@@ -51,7 +51,8 @@ public class DAODocente {
                                 resultado.getString("cedula"),
                                 materias,
                                 resultado.getString("nombre"),
-                                resultado.getString("apellido")));
+                                resultado.getString("apellido"),
+                                resultado.getString("correo")));
                     } catch (IOException ex) {
                         Logger.getLogger(DAODocente.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -74,6 +75,7 @@ public class DAODocente {
                         + "', materias= '" + json
                         + "', nombre='" + docente.getNombre()
                         + "', apellido='" + docente.getApellido()
+                        + "', correo='" + docente.getCorreo()
                         + "' WHERE  id='" + docente.getId() + "';";
                 PreparedStatement stmt = conexion.prepareStatement(query);
                 stmt.executeUpdate();

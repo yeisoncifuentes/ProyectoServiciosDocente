@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- *
+ *Clase que permite maquetar los atributos del docente
  * @author YEISON
  */
 public class DocentePOJO implements Serializable {
@@ -38,6 +38,11 @@ public class DocentePOJO implements Serializable {
      * Apellido del docente
      */
     String apellido;
+    
+    /**
+     * Correo electronico del docente
+     */
+    String correo;
 
     /**
      * Constructor vacio
@@ -55,12 +60,13 @@ public class DocentePOJO implements Serializable {
      * @param nombre
      * @param apellido
      */
-    public DocentePOJO(int id, String cedula, List<String> materias, String nombre, String apellido) {
+    public DocentePOJO(int id, String cedula, List<String> materias, String nombre, String apellido, String correo) {
         this.id = id;
         this.cedula = cedula;
         this.materias = materias;
         this.nombre = nombre;
         this.apellido = apellido;
+        this.correo=correo;
     }
 
     public int getId() {
@@ -101,6 +107,16 @@ public class DocentePOJO implements Serializable {
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
+        
+        
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
 }
