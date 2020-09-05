@@ -6,6 +6,7 @@
 package co.edu.unicundi.BD;
 
 import co.edu.unicundi.docentePOJO.DocentePOJO;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -35,7 +36,7 @@ public class DAODocente {
         Connection conexion = new BDConector().open();
         if (conexion != null) {
             try {
-                String query = "SELECT * FROM docente.tbl_docente ;";
+                String query = "SELECT * FROM docente.tbl_docente;";
                 PreparedStatement stmt = conexion.prepareStatement(query);
                 ResultSet resultado = stmt.executeQuery();
                 while (resultado.next()) {
@@ -62,5 +63,25 @@ public class DAODocente {
             }
         }
         return docentes;
+    }
+
+    public void editar(DocentePOJO docente) {
+        Connection conexion = new BDConector().open();
+        if (conexion != null) {
+            try {
+                String json = new Gson().toJson(docente.getMaterias());
+                String query = "UPDATE docente.tbl_docente SET cedula='" + docente.getCedula()
+                        + "', materias= '" + json
+                        + "', nombre='" + docente.getNombre()
+                        + "', apellido='" + docente.getApellido()
+                        + "' WHERE  id='" + docente.getId() + "';";
+                PreparedStatement stmt = conexion.prepareStatement(query);
+                stmt.executeUpdate();
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

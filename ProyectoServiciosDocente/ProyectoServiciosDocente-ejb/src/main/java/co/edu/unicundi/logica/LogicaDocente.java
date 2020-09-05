@@ -7,6 +7,7 @@ package co.edu.unicundi.logica;
 
 import co.edu.unicundi.BD.DAODocente;
 import co.edu.unicundi.docentePOJO.DocentePOJO;
+import java.util.Iterator;
 import java.util.List;
 import javax.ejb.Stateless;
 
@@ -20,4 +21,10 @@ public class LogicaDocente {
     public List<DocentePOJO> listar() {
         return new DAODocente().listar();
     }
+
+    public void editar(DocentePOJO docente) {
+        new DAODocente().editar(docente);
+    }
+
+    
 }

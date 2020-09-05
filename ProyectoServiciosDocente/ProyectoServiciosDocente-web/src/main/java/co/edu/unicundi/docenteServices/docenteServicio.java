@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -29,9 +31,19 @@ public class docenteServicio {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listar() {
-        List<DocentePOJO> docentes= new ArrayList();
-        docentes= new LogicaDocente().listar();
+        List<DocentePOJO> docentes = new ArrayList();
+        docentes = new LogicaDocente().listar();
         return Response.status(Response.Status.OK).entity(docentes).build();
+    }
+
+    @Path("/editar")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response editar(DocentePOJO docente) {
+
+        new LogicaDocente().editar(docente);
+        return Response.status(Response.Status.OK).entity("Editado correctamente").build();
     }
 
 }
