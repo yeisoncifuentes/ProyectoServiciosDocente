@@ -24,3 +24,4 @@ hs_err_pid*
 /ProyectoServiciosDocente/ProyectoServiciosDocente-ejb/target/
 /ProyectoServiciosDocente/ProyectoServiciosDocente-web/target/
 /ProyectoServiciosDocente/ProyectoServiciosDocente-ear/target/
+ProyectoServiciosDocente/ProyectoServiciosDocente-ejb/src/main/java/co/edu/unicundi/BD/BDConector.java
