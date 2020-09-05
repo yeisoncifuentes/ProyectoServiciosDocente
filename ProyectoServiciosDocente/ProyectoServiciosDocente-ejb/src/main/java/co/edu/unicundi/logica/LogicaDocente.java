@@ -8,7 +8,6 @@ package co.edu.unicundi.logica;
 import co.edu.unicundi.BD.DAODocente;
 import co.edu.unicundi.docentePOJO.DocentePOJO;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.ejb.Stateless;
 
@@ -18,13 +17,30 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class LogicaDocente {
-
+    
+    /**
+     * Registrar docente
+     * @param docente 
+     */
+    public void registrar(DocentePOJO docente) {
+        new DAODocente().registrar(docente);
+    }
+    
     /**
      * Listar todos los docentes
      * @return 
      */
     public List<DocentePOJO> listar() {
         return new DAODocente().listar();
+    }
+    
+    /**
+     * Obtener un docente filtrado por cedula
+     * @param cedula
+     * @return 
+     */
+    public DocentePOJO obtenerPorCedula(String cedula) {
+        return new DAODocente().obtenerPorCedula(cedula);
     }
 
     /**
@@ -55,5 +71,13 @@ public class LogicaDocente {
             }
         }
         return docentesMateria;
+    }
+    
+    /**
+     * Eliminar docente
+     * @param id 
+     */
+    public void eliminar(int id){
+        new DAODocente().eliminar(id);
     }
 }
