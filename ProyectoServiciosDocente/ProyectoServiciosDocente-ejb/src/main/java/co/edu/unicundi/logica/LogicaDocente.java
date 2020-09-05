@@ -14,7 +14,7 @@ import javax.ejb.Stateless;
  *
  * @author YEISON
  */
-
+@Stateless
 public class LogicaDocente {
 
     public List<DocentePOJO> listar() {
