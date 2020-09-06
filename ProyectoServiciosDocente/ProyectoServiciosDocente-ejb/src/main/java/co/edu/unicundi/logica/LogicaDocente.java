@@ -26,7 +26,7 @@ public class LogicaDocente {
      */
     public void registrar(DocentePOJO docente) throws Exception {
         DocentePOJO docenteFiltrado = new DAODocente().obtenerPorCedula(docente.getCedula());
-        if (docenteFiltrado == null) {
+        if (docenteFiltrado.getCedula() == null) {
             new DAODocente().registrar(docente);
         } else {
             throw new Exception("La cedula del docente ya existe");
@@ -116,7 +116,6 @@ public class LogicaDocente {
      */
     public void eliminar(int id) throws Exception {
         DocentePOJO docente = new DAODocente().obtenerPorId(id);
-        System.out.println(docente.getId());
         if (docente.getId() != 0) {
             new DAODocente().eliminar(id);
         } else {
