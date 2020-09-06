@@ -26,7 +26,31 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class DAODocente {
 
     /**
-     * listar todos los artistas
+     * Registrar docente en BD
+     * @param docente 
+     */
+    public void registrar(DocentePOJO docente) {
+        Connection conexion = new BDConector().open();
+        if (conexion != null) {
+            try {
+                String materias = new Gson().toJson(docente.getMaterias());
+                String query = "INSERT INTO docente.tbl_docente(cedula, materias, nombre, apellido, correo) VALUES ('"
+                        + docente.getCedula()+ "','"
+                        + materias + "','"
+                        + docente.getNombre() + "','"
+                        + docente.getApellido() + "','"
+                        + docente.getCorreo() + "');";
+                PreparedStatement stmt = conexion.prepareStatement(query);
+                stmt.executeUpdate();
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * listar todos los docentes
      *
      * @return
      */
@@ -65,7 +89,49 @@ public class DAODocente {
         }
         return docentes;
     }
+    
+    /**
+     * Obtener docente de la BD filtrado por cedula
+     * @param cedula
+     * @return 
+     */
+    public DocentePOJO obtenerPorCedula(String cedula){
+        DocentePOJO docente = new DocentePOJO();
+        Connection conexion = new BDConector().open();
+        if (conexion != null) {
+            try {
+                String query = "SELECT * FROM docente.tbl_docente WHERE tbl_docente.cedula = '" + cedula + "';";
+                PreparedStatement stmt = conexion.prepareStatement(query);
+                ResultSet resultado = stmt.executeQuery();
+                while (resultado.next()) {
+                    
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<String> materias = new ArrayList();
+                    try {
+                        materias = mapper.readValue(resultado.getString("materias"), List.class);
+                        docente = new DocentePOJO(
+                            resultado.getInt("id"),
+                            resultado.getString("cedula"),
+                            materias,
+                            resultado.getString("nombre"),
+                            resultado.getString("apellido"),
+                            resultado.getString("correo"));
+                    } catch (IOException ex) {
+                        Logger.getLogger(DAODocente.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return docente;
+    }
 
+    /**
+     * Edita los datos de un docente en BD
+     * @param docente 
+     */
     public void editar(DocentePOJO docente) {
         Connection conexion = new BDConector().open();
         if (conexion != null) {
@@ -85,5 +151,24 @@ public class DAODocente {
             }
         }
 
+    }
+    
+    /**
+     * Elimina un docente en la BD
+     * @param id 
+     */
+    public void eliminar(int id) {
+        Connection conexion = new BDConector().open();
+        if (conexion != null) {
+            try {
+
+                String query = "DELETE FROM docente.tbl_docente WHERE id='" + id + "';";
+                PreparedStatement stmt = conexion.prepareStatement(query);
+                stmt.executeUpdate();
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

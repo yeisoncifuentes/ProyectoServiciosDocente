@@ -10,8 +10,12 @@ import co.edu.unicundi.docentePOJO.DocentePOJO;
 import co.edu.unicundi.logica.LogicaDocente;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -25,13 +29,26 @@ import utilitarios.ClaseValidator;
  *
  * @author YEISON
  */
-@javax.enterprise.context.RequestScoped
+@Stateless
 @Path("/docentes")
 public class docenteServicio {
 
     /**
-     * LIsta todos los docentes
-     *
+     * Servicio para registrar docente
+     * @param docente 
+     * @return 
+     */
+    @POST
+    @Path("/registrar")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response registrar(DocentePOJO docente) {
+        new LogicaDocente().registrar(docente);
+        return Response.status(Response.Status.OK).entity("Registrado correctamente").build();
+    }
+    
+    /**
+     * LIsta todos los docentes 
      * @return
      */
     @Path("/listar")
@@ -41,6 +58,19 @@ public class docenteServicio {
         List<DocentePOJO> docentes = new ArrayList();
         docentes = new LogicaDocente().listar();
         return Response.status(Response.Status.OK).entity(docentes).build();
+    }
+    
+    /**
+     * Servicio para obtener un docente filtrado por cedula
+     * @param cedula
+     * @return 
+     */
+    @Path("/obtenerPorCedula/{cedula}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerPorCedula(@PathParam("cedula") String cedula) {
+        DocentePOJO docente = new LogicaDocente().obtenerPorCedula(cedula);
+        return Response.status(Response.Status.OK).entity(docente).build();
     }
 
     /**
@@ -87,4 +117,17 @@ public class docenteServicio {
         }
     }
 
+    /**
+     * Servicio para eliminar un docente
+     * @param id
+     * @return 
+     */
+    @Path("/eliminar/{id}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response eliminar(@PathParam("id") int id){
+        new LogicaDocente().eliminar(id);
+        return Response.status(Response.Status.OK).entity("Eliminado correctamente").build();
+    }
 }
