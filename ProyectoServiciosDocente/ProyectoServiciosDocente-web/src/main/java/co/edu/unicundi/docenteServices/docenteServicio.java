@@ -9,7 +9,6 @@ import co.edu.unicundi.docentePOJO.DocentePOJO;
 import co.edu.unicundi.logica.LogicaDocente;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -49,16 +48,13 @@ public class docenteServicio {
 
             if (validar.isEstado()) {
                 new LogicaDocente().registrar(docente);
-                return Response.status(Response.Status.OK).entity("Registrado correctamente").build();
-
+                return Response.status(Response.Status.CREATED).entity("Registrado correctamente").build();
             } else {
-                return Response.status(Response.Status.OK).entity(validar.getMensaje()).build();
-
+                return Response.status(Response.Status.BAD_REQUEST).entity(validar.getMensaje()).build();
             }
 
         } catch (Exception e) {
-
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("error en el servidor").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
 
     }
@@ -86,9 +82,13 @@ public class docenteServicio {
     @Path("/obtenerPorCedula/{cedula}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerPorCedula(@PathParam("cedula") String cedula) {
-        DocentePOJO docente = new LogicaDocente().obtenerPorCedula(cedula);
-        return Response.status(Response.Status.OK).entity(docente).build();
+    public Response obtenerPorCedula(@PathParam("cedula") String cedula) throws Exception {
+        try {
+            DocentePOJO docente = new LogicaDocente().obtenerPorCedula(cedula);
+            return Response.status(Response.Status.OK).entity(docente).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        }
     }
 
     /**
@@ -100,10 +100,14 @@ public class docenteServicio {
     @Path("/obtenerDocentesMateria/{materia}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerDocentesMateria(@PathParam("materia") String materia) {
-        List<DocentePOJO> docentes = new ArrayList();
-        docentes = new LogicaDocente().obtenerDocentesMateria(materia);
-        return Response.status(Response.Status.OK).entity(docentes).build();
+    public Response obtenerDocentesMateria(@PathParam("materia") String materia) throws Exception {
+        try {
+            List<DocentePOJO> docentes = new ArrayList();
+            docentes = new LogicaDocente().obtenerDocentesMateria(materia);
+            return Response.status(Response.Status.OK).entity(docentes).build();
+        } catch(Exception e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        }
     }
 
     /**
@@ -122,16 +126,12 @@ public class docenteServicio {
 
             if (validar.isEstado()) {
                 new LogicaDocente().editar(docente);
-                return Response.status(Response.Status.OK).entity("Editado correctamente").build();
-
+                return Response.status(Response.Status.ACCEPTED).entity("Editado correctamente").build();
             } else {
-                return Response.status(Response.Status.OK).entity(validar.getMensaje()).build();
-
+                return Response.status(Response.Status.BAD_REQUEST).entity(validar.getMensaje()).build();
             }
-
         } catch (Exception e) {
-
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("error en el servidor").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 
@@ -145,8 +145,12 @@ public class docenteServicio {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response eliminar(@PathParam("id") int id) {
-        new LogicaDocente().eliminar(id);
-        return Response.status(Response.Status.OK).entity("Eliminado correctamente").build();
+    public Response eliminar(@PathParam("id") int id) throws Exception {
+        try {
+            new LogicaDocente().eliminar(id);
+            return Response.status(Response.Status.ACCEPTED).entity("Eliminado correctamente").build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 }

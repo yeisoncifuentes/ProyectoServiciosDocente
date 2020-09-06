@@ -171,4 +171,42 @@ public class DAODocente {
             }
         }
     }
+    
+    /**
+     * Obtener docente de la BD filtrado por id
+     * @param id
+     * @return 
+     */
+    public DocentePOJO obtenerPorId(int id){
+        DocentePOJO docente = new DocentePOJO();
+        Connection conexion = new BDConector().open();
+        if (conexion != null) {
+            try {
+                String query = "SELECT * FROM docente.tbl_docente WHERE tbl_docente.id = '" + id + "';";
+                PreparedStatement stmt = conexion.prepareStatement(query);
+                ResultSet resultado = stmt.executeQuery();
+                while (resultado.next()) {
+                    
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<String> materias = new ArrayList();
+                    try {
+                        materias = mapper.readValue(resultado.getString("materias"), List.class);
+                        docente = new DocentePOJO(
+                            resultado.getInt("id"),
+                            resultado.getString("cedula"),
+                            materias,
+                            resultado.getString("nombre"),
+                            resultado.getString("apellido"),
+                            resultado.getString("correo"));
+                    } catch (IOException ex) {
+                        Logger.getLogger(DAODocente.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return docente;
+    }
 }

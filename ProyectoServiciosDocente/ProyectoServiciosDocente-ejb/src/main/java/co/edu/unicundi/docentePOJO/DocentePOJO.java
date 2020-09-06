@@ -7,6 +7,7 @@ package co.edu.unicundi.docentePOJO;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -25,6 +26,7 @@ public class DocentePOJO implements Serializable {
     /**
      * cedula del docente
      */
+    @NotNull(message = "Campo cedula requerido")
     @Pattern(regexp = "^([0-9])*$")
     @Size(min = 7, max = 10, message = "formato de cedula incorrecto")
     String cedula;
@@ -37,6 +39,7 @@ public class DocentePOJO implements Serializable {
     /**
      * Nombre del docente
      */
+    @NotNull(message = "Campo nombre requerido")
     @Pattern(regexp = "^[a-zA-Z ]*$")
     @Size(min = 2, max = 30, message = "Formato de nombre incorrecto")
     String nombre;
@@ -44,6 +47,7 @@ public class DocentePOJO implements Serializable {
     /**
      * Apellido del docente
      */
+    @NotNull(message = "Campo apellido requerido")
     @Pattern(regexp = "^[a-zA-Z ]*$")
     @Size(min = 2, max = 30, message = "Formato de apellido incorrecto")
     String apellido;
