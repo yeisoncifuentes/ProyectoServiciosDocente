@@ -51,7 +51,7 @@ public class ClaseValidator {
         if (errores.isEmpty()) {
             validar.estado = true;
         } else {
-            validar.estado = true;
+            validar.estado = false;
 
         }
         return validar;

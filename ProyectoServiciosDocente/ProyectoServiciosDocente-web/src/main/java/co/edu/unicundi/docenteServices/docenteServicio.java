@@ -5,7 +5,6 @@
  */
 package co.edu.unicundi.docenteServices;
 
-
 import co.edu.unicundi.docentePOJO.DocentePOJO;
 import co.edu.unicundi.logica.LogicaDocente;
 import java.util.ArrayList;
@@ -35,20 +34,38 @@ public class docenteServicio {
 
     /**
      * Servicio para registrar docente
-     * @param docente 
-     * @return 
+     *
+     * @param docente
+     * @return
      */
     @POST
     @Path("/registrar")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registrar(DocentePOJO docente) {
-        new LogicaDocente().registrar(docente);
-        return Response.status(Response.Status.OK).entity("Registrado correctamente").build();
+
+        try {
+            ClaseValidator validar = new ClaseValidator().validarDocente(docente);
+
+            if (validar.isEstado()) {
+                new LogicaDocente().registrar(docente);
+                return Response.status(Response.Status.OK).entity("Registrado correctamente").build();
+
+            } else {
+                return Response.status(Response.Status.OK).entity(validar.getMensaje()).build();
+
+            }
+
+        } catch (Exception e) {
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("error en el servidor").build();
+        }
+
     }
-    
+
     /**
-     * LIsta todos los docentes 
+     * LIsta todos los docentes
+     *
      * @return
      */
     @Path("/listar")
@@ -59,11 +76,12 @@ public class docenteServicio {
         docentes = new LogicaDocente().listar();
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
-    
+
     /**
      * Servicio para obtener un docente filtrado por cedula
+     *
      * @param cedula
-     * @return 
+     * @return
      */
     @Path("/obtenerPorCedula/{cedula}")
     @GET
@@ -74,7 +92,7 @@ public class docenteServicio {
     }
 
     /**
-     * Lista todos los docentes que tengas la materia ingresada
+     * Lista todos los docentes que tengan la materia ingresada
      *
      * @param materia
      * @return
@@ -100,9 +118,9 @@ public class docenteServicio {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response editar(DocentePOJO docente) {
         try {
-          ClaseValidator validar= new ClaseValidator().validarDocente(docente);
-         
-            if (validar.isEstado() ) {
+            ClaseValidator validar = new ClaseValidator().validarDocente(docente);
+
+            if (validar.isEstado()) {
                 new LogicaDocente().editar(docente);
                 return Response.status(Response.Status.OK).entity("Editado correctamente").build();
 
@@ -119,14 +137,15 @@ public class docenteServicio {
 
     /**
      * Servicio para eliminar un docente
+     *
      * @param id
-     * @return 
+     * @return
      */
     @Path("/eliminar/{id}")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response eliminar(@PathParam("id") int id){
+    public Response eliminar(@PathParam("id") int id) {
         new LogicaDocente().eliminar(id);
         return Response.status(Response.Status.OK).entity("Eliminado correctamente").build();
     }
