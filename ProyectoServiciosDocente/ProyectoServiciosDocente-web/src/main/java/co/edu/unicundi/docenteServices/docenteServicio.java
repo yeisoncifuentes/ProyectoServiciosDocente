@@ -5,12 +5,11 @@
  */
 package co.edu.unicundi.docenteServices;
 
+
 import co.edu.unicundi.docentePOJO.DocentePOJO;
 import co.edu.unicundi.logica.LogicaDocente;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -19,6 +18,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import utilitarios.ClaseValidator;
 
 /**
  * Servicios
@@ -30,7 +30,8 @@ import javax.ws.rs.core.Response;
 public class docenteServicio {
 
     /**
-     * LIsta todos los docentes 
+     * LIsta todos los docentes
+     *
      * @return
      */
     @Path("/listar")
@@ -44,8 +45,9 @@ public class docenteServicio {
 
     /**
      * Lista todos los docentes que tengas la materia ingresada
+     *
      * @param materia
-     * @return 
+     * @return
      */
     @Path("/obtenerDocentesMateria/{materia}")
     @GET
@@ -58,17 +60,31 @@ public class docenteServicio {
 
     /**
      * Servicio que permite editar los datos del docente
+     *
      * @param docente
-     * @return 
+     * @return
      */
     @Path("/editar")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response editar(DocentePOJO docente) {
+        try {
+          ClaseValidator validar= new ClaseValidator().validarDocente(docente);
+         
+            if (validar.isEstado() ) {
+                new LogicaDocente().editar(docente);
+                return Response.status(Response.Status.OK).entity("Editado correctamente").build();
 
-        new LogicaDocente().editar(docente);
-        return Response.status(Response.Status.OK).entity("Editado correctamente").build();
+            } else {
+                return Response.status(Response.Status.OK).entity(validar.getMensaje()).build();
+
+            }
+
+        } catch (Exception e) {
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("error en el servidor").build();
+        }
     }
 
 }

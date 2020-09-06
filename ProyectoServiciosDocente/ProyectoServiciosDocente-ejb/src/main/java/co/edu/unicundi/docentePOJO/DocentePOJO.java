@@ -7,9 +7,12 @@ package co.edu.unicundi.docentePOJO;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
- *Clase que permite maquetar los atributos del docente
+ * Clase que permite maquetar los atributos del docente
+ *
  * @author YEISON
  */
 public class DocentePOJO implements Serializable {
@@ -22,6 +25,8 @@ public class DocentePOJO implements Serializable {
     /**
      * cedula del docente
      */
+    @Pattern(regexp = "^([0-9])*$")
+    @Size(min = 7, max = 10, message = "formato de cedula incorrecto")
     String cedula;
 
     /**
@@ -32,25 +37,30 @@ public class DocentePOJO implements Serializable {
     /**
      * Nombre del docente
      */
+    @Pattern(regexp = "^[a-zA-Z ]*$")
+    @Size(min = 2, max = 30, message = "Formato de nombre incorrecto")
     String nombre;
 
     /**
      * Apellido del docente
      */
+    @Pattern(regexp = "^[a-zA-Z ]*$")
+    @Size(min = 2, max = 30, message = "Formato de apellido incorrecto")
     String apellido;
-    
+
     /**
      * Correo electronico del docente
      */
+    @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@+[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message = "Formato de correo incorrecto")
     String correo;
 
     /**
      * Constructor vacio
      */
-    public DocentePOJO(){
-        
+    public DocentePOJO() {
+
     }
-    
+
     /**
      * Constructor de la clase
      *
@@ -66,7 +76,7 @@ public class DocentePOJO implements Serializable {
         this.materias = materias;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.correo=correo;
+        this.correo = correo;
     }
 
     public int getId() {
@@ -107,8 +117,7 @@ public class DocentePOJO implements Serializable {
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
-        
-        
+
     }
 
     public String getCorreo() {
