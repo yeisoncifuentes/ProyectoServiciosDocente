@@ -71,7 +71,7 @@ public class LogicaDocente {
             
             if (docentes.size() == 0) {
                 new DAODocente().editar(docente);
-            } else if (docentes.get(0).getId() == docente.getId()){
+            } else if (docentes.size() == 1 && docentes.get(0).getId() == docente.getId()){
                 new DAODocente().editar(docente);
             } else {
                 throw new Exception("La cedula o el correo del docente ya existen");
