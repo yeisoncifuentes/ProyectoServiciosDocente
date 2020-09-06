@@ -27,7 +27,8 @@ public class DAODocente {
 
     /**
      * Registrar docente en BD
-     * @param docente 
+     *
+     * @param docente
      */
     public void registrar(DocentePOJO docente) {
         Connection conexion = new BDConector().open();
@@ -35,7 +36,7 @@ public class DAODocente {
             try {
                 String materias = new Gson().toJson(docente.getMaterias());
                 String query = "INSERT INTO docente.tbl_docente(cedula, materias, nombre, apellido, correo) VALUES ('"
-                        + docente.getCedula()+ "','"
+                        + docente.getCedula() + "','"
                         + materias + "','"
                         + docente.getNombre() + "','"
                         + docente.getApellido() + "','"
@@ -48,7 +49,7 @@ public class DAODocente {
             }
         }
     }
-    
+
     /**
      * listar todos los docentes
      *
@@ -89,13 +90,14 @@ public class DAODocente {
         }
         return docentes;
     }
-    
+
     /**
      * Obtener docente de la BD filtrado por cedula
+     *
      * @param cedula
-     * @return 
+     * @return
      */
-    public DocentePOJO obtenerPorCedula(String cedula){
+    public DocentePOJO obtenerPorCedula(String cedula) {
         DocentePOJO docente = new DocentePOJO();
         Connection conexion = new BDConector().open();
         if (conexion != null) {
@@ -104,18 +106,18 @@ public class DAODocente {
                 PreparedStatement stmt = conexion.prepareStatement(query);
                 ResultSet resultado = stmt.executeQuery();
                 while (resultado.next()) {
-                    
+
                     ObjectMapper mapper = new ObjectMapper();
                     List<String> materias = new ArrayList();
                     try {
                         materias = mapper.readValue(resultado.getString("materias"), List.class);
                         docente = new DocentePOJO(
-                            resultado.getInt("id"),
-                            resultado.getString("cedula"),
-                            materias,
-                            resultado.getString("nombre"),
-                            resultado.getString("apellido"),
-                            resultado.getString("correo"));
+                                resultado.getInt("id"),
+                                resultado.getString("cedula"),
+                                materias,
+                                resultado.getString("nombre"),
+                                resultado.getString("apellido"),
+                                resultado.getString("correo"));
                     } catch (IOException ex) {
                         Logger.getLogger(DAODocente.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -130,7 +132,8 @@ public class DAODocente {
 
     /**
      * Edita los datos de un docente en BD
-     * @param docente 
+     *
+     * @param docente
      */
     public void editar(DocentePOJO docente) {
         Connection conexion = new BDConector().open();
@@ -152,10 +155,11 @@ public class DAODocente {
         }
 
     }
-    
+
     /**
      * Elimina un docente en la BD
-     * @param id 
+     *
+     * @param id
      */
     public void eliminar(int id) {
         Connection conexion = new BDConector().open();
@@ -171,13 +175,14 @@ public class DAODocente {
             }
         }
     }
-    
+
     /**
      * Obtener docente de la BD filtrado por id
+     *
      * @param id
-     * @return 
+     * @return
      */
-    public DocentePOJO obtenerPorId(int id){
+    public DocentePOJO obtenerPorId(int id) {
         DocentePOJO docente = new DocentePOJO();
         Connection conexion = new BDConector().open();
         if (conexion != null) {
@@ -186,18 +191,18 @@ public class DAODocente {
                 PreparedStatement stmt = conexion.prepareStatement(query);
                 ResultSet resultado = stmt.executeQuery();
                 while (resultado.next()) {
-                    
+
                     ObjectMapper mapper = new ObjectMapper();
                     List<String> materias = new ArrayList();
                     try {
                         materias = mapper.readValue(resultado.getString("materias"), List.class);
                         docente = new DocentePOJO(
-                            resultado.getInt("id"),
-                            resultado.getString("cedula"),
-                            materias,
-                            resultado.getString("nombre"),
-                            resultado.getString("apellido"),
-                            resultado.getString("correo"));
+                                resultado.getInt("id"),
+                                resultado.getString("cedula"),
+                                materias,
+                                resultado.getString("nombre"),
+                                resultado.getString("apellido"),
+                                resultado.getString("correo"));
                     } catch (IOException ex) {
                         Logger.getLogger(DAODocente.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -208,5 +213,45 @@ public class DAODocente {
             }
         }
         return docente;
+    }
+
+    /**
+     * Obtener docente de la BD filtrado por cedula y correo para validar
+     *
+     * @param cedula
+     * @return
+     */
+    public List<DocentePOJO> obtenerPorCedulaYCorreo(String cedula, String correo) {
+        List<DocentePOJO> docentes = new ArrayList();
+        Connection conexion = new BDConector().open();
+        if (conexion != null) {
+            try {
+                String query = "SELECT * FROM docente.tbl_docente WHERE tbl_docente.cedula = '" + cedula + "' "
+                        + "OR tbl_docente.correo = '" + correo + "';";
+                PreparedStatement stmt = conexion.prepareStatement(query);
+                ResultSet resultado = stmt.executeQuery();
+                while (resultado.next()) {
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<String> materias = new ArrayList();
+                    try {
+                        materias = mapper.readValue(resultado.getString("materias"), List.class);
+                        docentes.add(new DocentePOJO(
+                                resultado.getInt("id"),
+                                resultado.getString("cedula"),
+                                materias,
+                                resultado.getString("nombre"),
+                                resultado.getString("apellido"),
+                                resultado.getString("correo")));
+                    } catch (IOException ex) {
+                        Logger.getLogger(DAODocente.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return docentes;
     }
 }

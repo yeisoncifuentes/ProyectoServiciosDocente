@@ -25,11 +25,11 @@ public class LogicaDocente {
      * @param docente
      */
     public void registrar(DocentePOJO docente) throws Exception {
-        DocentePOJO docenteFiltrado = new DAODocente().obtenerPorCedula(docente.getCedula());
-        if (docenteFiltrado.getCedula() == null) {
+        List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
+        if (docentes.size() > 0) {
             new DAODocente().registrar(docente);
         } else {
-            throw new Exception("La cedula del docente ya existe");
+            throw new Exception("La cedula o el correo del docente ya existen");
         }
     }
 
@@ -66,15 +66,15 @@ public class LogicaDocente {
         DocentePOJO docenteFiltradoId = new DAODocente().obtenerPorId(docente.getId());
         
         if (docenteFiltradoId.getId() == docente.getId()) {
-            DocentePOJO docenteFiltradoCedula = new DAODocente().obtenerPorCedula(docente.getCedula());
-            if (docenteFiltradoCedula.getCedula() == null) {
+            
+            List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
+            
+            if (docentes.size() == 0) {
+                new DAODocente().editar(docente);
+            } else if (docentes.get(0).getId() == docente.getId()){
                 new DAODocente().editar(docente);
             } else {
-                if (docenteFiltradoCedula.getId() == docente.getId()) {
-                    new DAODocente().editar(docente);
-                } else {
-                    throw new Exception("La cedula del docente ya existe");
-                }
+                throw new Exception("La cedula o el correo del docente ya existen");
             }
         } else {
             throw new Exception("El docente no existe");
