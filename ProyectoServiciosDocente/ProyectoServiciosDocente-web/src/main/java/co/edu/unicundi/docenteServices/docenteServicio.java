@@ -44,14 +44,8 @@ public class docenteServicio {
     public Response registrar(DocentePOJO docente) {
 
         try {
-            ClaseValidator validar = new ClaseValidator().validarDocente(docente);
-
-            if (validar.isEstado()) {
-                new LogicaDocente().registrar(docente);
-                return Response.status(Response.Status.CREATED).entity("Registrado correctamente").build();
-            } else {
-                return Response.status(Response.Status.BAD_REQUEST).entity(validar.getMensaje()).build();
-            }
+            new LogicaDocente().registrar(docente);
+            return Response.status(Response.Status.CREATED).entity("Registrado correctamente").build();
 
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -105,7 +99,7 @@ public class docenteServicio {
             List<DocentePOJO> docentes = new ArrayList();
             docentes = new LogicaDocente().obtenerDocentesMateria(materia);
             return Response.status(Response.Status.OK).entity(docentes).build();
-        } catch(Exception e) {
+        } catch (Exception e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
         }
     }
@@ -122,14 +116,9 @@ public class docenteServicio {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response editar(DocentePOJO docente) {
         try {
-            ClaseValidator validar = new ClaseValidator().validarDocente(docente);
+            new LogicaDocente().editar(docente);
+            return Response.status(Response.Status.ACCEPTED).entity("Editado correctamente").build();
 
-            if (validar.isEstado()) {
-                new LogicaDocente().editar(docente);
-                return Response.status(Response.Status.ACCEPTED).entity("Editado correctamente").build();
-            } else {
-                return Response.status(Response.Status.BAD_REQUEST).entity(validar.getMensaje()).build();
-            }
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }

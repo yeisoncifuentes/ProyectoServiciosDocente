@@ -27,8 +27,8 @@ public class DocentePOJO implements Serializable {
      * cedula del docente
      */
     @NotNull(message = "Campo cedula requerido")
-    @Pattern(regexp = "^([0-9])*$")
-    @Size(min = 7, max = 10, message = "formato de cedula incorrecto")
+    @Pattern(regexp = "^([0-9])*$",message = "formato de cedula incorrecto")
+    @Size(min = 7, max = 10, message = "Longitud de la cedula no valido debe estar entre 7 y 10")
     String cedula;
 
     /**
@@ -40,21 +40,22 @@ public class DocentePOJO implements Serializable {
      * Nombre del docente
      */
     @NotNull(message = "Campo nombre requerido")
-    @Pattern(regexp = "^[a-zA-Z ]*$")
-    @Size(min = 2, max = 30, message = "Formato de nombre incorrecto")
+    @Pattern(regexp = "^[a-zA-Z ]*$", message = "Formato de nombre incorrecto")
+    @Size(min = 2, max = 30, message = "Longitud de nombre no valido")
     String nombre;
 
     /**
      * Apellido del docente
      */
     @NotNull(message = "Campo apellido requerido")
-    @Pattern(regexp = "^[a-zA-Z ]*$")
-    @Size(min = 2, max = 30, message = "Formato de apellido incorrecto")
+    @Pattern(regexp = "^[a-zA-Z ]*$",message = "Formato de apellido incorrecto")
+    @Size(min = 2, max = 30, message = "Longitud de apellido no valido")
     String apellido;
 
     /**
      * Correo electronico del docente
      */
+     @NotNull(message = "Campo correo requerido")
     @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@+[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message = "Formato de correo incorrecto")
     String correo;
 

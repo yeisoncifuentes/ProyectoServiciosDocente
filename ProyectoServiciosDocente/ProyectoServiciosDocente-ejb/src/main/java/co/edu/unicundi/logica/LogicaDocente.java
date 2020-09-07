@@ -10,6 +10,8 @@ import co.edu.unicundi.docentePOJO.DocentePOJO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.ws.rs.core.Response;
+import utilitarios.ClaseValidator;
 
 /**
  * Clase que permite hacer la logica de los servicios
@@ -26,11 +28,19 @@ public class LogicaDocente {
      */
     public void registrar(DocentePOJO docente) throws Exception {
         List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
-        if (docentes.size() > 0) {
-            new DAODocente().registrar(docente);
+
+        ClaseValidator validar = new ClaseValidator().validarDocente(docente);
+
+        if (validar.isEstado()) {
+            if (docentes.size() == 0) {
+                new DAODocente().registrar(docente);
+            } else {
+                throw new Exception("La cedula o el correo del docente ya existen");
+            }
         } else {
-            throw new Exception("La cedula o el correo del docente ya existen");
+            throw new Exception(validar.getMensaje());
         }
+
     }
 
     /**
@@ -64,21 +74,28 @@ public class LogicaDocente {
      */
     public void editar(DocentePOJO docente) throws Exception {
         DocentePOJO docenteFiltradoId = new DAODocente().obtenerPorId(docente.getId());
-        
-        if (docenteFiltradoId.getId() == docente.getId()) {
-            
-            List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
-            
-            if (docentes.size() == 0) {
-                new DAODocente().editar(docente);
-            } else if (docentes.size() == 1 && docentes.get(0).getId() == docente.getId()){
-                new DAODocente().editar(docente);
+
+        ClaseValidator validar = new ClaseValidator().validarDocente(docente);
+
+        if (validar.isEstado()) {
+            if (docenteFiltradoId.getId() == docente.getId()) {
+
+                List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
+
+                if (docentes.size() == 0) {
+                    new DAODocente().editar(docente);
+                } else if (docentes.size() == 1 && docentes.get(0).getId() == docente.getId()) {
+                    new DAODocente().editar(docente);
+                } else {
+                    throw new Exception("La cedula o el correo del docente ya existen");
+                }
             } else {
-                throw new Exception("La cedula o el correo del docente ya existen");
+                throw new Exception("El docente no existe");
             }
         } else {
-            throw new Exception("El docente no existe");
+            throw new Exception(validar.getMensaje());
         }
+
     }
 
     /**
