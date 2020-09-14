@@ -7,10 +7,10 @@ package co.edu.unicundi.logica;
 
 import co.edu.unicundi.BD.DAODocente;
 import co.edu.unicundi.docentePOJO.DocentePOJO;
+import co.edu.unicundi.exception.ObjectNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.ws.rs.core.Response;
 import utilitarios.ClaseValidator;
 
 /**
@@ -131,12 +131,12 @@ public class LogicaDocente {
      *
      * @param id
      */
-    public void eliminar(int id) throws Exception {
+    public void eliminar(int id) throws ObjectNotFoundException {
         DocentePOJO docente = new DAODocente().obtenerPorId(id);
         if (docente.getId() != 0) {
             new DAODocente().eliminar(id);
         } else {
-            throw new Exception("El id del docente no existe");
+            throw new ObjectNotFoundException("El id del docente no existe");
         }
     }
 }

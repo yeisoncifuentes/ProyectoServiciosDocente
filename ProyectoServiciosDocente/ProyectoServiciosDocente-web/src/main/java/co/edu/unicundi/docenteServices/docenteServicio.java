@@ -20,7 +20,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import utilitarios.ClaseValidator;
 
 /**
  * Servicios
@@ -133,13 +132,8 @@ public class docenteServicio {
     @Path("/eliminar/{id}")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response eliminar(@PathParam("id") int id) throws Exception {
-        try {
-            new LogicaDocente().eliminar(id);
-            return Response.status(Response.Status.ACCEPTED).entity("Eliminado correctamente").build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
+    public Response eliminar(@PathParam("id") int id) {
+        new LogicaDocente().eliminar(id);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
