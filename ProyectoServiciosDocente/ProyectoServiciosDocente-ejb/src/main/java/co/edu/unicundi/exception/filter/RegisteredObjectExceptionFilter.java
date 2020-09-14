@@ -20,8 +20,8 @@ public class RegisteredObjectExceptionFilter implements ExceptionMapper<Register
 
     @Override
     public Response toResponse(RegisteredObjectException ex) {
-        ErrorWrapperPOJO error = new ErrorWrapperPOJO(ex.getMessage(), "422", "Unprocessable Entity");
-        return Response.status(Response.Status.OK).entity(error).build();
+        ErrorWrapperPOJO error = new ErrorWrapperPOJO(ex.getMessage(), "403", "Forbidden");
+        return Response.status(Response.Status.FORBIDDEN).entity(error).build();
     }
     
 }

@@ -20,7 +20,7 @@ public class ExceptionFilter implements ExceptionMapper<Exception>{
     @Override
     public Response toResponse(Exception ex) {
         System.out.println("Excepcion: " + ex.getClass().getCanonicalName());
-        ErrorWrapperPOJO error = new ErrorWrapperPOJO(ex.getMessage(), "500", "Internal Server Error");
+        ErrorWrapperPOJO error = new ErrorWrapperPOJO(ex.getLocalizedMessage(), "500", "Internal Server Error");
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
     }
     

@@ -20,7 +20,7 @@ public class WebApplicationExceptionFilter implements ExceptionMapper<WebApplica
 
     @Override
     public Response toResponse(WebApplicationException ex) {
-        ErrorWrapperPOJO error = new ErrorWrapperPOJO(ex.getMessage(), Integer.toString(ex.getResponse().getStatus()), ex.getResponse().getStatusInfo().getReasonPhrase());
+        ErrorWrapperPOJO error = new ErrorWrapperPOJO(ex.getLocalizedMessage(), Integer.toString(ex.getResponse().getStatus()), ex.getResponse().getStatusInfo().getReasonPhrase());
         return Response.status(Response.Status.fromStatusCode(ex.getResponse().getStatus())).entity(error).build();
     }
     

@@ -52,12 +52,12 @@ public class LogicaDocente {
      * @param cedula
      * @return
      */
-    public DocentePOJO obtenerPorCedula(String cedula) throws Exception {
+    public DocentePOJO obtenerPorCedula(String cedula) throws ObjectNotFoundException {
         DocentePOJO docente = new DAODocente().obtenerPorCedula(cedula);
         if (docente.getId() > 0) {
             return docente;
         } else {
-            throw new Exception("La cedula no existe");
+            throw new ObjectNotFoundException("La cedula no existe");
         }
     }
 
