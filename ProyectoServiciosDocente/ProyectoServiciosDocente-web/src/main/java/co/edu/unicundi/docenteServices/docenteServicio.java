@@ -10,6 +10,7 @@ import co.edu.unicundi.logica.LogicaDocente;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -40,16 +41,9 @@ public class docenteServicio {
     @Path("/registrar")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registrar(DocentePOJO docente) {
-
-        try {
-            new LogicaDocente().registrar(docente);
-            return Response.status(Response.Status.CREATED).entity("Registrado correctamente").build();
-
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
-
+    public Response registrar(@Valid DocentePOJO docente) {
+        new LogicaDocente().registrar(docente);
+        return Response.status(Response.Status.CREATED).entity(docente).build();
     }
 
     /**
@@ -76,12 +70,8 @@ public class docenteServicio {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerPorCedula(@PathParam("cedula") String cedula) throws Exception {
-        try {
-            DocentePOJO docente = new LogicaDocente().obtenerPorCedula(cedula);
-            return Response.status(Response.Status.OK).entity(docente).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
-        }
+        DocentePOJO docente = new LogicaDocente().obtenerPorCedula(cedula);
+        return Response.status(Response.Status.OK).entity(docente).build();
     }
 
     /**

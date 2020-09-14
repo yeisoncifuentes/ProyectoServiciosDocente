@@ -8,6 +8,7 @@ package co.edu.unicundi.logica;
 import co.edu.unicundi.BD.DAODocente;
 import co.edu.unicundi.docentePOJO.DocentePOJO;
 import co.edu.unicundi.exception.ObjectNotFoundException;
+import co.edu.unicundi.exception.RegisteredObjectException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -26,21 +27,14 @@ public class LogicaDocente {
      *
      * @param docente
      */
-    public void registrar(DocentePOJO docente) throws Exception {
+    public void registrar(DocentePOJO docente) throws RegisteredObjectException {
         List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
 
-        ClaseValidator validar = new ClaseValidator().validarDocente(docente);
-
-        if (validar.isEstado()) {
-            if (docentes.size() == 0) {
-                new DAODocente().registrar(docente);
-            } else {
-                throw new Exception("La cedula o el correo del docente ya existen");
-            }
+        if (docentes.size() == 0) {
+            new DAODocente().registrar(docente);
         } else {
-            throw new Exception(validar.getMensaje());
+            throw new RegisteredObjectException("La cedula o el correo del docente ya existen");
         }
-
     }
 
     /**
