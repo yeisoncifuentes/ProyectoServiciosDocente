@@ -55,8 +55,7 @@ public class docenteServicio {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listar() {
-        List<DocentePOJO> docentes = new ArrayList();
-        docentes = new LogicaDocente().listar();
+        List<DocentePOJO> docentes = new LogicaDocente().listar();      
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
 
@@ -84,13 +83,8 @@ public class docenteServicio {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerDocentesMateria(@PathParam("materia") String materia) throws Exception {
-        try {
-            List<DocentePOJO> docentes = new ArrayList();
-            docentes = new LogicaDocente().obtenerDocentesMateria(materia);
-            return Response.status(Response.Status.OK).entity(docentes).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
-        }
+        List<DocentePOJO> docentes = new LogicaDocente().obtenerDocentesMateria(materia);       
+        return Response.status(Response.Status.OK).entity(docentes).build();
     }
 
     /**
@@ -103,14 +97,9 @@ public class docenteServicio {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response editar(DocentePOJO docente) {
-        try {
+    public Response editar(DocentePOJO docente) {       
             new LogicaDocente().editar(docente);
-            return Response.status(Response.Status.ACCEPTED).entity("Editado correctamente").build();
-
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
+            return Response.status(Response.Status.OK).entity("Editado correctamente").build();      
     }
 
     /**

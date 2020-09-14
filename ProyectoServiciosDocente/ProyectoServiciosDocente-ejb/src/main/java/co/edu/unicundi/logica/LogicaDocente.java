@@ -42,8 +42,13 @@ public class LogicaDocente {
      *
      * @return
      */
-    public List<DocentePOJO> listar() {
-        return new DAODocente().listar();
+    public List<DocentePOJO> listar() throws ObjectNotFoundException {
+        ArrayList<DocentePOJO> docentes = new DAODocente().listar();
+        if(docentes.size()>0){
+            return docentes;
+        }else{
+            throw new ObjectNotFoundException("El docente no existe");
+        }
     }
 
     /**
@@ -66,28 +71,22 @@ public class LogicaDocente {
      *
      * @param docente
      */
-    public void editar(DocentePOJO docente) throws Exception {
+    public void editar(DocentePOJO docente) throws RegisteredObjectException,ObjectNotFoundException {
         DocentePOJO docenteFiltradoId = new DAODocente().obtenerPorId(docente.getId());
 
-        ClaseValidator validar = new ClaseValidator().validarDocente(docente);
+        if (docenteFiltradoId != null) {
 
-        if (validar.isEstado()) {
-            if (docenteFiltradoId.getId() == docente.getId()) {
+            List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
 
-                List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
-
-                if (docentes.size() == 0) {
-                    new DAODocente().editar(docente);
-                } else if (docentes.size() == 1 && docentes.get(0).getId() == docente.getId()) {
-                    new DAODocente().editar(docente);
-                } else {
-                    throw new Exception("La cedula o el correo del docente ya existen");
-                }
+            if (docentes.size() == 0) {
+                new DAODocente().editar(docente);
+            } else if (docentes.size() == 1 && docentes.get(0).getId() == docente.getId()) {
+                new DAODocente().editar(docente);
             } else {
-                throw new Exception("El docente no existe");
+                throw new RegisteredObjectException("La cedula o el correo del docente ya existen");
             }
         } else {
-            throw new Exception(validar.getMensaje());
+            throw new ObjectNotFoundException("El docente no existe");
         }
 
     }
@@ -98,7 +97,7 @@ public class LogicaDocente {
      * @param materia
      * @return
      */
-    public List<DocentePOJO> obtenerDocentesMateria(String materia) throws Exception {
+    public List<DocentePOJO> obtenerDocentesMateria(String materia) throws ObjectNotFoundException {
         List<DocentePOJO> todosDocentes = new DAODocente().listar();
 
         List<DocentePOJO> docentesMateria = new ArrayList();
@@ -116,7 +115,7 @@ public class LogicaDocente {
         if (docentesMateria.size() > 0) {
             return docentesMateria;
         } else {
-            throw new Exception("No existen docentes con la materia " + materia);
+            throw new ObjectNotFoundException("La materia no existe");
         }
     }
 
