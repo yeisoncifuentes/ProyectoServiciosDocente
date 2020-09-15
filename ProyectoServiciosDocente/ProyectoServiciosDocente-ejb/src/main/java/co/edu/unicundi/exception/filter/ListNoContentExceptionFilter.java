@@ -20,8 +20,7 @@ public class ListNoContentExceptionFilter implements ExceptionMapper<ListNoConte
 
     @Override
     public Response toResponse(ListNoContentException ex) {
-        ErrorWrapperPOJO error = new ErrorWrapperPOJO(ex.getMessage(), "204", "No Content");
-        return Response.status(Response.Status.NO_CONTENT).entity(error).build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
     
 }

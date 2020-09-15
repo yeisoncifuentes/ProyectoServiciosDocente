@@ -45,9 +45,9 @@ public class LogicaDocente {
      */
     public List<DocentePOJO> listar() throws ObjectNotFoundException {
         ArrayList<DocentePOJO> docentes = new DAODocente().listar();
-        if(docentes.size()>0){
+        if (docentes.size() > 0) {
             return docentes;
-        }else{
+        } else {
             throw new ListNoContentException();
         }
     }
@@ -72,10 +72,10 @@ public class LogicaDocente {
      *
      * @param docente
      */
-    public void editar(DocentePOJO docente) throws RegisteredObjectException,ObjectNotFoundException {
+    public void editar(DocentePOJO docente) throws RegisteredObjectException, ObjectNotFoundException {
         DocentePOJO docenteFiltradoId = new DAODocente().obtenerPorId(docente.getId());
 
-        if (docenteFiltradoId != null) {
+        if (docenteFiltradoId.getId() == docente.getId()) {
 
             List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
 
