@@ -7,6 +7,7 @@ package co.edu.unicundi.logica;
 
 import co.edu.unicundi.BD.DAODocente;
 import co.edu.unicundi.docentePOJO.DocentePOJO;
+import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class LogicaDocente {
         if(docentes.size()>0){
             return docentes;
         }else{
-            throw new ObjectNotFoundException("El docente no existe");
+            throw new ListNoContentException();
         }
     }
 
