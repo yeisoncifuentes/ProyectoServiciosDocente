@@ -5,7 +5,7 @@
  */
 package co.edu.unicundi.services;
 
-import co.edu.unicundi.docentePOJO.DocentePOJO;
+import co.edu.unicundi.POJO.DocentePOJO;
 import co.edu.unicundi.logica.LogicaDocente;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -14,6 +14,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.ws.rs.Consumes;
@@ -174,7 +175,10 @@ public class DocenteService {
         @ApiResponse(code = 404, message = "Recurso o docente no encontrado"),
         @ApiResponse(code = 405, message = "El método de la solicitud no es DELETE"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
-    public Response eliminar(@PathParam("id") int id) {
+    public Response eliminar(
+            //Campo id url con validacion
+            @NotNull(message = "Campo id requerido")
+            @PathParam("id") Integer id) {
         new LogicaDocente().eliminar(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }

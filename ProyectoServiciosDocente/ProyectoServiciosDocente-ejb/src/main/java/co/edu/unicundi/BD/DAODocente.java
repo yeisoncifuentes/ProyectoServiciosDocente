@@ -5,7 +5,7 @@
  */
 package co.edu.unicundi.BD;
 
-import co.edu.unicundi.docentePOJO.DocentePOJO;
+import co.edu.unicundi.POJO.DocentePOJO;
 import com.google.gson.Gson;
 
 import java.io.IOException;

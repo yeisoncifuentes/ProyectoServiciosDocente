@@ -36,6 +36,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.edu.unicundi.exception.filter.BadRequestExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.ConstraintViolationExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.ExceptionFilter.class);
+        resources.add(co.edu.unicundi.exception.filter.IdRequiredExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.ListNoContentExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.MethodNotAllowedExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.NotFoundExceptionFilter.class);

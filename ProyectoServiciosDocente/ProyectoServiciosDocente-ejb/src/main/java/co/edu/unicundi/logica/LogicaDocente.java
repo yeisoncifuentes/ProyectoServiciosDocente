@@ -6,7 +6,8 @@
 package co.edu.unicundi.logica;
 
 import co.edu.unicundi.BD.DAODocente;
-import co.edu.unicundi.docentePOJO.DocentePOJO;
+import co.edu.unicundi.POJO.DocentePOJO;
+import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
@@ -72,24 +73,27 @@ public class LogicaDocente {
      *
      * @param docente
      */
-    public void editar(DocentePOJO docente) throws RegisteredObjectException, ObjectNotFoundException {
-        DocentePOJO docenteFiltradoId = new DAODocente().obtenerPorId(docente.getId());
+    public void editar(DocentePOJO docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException {
+        if (docente.getId() != 0) {
+            DocentePOJO docenteFiltradoId = new DAODocente().obtenerPorId(docente.getId());
 
-        if (docenteFiltradoId.getId() == docente.getId()) {
+            if (docenteFiltradoId.getId() == docente.getId()) {
 
-            List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
+                List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
 
-            if (docentes.size() == 0) {
-                new DAODocente().editar(docente);
-            } else if (docentes.size() == 1 && docentes.get(0).getId() == docente.getId()) {
-                new DAODocente().editar(docente);
+                if (docentes.size() == 0) {
+                    new DAODocente().editar(docente);
+                } else if (docentes.size() == 1 && docentes.get(0).getId() == docente.getId()) {
+                    new DAODocente().editar(docente);
+                } else {
+                    throw new RegisteredObjectException("La cedula o el correo del docente ya existen");
+                }
             } else {
-                throw new RegisteredObjectException("La cedula o el correo del docente ya existen");
+                throw new ObjectNotFoundException("El id del docente no existe");
             }
         } else {
-            throw new ObjectNotFoundException("El docente no existe");
+            throw new IdRequiredException("Campo id requerido");
         }
-
     }
 
     /**
