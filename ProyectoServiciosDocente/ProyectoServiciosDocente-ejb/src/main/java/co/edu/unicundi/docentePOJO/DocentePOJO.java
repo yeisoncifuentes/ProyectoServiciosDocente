@@ -28,8 +28,8 @@ public class DocentePOJO implements Serializable {
      * cedula del docente
      */
     @NotNull(message = "Campo cedula requerido")
-    @Pattern(regexp = "^([0-9])*$", message = "formato de cedula incorrecto")
-    @Size(min = 7, max = 10, message = "Longitud de la cedula no valido debe estar entre 7 y 10")
+    @Pattern(regexp = "^([0-9])*$", message = "Formato de cedula incorrecto, indicar solamente valores numéricos")
+    @Size(min = 7, max = 10, message = "La longitud de la cedula debe estar entre 7 y 10")
     private String cedula;
 
     /**

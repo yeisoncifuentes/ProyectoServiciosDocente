@@ -14,6 +14,8 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -97,7 +99,12 @@ public class DocenteService {
         @ApiResponse(code = 404, message = "Recurso o docente no encontrado"),
         @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
-    public Response obtenerPorCedula(@PathParam("cedula") String cedula) throws Exception {
+    public Response obtenerPorCedula(
+            //Campo cedula de url con validacion
+            @Pattern(regexp = "^([0-9])*$", message = "Formato de cedula incorrecto, indicar solamente valores numéricos")
+            @Size(min = 7, max = 10, message = "La longitud de la cedula debe estar entre 7 y 10")
+            @PathParam("cedula") String cedula) {
+
         DocentePOJO docente = new LogicaDocente().obtenerPorCedula(cedula);
         return Response.status(Response.Status.OK).entity(docente).build();
     }
@@ -118,7 +125,11 @@ public class DocenteService {
         @ApiResponse(code = 404, message = "Recurso encontrado o lista vacia"),
         @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
-    public Response obtenerDocentesMateria(@PathParam("materia") String materia) throws Exception {
+    public Response obtenerDocentesMateria(
+            //Campo materia de url con validacion
+            @Pattern(regexp = "^[a-zA-Z0-9 ]*$", message = "Formato de materia incorrecto")
+            @PathParam("materia") String materia) {
+
         List<DocentePOJO> docentes = new LogicaDocente().obtenerDocentesMateria(materia);
         return Response.status(Response.Status.OK).entity(docentes).build();
     }

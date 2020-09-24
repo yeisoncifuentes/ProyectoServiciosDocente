@@ -26,7 +26,7 @@ public class WebApplicationExceptionFilter implements ExceptionMapper<WebApplica
         System.out.println("Web Application Exception: " + ex.getClass().getCanonicalName());
         ex.printStackTrace();
 
-        String descripcion = "Ha ocurrido un error, revisar el cuerpo la petición";
+        String descripcion = "Ha ocurrido un error, revisar la petición";
         String codigo = Integer.toString(ex.getResponse().getStatus());
         String codigoNombre = ex.getResponse().getStatusInfo().getReasonPhrase();
 

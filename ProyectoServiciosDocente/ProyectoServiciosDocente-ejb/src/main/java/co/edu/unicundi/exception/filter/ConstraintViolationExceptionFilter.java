@@ -27,7 +27,7 @@ public class ConstraintViolationExceptionFilter implements ExceptionMapper<Const
         String erroresValidacion = "";
 
         for (ConstraintViolation cv : ex.getConstraintViolations()) {
-            erroresValidacion += cv.getMessage() + ", ";
+            erroresValidacion += cv.getMessage() + ". ";
         }
 
         ErrorWrapperPOJO error = new ErrorWrapperPOJO(erroresValidacion, "400", "Bad Request");
