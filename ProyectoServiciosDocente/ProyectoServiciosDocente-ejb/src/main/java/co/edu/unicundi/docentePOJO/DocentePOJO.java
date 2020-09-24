@@ -14,14 +14,15 @@ import javax.validation.constraints.Size;
 /**
  * Clase que permite maquetar los atributos del docente
  *
- * @author YEISON
+ * @author Yeison Cifuentes
+ * @version 1.0.0
  */
 public class DocentePOJO implements Serializable {
 
     /**
      * Id del docente
      */
-    int id;
+    private int id;
 
     /**
      * cedula del docente
@@ -29,12 +30,12 @@ public class DocentePOJO implements Serializable {
     @NotNull(message = "Campo cedula requerido")
     @Pattern(regexp = "^([0-9])*$", message = "formato de cedula incorrecto")
     @Size(min = 7, max = 10, message = "Longitud de la cedula no valido debe estar entre 7 y 10")
-    String cedula;
+    private String cedula;
 
     /**
      * Lista de materias del docente
      */
-    List<String> materias;
+    private List<String> materias;
 
     /**
      * Nombre del docente
@@ -42,7 +43,7 @@ public class DocentePOJO implements Serializable {
     @NotNull(message = "Campo nombre requerido")
     @Pattern(regexp = "^[a-zA-Z ]*$", message = "Formato de nombre incorrecto")
     @Size(min = 2, max = 30, message = "Longitud de nombre no valido")
-    String nombre;
+    private String nombre;
 
     /**
      * Apellido del docente
@@ -50,14 +51,14 @@ public class DocentePOJO implements Serializable {
     @NotNull(message = "Campo apellido requerido")
     @Pattern(regexp = "^[a-zA-Z ]*$", message = "Formato de apellido incorrecto")
     @Size(min = 2, max = 30, message = "Longitud de apellido no valido")
-    String apellido;
+    private String apellido;
 
     /**
      * Correo electronico del docente
      */
     @NotNull(message = "Campo correo requerido")
     @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@+[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message = "Formato de correo incorrecto")
-    String correo;
+    private String correo;
 
     /**
      * Constructor vacio
@@ -84,51 +85,86 @@ public class DocentePOJO implements Serializable {
         this.correo = correo;
     }
 
+    /**
+     * @return the id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * @param id the id to set
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * @return the cedula
+     */
     public String getCedula() {
         return cedula;
     }
 
+    /**
+     * @param cedula the cedula to set
+     */
     public void setCedula(String cedula) {
         this.cedula = cedula;
     }
 
+    /**
+     * @return the materias
+     */
     public List<String> getMaterias() {
         return materias;
     }
 
+    /**
+     * @param materias the materias to set
+     */
     public void setMaterias(List<String> materias) {
         this.materias = materias;
     }
 
+    /**
+     * @return the nombre
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * @param nombre the nombre to set
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     * @return the apellido
+     */
     public String getApellido() {
         return apellido;
     }
 
+    /**
+     * @param apellido the apellido to set
+     */
     public void setApellido(String apellido) {
         this.apellido = apellido;
-
     }
 
+    /**
+     * @return the correo
+     */
     public String getCorreo() {
         return correo;
     }
 
+    /**
+     * @param correo the correo to set
+     */
     public void setCorreo(String correo) {
         this.correo = correo;
     }

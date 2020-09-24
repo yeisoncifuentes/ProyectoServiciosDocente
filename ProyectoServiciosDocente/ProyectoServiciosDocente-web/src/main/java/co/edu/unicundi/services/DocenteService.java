@@ -26,9 +26,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Servicios
+ * Controlaor de servicios docente
  *
- * @author YEISON
+ * @author Yeison Cifuentes
+ * @version 1.0.0
  */
 @Stateless
 @Path("/docentes")
@@ -36,10 +37,10 @@ import javax.ws.rs.core.Response;
 public class DocenteService {
 
     /**
-     * Servicio para registrar docente
+     * Servicio que registra un docente
      *
      * @param docente
-     * @return
+     * @return Response con docente creado
      */
     @POST
     @Path("/registrar")
@@ -60,9 +61,9 @@ public class DocenteService {
     }
 
     /**
-     * LIsta todos los docentes
+     * Servicio que lista todos los docentes
      *
-     * @return
+     * @return Response con lista de docentes
      */
     @Path("/listar")
     @GET
@@ -81,10 +82,10 @@ public class DocenteService {
     }
 
     /**
-     * Servicio para obtener un docente filtrado por cedula
+     * Servicio que obtiene un docente filtrado por cedula
      *
      * @param cedula
-     * @return
+     * @return Response con docente filtrado
      */
     @Path("/obtenerPorCedula/{cedula}")
     @GET
@@ -102,10 +103,10 @@ public class DocenteService {
     }
 
     /**
-     * Lista todos los docentes que tengan la materia ingresada
+     * Servicio que lista todos los docentes que tengan la materia especificada
      *
      * @param materia
-     * @return
+     * @return Response con lista de docentes filtrados
      */
     @Path("/obtenerDocentesMateria/{materia}")
     @GET
@@ -123,10 +124,10 @@ public class DocenteService {
     }
 
     /**
-     * Servicio que permite editar los datos del docente
+     * Servicio que edita los datos del docente especificado
      *
      * @param docente
-     * @return
+     * @return Response
      */
     @Path("/editar")
     @PUT
@@ -147,10 +148,10 @@ public class DocenteService {
     }
 
     /**
-     * Servicio para eliminar un docente
+     * Servicio que elimina un docente
      *
      * @param id
-     * @return
+     * @return Response
      */
     @Path("/eliminar/{id}")
     @DELETE

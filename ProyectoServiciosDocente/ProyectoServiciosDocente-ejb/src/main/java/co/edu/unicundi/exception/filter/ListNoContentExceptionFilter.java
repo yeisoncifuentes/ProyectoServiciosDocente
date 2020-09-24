@@ -5,22 +5,24 @@
  */
 package co.edu.unicundi.exception.filter;
 
-import co.edu.unicundi.docentePOJO.ErrorWrapperPOJO;
 import co.edu.unicundi.exception.ListNoContentException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Filtro que captura la excepcion que se dispara cuando una lista se devuelve
+ * vacia
  *
- * @author cass465
+ * @author Camilo Sanabria
+ * @version 1.0.0
  */
 @Provider
-public class ListNoContentExceptionFilter implements ExceptionMapper<ListNoContentException>{
+public class ListNoContentExceptionFilter implements ExceptionMapper<ListNoContentException> {
 
     @Override
     public Response toResponse(ListNoContentException ex) {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
-    
+
 }

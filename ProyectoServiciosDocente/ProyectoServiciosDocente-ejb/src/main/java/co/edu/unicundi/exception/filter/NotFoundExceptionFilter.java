@@ -6,30 +6,27 @@
 package co.edu.unicundi.exception.filter;
 
 import co.edu.unicundi.docentePOJO.ErrorWrapperPOJO;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
- * Filtro que captura las excepciones que se disparan y no esten filtradas
+ * Filtro que captura la excepcion que se dispara cuando ocurre un 404
  *
  * @author Camilo Sanabria
  * @version 1.0.0
  */
 @Provider
-public class ExceptionFilter implements ExceptionMapper<Exception> {
+public class NotFoundExceptionFilter implements ExceptionMapper<NotFoundException> {
 
     @Override
-    public Response toResponse(Exception ex) {
-        System.out.println("Exception: " + ex.getClass().getCanonicalName());
-        ex.printStackTrace();
-
-        String descripcion = "Ha ocurrido un error en el servidor";
-        String codigo = "500";
-        String codigoNombre = "Internal Server Error";
+    public Response toResponse(NotFoundException ex) {
+        String descripcion = "El recurso solicitado no ha sido encontrado";
+        String codigo = Integer.toString(ex.getResponse().getStatus());
+        String codigoNombre = ex.getResponse().getStatusInfo().getReasonPhrase();
 
         ErrorWrapperPOJO error = new ErrorWrapperPOJO(descripcion, codigo, codigoNombre);
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
+        return Response.status(Response.Status.NOT_FOUND).entity(error).build();
     }
-
 }

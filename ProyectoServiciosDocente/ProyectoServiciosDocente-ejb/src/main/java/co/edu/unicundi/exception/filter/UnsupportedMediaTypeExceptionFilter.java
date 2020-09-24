@@ -6,32 +6,27 @@
 package co.edu.unicundi.exception.filter;
 
 import co.edu.unicundi.docentePOJO.ErrorWrapperPOJO;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
- * Filtro que captura las excepciones que se disparan cuando hay un error en la
- * petición y no está filtrada
+ * Filtro que captura la excepcion que se dispara cuando ocurre un 415
  *
  * @author Camilo Sanabria
  * @version 1.0.0
  */
 @Provider
-public class WebApplicationExceptionFilter implements ExceptionMapper<WebApplicationException> {
+public class UnsupportedMediaTypeExceptionFilter implements ExceptionMapper<NotSupportedException> {
 
     @Override
-    public Response toResponse(WebApplicationException ex) {
-        System.out.println("Web Application Exception: " + ex.getClass().getCanonicalName());
-        ex.printStackTrace();
-
-        String descripcion = "Ha ocurrido un error, revisar el cuerpo la petición";
+    public Response toResponse(NotSupportedException ex) {
+        String descripcion = "El tipo de cuerpo en la petición debe ser Json";
         String codigo = Integer.toString(ex.getResponse().getStatus());
         String codigoNombre = ex.getResponse().getStatusInfo().getReasonPhrase();
 
         ErrorWrapperPOJO error = new ErrorWrapperPOJO(descripcion, codigo, codigoNombre);
-        return Response.status(Response.Status.fromStatusCode(ex.getResponse().getStatus())).entity(error).build();
+        return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).entity(error).build();
     }
-
 }

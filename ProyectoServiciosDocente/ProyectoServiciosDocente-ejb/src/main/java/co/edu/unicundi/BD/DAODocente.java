@@ -20,13 +20,15 @@ import java.util.logging.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
+ * Controla los metodos docente que se comunican a base de datos
  *
- * @author YEISON
+ * @author Yeison Cifuentes
+ * @version 1.0.0
  */
 public class DAODocente {
 
     /**
-     * Registrar docente en BD
+     * Registra un docente en BD
      *
      * @param docente
      */
@@ -51,12 +53,11 @@ public class DAODocente {
     }
 
     /**
-     * listar todos los docentes
+     * lista todos los docentes registrados
      *
-     * @return
+     * @return lista de docentes
      */
     public ArrayList<DocentePOJO> listar() {
-        String estado;
         ArrayList<DocentePOJO> docentes = new ArrayList();
         Connection conexion = new BDConector().open();
         if (conexion != null) {
@@ -92,10 +93,10 @@ public class DAODocente {
     }
 
     /**
-     * Obtener docente de la BD filtrado por cedula
+     * Obtiene el docente de la BD filtrado por cedula
      *
      * @param cedula
-     * @return
+     * @return docente filtrado
      */
     public DocentePOJO obtenerPorCedula(String cedula) {
         DocentePOJO docente = new DocentePOJO();
@@ -177,10 +178,10 @@ public class DAODocente {
     }
 
     /**
-     * Obtener docente de la BD filtrado por id
+     * Obtiene el docente de la BD filtrado por id
      *
      * @param id
-     * @return
+     * @return docente filtrado
      */
     public DocentePOJO obtenerPorId(int id) {
         DocentePOJO docente = new DocentePOJO();
@@ -216,10 +217,10 @@ public class DAODocente {
     }
 
     /**
-     * Obtener docente de la BD filtrado por cedula y correo para validar
+     * Lista los docentes de la BD filtrados por cedula y correo para validar
      *
      * @param cedula
-     * @return
+     * @return lista de docentes
      */
     public List<DocentePOJO> obtenerPorCedulaYCorreo(String cedula, String correo) {
         List<DocentePOJO> docentes = new ArrayList();

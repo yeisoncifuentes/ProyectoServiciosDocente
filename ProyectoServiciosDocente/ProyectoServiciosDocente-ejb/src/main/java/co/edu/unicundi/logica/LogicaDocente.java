@@ -13,12 +13,12 @@ import co.edu.unicundi.exception.RegisteredObjectException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
-import utilitarios.ClaseValidator;
 
 /**
- * Clase que permite hacer la logica de los servicios
+ * Clase que permite hacer la logica de los servicios docente
  *
- * @author YEISON
+ * @author Yeison Cifuentes
+ * @version 1.0.0
  */
 @Stateless
 public class LogicaDocente {

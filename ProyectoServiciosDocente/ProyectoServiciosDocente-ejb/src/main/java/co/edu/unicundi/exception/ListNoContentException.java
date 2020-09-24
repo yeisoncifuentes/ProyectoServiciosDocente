@@ -6,13 +6,18 @@
 package co.edu.unicundi.exception;
 
 /**
+ * Excepción que se dispara cuando una lista solicitada está vacía
  *
- * @author cass465
+ * @author Camilo Sanabria
+ * @version 1.0.0
  */
 public class ListNoContentException extends RuntimeException {
 
+    /**
+     * Constructor vacio de clase
+     */
     public ListNoContentException() {
-        
+
     }
-    
+
 }

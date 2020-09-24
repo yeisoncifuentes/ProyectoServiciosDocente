@@ -33,11 +33,15 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(co.edu.unicundi.exception.filter.BadRequestExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.ConstraintViolationExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.ExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.ListNoContentExceptionFilter.class);
+        resources.add(co.edu.unicundi.exception.filter.MethodNotAllowedExceptionFilter.class);
+        resources.add(co.edu.unicundi.exception.filter.NotFoundExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.ObjectNotFoundExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.RegisteredObjectExceptionFilter.class);
+        resources.add(co.edu.unicundi.exception.filter.UnsupportedMediaTypeExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.WebApplicationExceptionFilter.class);
         resources.add(co.edu.unicundi.services.DocenteService.class);
     }

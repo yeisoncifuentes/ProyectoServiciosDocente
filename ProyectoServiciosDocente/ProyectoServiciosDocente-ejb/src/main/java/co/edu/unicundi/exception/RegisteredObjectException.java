@@ -6,13 +6,21 @@
 package co.edu.unicundi.exception;
 
 /**
+ * Excepción que se dispara cuando se va a crear o editar un objeto ya está
+ * registrado en base de datos
  *
- * @author cass465
+ * @author Camilo Sanabria
+ * @version 1.0.0
  */
 public class RegisteredObjectException extends RuntimeException {
 
+    /**
+     * Constructor de clase
+     *
+     * @param message
+     */
     public RegisteredObjectException(String message) {
         super(message);
     }
-    
+
 }

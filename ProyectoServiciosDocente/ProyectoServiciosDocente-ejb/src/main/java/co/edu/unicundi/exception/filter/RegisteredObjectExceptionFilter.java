@@ -12,16 +12,19 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Filtro que captura la excepcion que se dispara cuando ya se encuentra
+ * registrado un objeto en base de datos
  *
- * @author cass465
+ * @author Camilo Sanabria
+ * @version 1.0.0
  */
 @Provider
-public class RegisteredObjectExceptionFilter implements ExceptionMapper<RegisteredObjectException>{
+public class RegisteredObjectExceptionFilter implements ExceptionMapper<RegisteredObjectException> {
 
     @Override
     public Response toResponse(RegisteredObjectException ex) {
         ErrorWrapperPOJO error = new ErrorWrapperPOJO(ex.getMessage(), "400", "Bad Request");
         return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
     }
-    
+
 }

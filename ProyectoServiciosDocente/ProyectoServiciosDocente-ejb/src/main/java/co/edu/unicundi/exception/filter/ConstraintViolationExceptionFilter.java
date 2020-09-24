@@ -13,8 +13,11 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Filtro que captura la excepcion que se dispara cuando no se cumplen las
+ * validaciones a cargo de @valid
  *
- * @author cass465
+ * @author Camilo Sanabria
+ * @version 1.0.0
  */
 @Provider
 public class ConstraintViolationExceptionFilter implements ExceptionMapper<ConstraintViolationException> {

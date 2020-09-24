@@ -6,13 +6,20 @@
 package co.edu.unicundi.exception;
 
 /**
+ * Excepción que se dispara cuando un objeto no es encontrado en base de datos
  *
- * @author cass465
+ * @author Camilo Sanabria
+ * @version 1.0.0
  */
 public class ObjectNotFoundException extends RuntimeException {
 
+    /**
+     * Constructor de clase
+     *
+     * @param message
+     */
     public ObjectNotFoundException(String message) {
         super(message);
     }
-    
+
 }

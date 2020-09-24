@@ -10,16 +10,40 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * Envoltorio de error para respuestas
  *
- * @author cass465
+ * @author Camilo Sanabria
+ * @version 1.0.0
  */
-public class ErrorWrapperPOJO implements Serializable{
-    
+public class ErrorWrapperPOJO implements Serializable {
+
+    /**
+     * Descripcion del error
+     */
     private String error;
+
+    /**
+     * Codigo de respuesta http
+     */
     private String codigo;
+
+    /**
+     * Nombre del codigo de respuesta
+     */
     private String codigoNombre;
+
+    /**
+     * Fecha en que ocurre el error
+     */
     private String fecha;
 
+    /**
+     * Constructor de clase
+     *
+     * @param error
+     * @param codigo
+     * @param codigoNombre
+     */
     public ErrorWrapperPOJO(String error, String codigo, String codigoNombre) {
         this.error = error;
         this.codigo = codigo;
@@ -27,37 +51,60 @@ public class ErrorWrapperPOJO implements Serializable{
         this.fecha = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss").format(new Date());
     }
 
+    /**
+     * @return the error
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     * @param error the error to set
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     * @return the codigo
+     */
     public String getCodigo() {
         return codigo;
     }
 
+    /**
+     * @param codigo the codigo to set
+     */
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
+    /**
+     * @return the codigoNombre
+     */
     public String getCodigoNombre() {
         return codigoNombre;
     }
 
+    /**
+     * @param codigoNombre the codigoNombre to set
+     */
     public void setCodigoNombre(String codigoNombre) {
         this.codigoNombre = codigoNombre;
     }
 
+    /**
+     * @return the fecha
+     */
     public String getFecha() {
         return fecha;
     }
 
+    /**
+     * @param fecha the fecha to set
+     */
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
-    
-    
+
 }

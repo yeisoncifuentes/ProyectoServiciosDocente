@@ -12,16 +12,19 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Filtro que captura la excepcion que se dispara cuando no se encuentra
+ * registrado un objeto en base de datos
  *
- * @author cass465
+ * @author Camilo Sanabria
+ * @version 1.0.0
  */
 @Provider
-public class ObjectNotFoundExceptionFilter implements ExceptionMapper<ObjectNotFoundException>{
+public class ObjectNotFoundExceptionFilter implements ExceptionMapper<ObjectNotFoundException> {
 
     @Override
     public Response toResponse(ObjectNotFoundException ex) {
         ErrorWrapperPOJO error = new ErrorWrapperPOJO(ex.getMessage(), "404", "Not Found");
         return Response.status(Response.Status.NOT_FOUND).entity(error).build();
     }
-    
+
 }
