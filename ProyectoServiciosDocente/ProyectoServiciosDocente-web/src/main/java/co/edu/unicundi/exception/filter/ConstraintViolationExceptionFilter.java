@@ -5,7 +5,7 @@
  */
 package co.edu.unicundi.exception.filter;
 
-import co.edu.unicundi.docentePOJO.ErrorWrapperPOJO;
+import co.edu.unicundi.POJO.ErrorWrapperPOJO;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Response;

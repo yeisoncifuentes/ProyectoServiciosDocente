@@ -5,7 +5,7 @@
  */
 package co.edu.unicundi.exception.filter;
 
-import co.edu.unicundi.docentePOJO.ErrorWrapperPOJO;
+import co.edu.unicundi.POJO.ErrorWrapperPOJO;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
