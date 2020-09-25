@@ -37,13 +37,14 @@ public class LogicaDocente implements ILogicaDocente {
      */
     @Override
     public void registrar(DocentePOJO docente) throws RegisteredObjectException {
-        List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
+        /**List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
 
         if (docentes.size() == 0) {
             new DAODocente().registrar(docente);
         } else {
             throw new RegisteredObjectException("La cedula y/o el correo del docente ya existen");
-        }
+        }**/
+        new DAODocente().registrar(docente);
     }
 
     /**
