@@ -106,7 +106,7 @@ public class DocenteService {
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     public Response obtenerPorCedula(
             //Campo cedula de url con validacion
-            @Pattern(regexp = "^([0-9])*$", message = "Formato de cedula incorrecto, indicar solamente valores numéricos")
+            @Pattern(regexp = "^([0-9])*$", message = "Formato de cedula incorrecto, indicar valores numéricos sin espacios")
             @Size(min = 7, max = 10, message = "La longitud de la cedula debe estar entre 7 y 10")
             @PathParam("cedula") String cedula) {
 

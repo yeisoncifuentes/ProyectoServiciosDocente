@@ -42,7 +42,7 @@ public class LogicaDocente implements ILogicaDocente {
         if (docentes.size() == 0) {
             new DAODocente().registrar(docente);
         } else {
-            throw new RegisteredObjectException("La cedula o el correo del docente ya existen");
+            throw new RegisteredObjectException("La cedula y/o el correo del docente ya existen");
         }
     }
 
@@ -75,7 +75,7 @@ public class LogicaDocente implements ILogicaDocente {
         if (docente.getId() > 0) {
             return docente;
         } else {
-            throw new ObjectNotFoundException("La cedula no existe");
+            throw new ObjectNotFoundException("La cedula ingresada no existe");
         }
     }
 
@@ -101,7 +101,7 @@ public class LogicaDocente implements ILogicaDocente {
                 } else if (docentes.size() == 1 && docentes.get(0).getId() == docente.getId()) {
                     new DAODocente().editar(docente);
                 } else {
-                    throw new RegisteredObjectException("La cedula o el correo del docente ya existen");
+                    throw new RegisteredObjectException("La cedula y/o el correo del docente ya existen");
                 }
             } else {
                 throw new ObjectNotFoundException("El id del docente no existe");
@@ -137,7 +137,7 @@ public class LogicaDocente implements ILogicaDocente {
         if (docentesMateria.size() > 0) {
             return docentesMateria;
         } else {
-            throw new ObjectNotFoundException("La materia no existe");
+            throw new ObjectNotFoundException("La materia ingresada no existe");
         }
     }
 

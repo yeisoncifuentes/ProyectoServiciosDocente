@@ -41,6 +41,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.edu.unicundi.exception.filter.MethodNotAllowedExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.NotFoundExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.ObjectNotFoundExceptionFilter.class);
+        resources.add(co.edu.unicundi.exception.filter.PathParamExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.RegisteredObjectExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.UnsupportedMediaTypeExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.WebApplicationExceptionFilter.class);
