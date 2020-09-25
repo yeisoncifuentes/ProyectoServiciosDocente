@@ -23,9 +23,7 @@ public class IdRequiredExceptionFilter implements ExceptionMapper<IdRequiredExce
 
     @Override
     public Response toResponse(IdRequiredException ex) {
-        System.out.println("Entre IdRequiredException");
         ErrorWrapperPOJO error = new ErrorWrapperPOJO(ex.getMessage(), "400", "Bad Request");
-        System.out.println("Ya esta wrapper");
         return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
     }
 

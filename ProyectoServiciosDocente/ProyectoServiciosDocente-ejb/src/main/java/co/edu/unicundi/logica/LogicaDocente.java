@@ -15,6 +15,8 @@ import co.edu.unicundi.interfaces.ILogicaDocente;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 
 /**
  * Clase que permite hacer la logica de los servicios docente
@@ -23,6 +25,8 @@ import javax.ejb.Stateless;
  * @version 1.0.0
  */
 @Stateless
+//Le asigna las transacciones a este bean y no al conenedor con el fin de que si hay un error, este bean acabe con la transaccion
+@TransactionManagement(TransactionManagementType.BEAN)
 public class LogicaDocente implements ILogicaDocente {
 
     /**
