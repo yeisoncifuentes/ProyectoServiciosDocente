@@ -6,12 +6,13 @@
 package co.edu.unicundi.services;
 
 import co.edu.unicundi.POJO.DocentePOJO;
-import co.edu.unicundi.logica.LogicaDocente;
+import co.edu.unicundi.interfaces.ILogicaDocente;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -39,6 +40,9 @@ import javax.ws.rs.core.Response;
 @Api(value = "/docentes", description = "Manejo de datos docente")
 public class DocenteService {
 
+    @EJB
+    public ILogicaDocente logicaDocente;
+    
     /**
      * Servicio que registra un docente
      *
@@ -59,7 +63,7 @@ public class DocenteService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registrar(@Valid DocentePOJO docente) {
-        new LogicaDocente().registrar(docente);
+        logicaDocente.registrar(docente);
         return Response.status(Response.Status.CREATED).entity(docente).build();
     }
 
@@ -80,7 +84,7 @@ public class DocenteService {
         @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     public Response listar() {
-        List<DocentePOJO> docentes = new LogicaDocente().listar();
+        List<DocentePOJO> docentes = logicaDocente.listar();
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
 
@@ -106,7 +110,7 @@ public class DocenteService {
             @Size(min = 7, max = 10, message = "La longitud de la cedula debe estar entre 7 y 10")
             @PathParam("cedula") String cedula) {
 
-        DocentePOJO docente = new LogicaDocente().obtenerPorCedula(cedula);
+        DocentePOJO docente = logicaDocente.obtenerPorCedula(cedula);
         return Response.status(Response.Status.OK).entity(docente).build();
     }
 
@@ -131,7 +135,7 @@ public class DocenteService {
             @Pattern(regexp = "^[a-zA-Z0-9 ]*$", message = "Formato de materia incorrecto")
             @PathParam("materia") String materia) {
 
-        List<DocentePOJO> docentes = new LogicaDocente().obtenerDocentesMateria(materia);
+        List<DocentePOJO> docentes = logicaDocente.obtenerDocentesMateria(materia);
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
 
@@ -155,7 +159,7 @@ public class DocenteService {
         @ApiResponse(code = 515, message = "El tipo de cuerpo en la petición no es Json"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     public Response editar(@Valid DocentePOJO docente) {
-        new LogicaDocente().editar(docente);
+        logicaDocente.editar(docente);
         return Response.status(Response.Status.OK).entity("Editado correctamente").build();
     }
 
@@ -179,7 +183,7 @@ public class DocenteService {
             //Campo id url con validacion
             @NotNull(message = "Campo id requerido")
             @PathParam("id") Integer id) {
-        new LogicaDocente().eliminar(id);
+        logicaDocente.eliminar(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
