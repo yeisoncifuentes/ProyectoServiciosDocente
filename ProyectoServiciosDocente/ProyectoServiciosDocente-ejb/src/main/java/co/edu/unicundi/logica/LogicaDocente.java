@@ -12,8 +12,17 @@ import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.interfaces.ILogicaDocente;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -28,7 +37,9 @@ import javax.ejb.TransactionManagementType;
 //Le asigna las transacciones a este bean y no al conenedor con el fin de que si hay un error, este bean acabe con la transaccion
 @TransactionManagement(TransactionManagementType.BEAN)
 public class LogicaDocente implements ILogicaDocente {
-
+    
+    private static String ruta="Y:\\UNIVERSIDAD\\2020-2\\LINEA_DE_PROFUNDIZACIÓN_II\\TRABAJOS\\ProyectoServiciosDocente\\ProyectoServiciosDocente\\ProyectoServiciosDocente-ejb\\src\\main\\java\\co\\edu\\unicundi\\logica\\docentes.txt";
+     
     /**
      * Registra el docente especificado
      *
@@ -37,13 +48,15 @@ public class LogicaDocente implements ILogicaDocente {
      */
     @Override
     public void registrar(DocentePOJO docente) throws RegisteredObjectException {
-        /**List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
-
-        if (docentes.size() == 0) {
-            new DAODocente().registrar(docente);
-        } else {
-            throw new RegisteredObjectException("La cedula y/o el correo del docente ya existen");
-        }**/
+        /**
+         * List<DocentePOJO> docentes = new
+         * DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(),
+         * docente.getCorreo());
+         *
+         * if (docentes.size() == 0) { new DAODocente().registrar(docente); }
+         * else { throw new RegisteredObjectException("La cedula y/o el correo
+         * del docente ya existen"); }*
+         */
         new DAODocente().registrar(docente);
     }
 
@@ -157,4 +170,65 @@ public class LogicaDocente implements ILogicaDocente {
             throw new ObjectNotFoundException("El id del docente no existe");
         }
     }
+
+    /**
+     * Registra el docente especificado en el fichero
+     *
+     * @param docente
+     * @throws IOException
+     */
+    @Override
+    public void registrarFichero(DocentePOJO docente) throws IOException {
+        List<DocentePOJO> docentes;
+         try {
+            File f = new File(ruta);
+            if (!f.exists()) {
+                f.createNewFile();
+                FileOutputStream fos = new FileOutputStream(f);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(docente);
+                oos.close();               
+            } else {
+                docentes = listarFichero();
+                FileOutputStream fos = new FileOutputStream(ruta);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);                
+                for (DocentePOJO docent : docentes) {
+                    oos.writeObject(docent);
+                }
+                oos.writeObject(docente);
+                oos.close();               
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(LogicaDocente.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(LogicaDocente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    @Override
+    public List<DocentePOJO> listarFichero() throws IOException {
+        ObjectInputStream ois = null;
+        ArrayList<DocentePOJO> docentes = new ArrayList();
+
+        try {
+            File f = new File(ruta);
+            FileInputStream fis = new FileInputStream(f);
+
+            ois = new ObjectInputStream(fis);
+            while (true) {
+                docentes.add((DocentePOJO) ois.readObject());
+
+            }
+        } catch (IOException io) {
+            //Fin de la lectura
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(LogicaDocente.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ois.close();
+        }        
+        return docentes;
+
+    }
+
 }

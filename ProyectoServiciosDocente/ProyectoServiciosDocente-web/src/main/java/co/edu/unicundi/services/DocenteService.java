@@ -11,6 +11,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -62,8 +63,33 @@ public class DocenteService {
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registrar(@Valid DocentePOJO docente) {
+    public Response registrar(@Valid DocentePOJO docente)  {
         logicaDocente.registrar(docente);
+        return Response.status(Response.Status.CREATED).entity(docente).build();
+    }
+    
+    
+     /**
+     * Servicio que registra un docente en el fichero
+     *
+     * @param docente
+     * @return Response con docente creado
+     */
+    @POST
+    @Path("/registrarFichero")
+    @ApiOperation(value = "Registra un docente en el sistema")
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "El docente fue registrado correctamente, se devuelve el objeto creado"),
+        @ApiResponse(code = 400, message = " Error en la petición, los campos enviados en la solicitud son inválidos o el\n"
+                + "correo o la cédula ya están registrados o si la petición no contiene body"),
+        @ApiResponse(code = 404, message = "Recurso no encontrado"),
+        @ApiResponse(code = 405, message = "El método de la solicitud no es POST"),
+        @ApiResponse(code = 515, message = "El tipo de cuerpo en la petición no es Json"),
+        @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response registrarFichero(@Valid DocentePOJO docente) throws IOException  {
+        logicaDocente.registrarFichero(docente);
         return Response.status(Response.Status.CREATED).entity(docente).build();
     }
 
@@ -85,6 +111,28 @@ public class DocenteService {
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     public Response listar() {
         List<DocentePOJO> docentes = logicaDocente.listar();
+        return Response.status(Response.Status.OK).entity(docentes).build();
+    }
+    
+    
+     /**
+     * Servicio que lista todos los docentes del fichero
+     *
+     * @return Response con lista de docentes
+     */
+    @Path("/listarFichero")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Lista todos los docentes registrados")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Los docentes se obtuvieron correctamente"),
+        @ApiResponse(code = 204, message = "La lista de docentes está vacía"),
+        @ApiResponse(code = 400, message = "Error en la petición, puede suceder si se envía body"),
+        @ApiResponse(code = 404, message = "Recurso no encontrado"),
+        @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
+        @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
+    public Response listarFichero() throws IOException {
+        List<DocentePOJO> docentes = logicaDocente.listarFichero();
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
 

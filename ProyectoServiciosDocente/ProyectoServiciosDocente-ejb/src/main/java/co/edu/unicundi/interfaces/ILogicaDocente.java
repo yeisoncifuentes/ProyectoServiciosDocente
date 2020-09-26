@@ -9,6 +9,7 @@ import co.edu.unicundi.POJO.DocentePOJO;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
+import java.io.IOException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -30,12 +31,30 @@ public interface ILogicaDocente {
     public void registrar(DocentePOJO docente) throws RegisteredObjectException;
     
     /**
+     * Registra el docente especificado dentro del fichero
+     *
+     * @param docente
+     * @throws RegisteredObjectException
+     */
+    public void registrarFichero(DocentePOJO docente) throws IOException;
+    
+    /**
      * Lista todos los docentes registrados
      *
      * @return Lista de docentes
      * @throws ObjectNotFoundException
      */
     public List<DocentePOJO> listar() throws ObjectNotFoundException;
+    
+    
+     /**
+     * Lista todos los docentes registrados
+     *
+     * @return Lista de docentes
+     * @throws ObjectNotFoundException
+     */
+    public List<DocentePOJO> listarFichero() throws IOException;
+    
     
     /**
      * Obtiene un docente filtrado por la cedula especificada
@@ -72,4 +91,6 @@ public interface ILogicaDocente {
      * @throws ObjectNotFoundException
      */
     public void eliminar(int id) throws ObjectNotFoundException;
+    
+    
 }
