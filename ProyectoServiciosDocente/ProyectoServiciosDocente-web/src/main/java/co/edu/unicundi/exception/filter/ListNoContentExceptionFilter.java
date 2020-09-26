@@ -22,7 +22,7 @@ public class ListNoContentExceptionFilter implements ExceptionMapper<ListNoConte
 
     @Override
     public Response toResponse(ListNoContentException ex) {
-        return Response.status(Response.Status.NO_CONTENT).build();
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
 
 }

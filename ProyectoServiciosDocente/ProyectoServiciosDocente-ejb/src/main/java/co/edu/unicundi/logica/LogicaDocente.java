@@ -37,9 +37,9 @@ import javax.ejb.TransactionManagementType;
 //Le asigna las transacciones a este bean y no al conenedor con el fin de que si hay un error, este bean acabe con la transaccion
 @TransactionManagement(TransactionManagementType.BEAN)
 public class LogicaDocente implements ILogicaDocente {
-    
-    private static String ruta="Y:\\UNIVERSIDAD\\2020-2\\LINEA_DE_PROFUNDIZACIÓN_II\\TRABAJOS\\ProyectoServiciosDocente\\ProyectoServiciosDocente\\ProyectoServiciosDocente-ejb\\src\\main\\java\\co\\edu\\unicundi\\logica\\docentes.txt";
-     
+
+    private static String ruta = "Y:\\UNIVERSIDAD\\2020-2\\LINEA_DE_PROFUNDIZACIÓN_II\\TRABAJOS\\ProyectoServiciosDocente\\ProyectoServiciosDocente\\ProyectoServiciosDocente-ejb\\src\\main\\java\\co\\edu\\unicundi\\logica\\docentes.txt";
+
     /**
      * Registra el docente especificado
      *
@@ -57,7 +57,9 @@ public class LogicaDocente implements ILogicaDocente {
          * else { throw new RegisteredObjectException("La cedula y/o el correo
          * del docente ya existen"); }*
          */
+
         new DAODocente().registrar(docente);
+
     }
 
     /**
@@ -180,23 +182,23 @@ public class LogicaDocente implements ILogicaDocente {
     @Override
     public void registrarFichero(DocentePOJO docente) throws IOException {
         List<DocentePOJO> docentes;
-         try {
+        try {
             File f = new File(ruta);
             if (!f.exists()) {
                 f.createNewFile();
                 FileOutputStream fos = new FileOutputStream(f);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
                 oos.writeObject(docente);
-                oos.close();               
+                oos.close();
             } else {
                 docentes = listarFichero();
                 FileOutputStream fos = new FileOutputStream(ruta);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);                
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
                 for (DocentePOJO docent : docentes) {
                     oos.writeObject(docent);
                 }
                 oos.writeObject(docente);
-                oos.close();               
+                oos.close();
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(LogicaDocente.class.getName()).log(Level.SEVERE, null, ex);
@@ -226,7 +228,7 @@ public class LogicaDocente implements ILogicaDocente {
             Logger.getLogger(LogicaDocente.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ois.close();
-        }        
+        }
         return docentes;
 
     }

@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 package co.edu.unicundi.BD;
+
+import co.edu.unicundi.exception.ListNoContentException;
+import co.edu.unicundi.exception.NoResponseBDException;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,7 +14,8 @@ import java.sql.SQLException;
 
 /**
  * Clase que conecta al sistema con la Base de Datos
- * @author YEISON
+ *
+ * @author Yeison Cifuentes
  * @version 1.0.0
  */
 public class BDConector implements Serializable {
@@ -20,22 +24,22 @@ public class BDConector implements Serializable {
      * Manejador de JDBC
      */
     private final String JDBC_DRIVER = "org.postgresql.Driver";
-    
+
     /**
      * Direccion a la que se conecta BD
      */
-    private final String DB_URL = "jdbc:postgresql://localhost:5432/docente";
-    
+    private final String DB_URL = "jdbc:postgresql://localhost:5432/Docentes";
+
     /**
      * Usuario de postgreSQL
      */
     private String user;
-    
+
     /**
      * Contraseña de postgreSQL
      */
     private String pass;
-    
+
     /**
      * Variable de conexion
      */
@@ -46,11 +50,12 @@ public class BDConector implements Serializable {
      */
     public BDConector() {
         this.user = "postgres";
-        this.pass = "root";
+        this.pass = "XVV254";
     }
 
     /**
      * Abrir conexion
+     *
      * @return La conexion realizada
      */
     public Connection open() {
@@ -59,8 +64,7 @@ public class BDConector implements Serializable {
             try {
                 conexion = DriverManager.getConnection(DB_URL, user, pass);
             } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("No se pudo conectar a la BD");
+                throw new NoResponseBDException("La Base de datos no responde");
             }
         } catch (ClassNotFoundException ex) {
             System.out.println("Driver no encontrado");
