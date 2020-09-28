@@ -38,7 +38,7 @@ import javax.ejb.TransactionManagementType;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class LogicaDocente implements ILogicaDocente {
 
-    private static String ruta = "Y:\\UNIVERSIDAD\\2020-2\\LINEA_DE_PROFUNDIZACIÓN_II\\TRABAJOS\\ProyectoServiciosDocente\\ProyectoServiciosDocente\\ProyectoServiciosDocente-ejb\\src\\main\\java\\co\\edu\\unicundi\\logica\\docentes.txt";
+    private static String ruta = "C:\\Users\\cass4\\Desktop\\UDEC\\Semestre 8\\LINEA DE PROFUNDIZACION II\\Proyectos\\ProyectoServiciosDocente\\ProyectoServiciosDocente\\ProyectoServiciosDocente-ejb\\src\\main\\java\\co\\edu\\unicundi\\logica\\docentes.txt";
 
     /**
      * Registra el docente especificado
@@ -48,18 +48,14 @@ public class LogicaDocente implements ILogicaDocente {
      */
     @Override
     public void registrar(DocentePOJO docente) throws RegisteredObjectException {
-        /**
-         * List<DocentePOJO> docentes = new
-         * DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(),
-         * docente.getCorreo());
-         *
-         * if (docentes.size() == 0) { new DAODocente().registrar(docente); }
-         * else { throw new RegisteredObjectException("La cedula y/o el correo
-         * del docente ya existen"); }*
-         */
 
-        new DAODocente().registrar(docente);
+        List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
 
+        if (docentes.size() == 0) {
+            new DAODocente().registrar(docente);
+        } else {
+            throw new RegisteredObjectException("La cedula y/o el correo del docente ya existen");
+        }
     }
 
     /**
