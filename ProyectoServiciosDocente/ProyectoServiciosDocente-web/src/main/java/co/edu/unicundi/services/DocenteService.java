@@ -6,6 +6,11 @@
 package co.edu.unicundi.services;
 
 import co.edu.unicundi.POJO.DocentePOJO;
+import co.edu.unicundi.exception.IdRequiredException;
+import co.edu.unicundi.exception.ListNoContentException;
+import co.edu.unicundi.exception.NoResponseBDException;
+import co.edu.unicundi.exception.ObjectNotFoundException;
+import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.interfaces.ILogicaDocente;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -63,7 +68,7 @@ public class DocenteService {
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registrar(@Valid DocentePOJO docente)  {
+    public Response registrar(@Valid DocentePOJO docente) throws RegisteredObjectException, NoResponseBDException  {
         logicaDocente.registrar(docente);
         return Response.status(Response.Status.CREATED).entity(docente).build();
     }
@@ -88,7 +93,7 @@ public class DocenteService {
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registrarFichero(@Valid DocentePOJO docente) throws IOException  {
+    public Response registrarFichero(@Valid DocentePOJO docente) throws IOException, NoResponseBDException  {
         logicaDocente.registrarFichero(docente);
         return Response.status(Response.Status.CREATED).entity(docente).build();
     }
@@ -109,7 +114,7 @@ public class DocenteService {
         @ApiResponse(code = 404, message = "Recurso no encontrado"),
         @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
-    public Response listar() {
+    public Response listar() throws ListNoContentException, NoResponseBDException {
         List<DocentePOJO> docentes = logicaDocente.listar();
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
@@ -131,7 +136,7 @@ public class DocenteService {
         @ApiResponse(code = 404, message = "Recurso no encontrado"),
         @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
-    public Response listarFichero() throws IOException {
+    public Response listarFichero() throws IOException, NoResponseBDException {
         List<DocentePOJO> docentes = logicaDocente.listarFichero();
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
@@ -156,7 +161,7 @@ public class DocenteService {
             //Campo cedula de url con validacion
             @Pattern(regexp = "^([0-9])*$", message = "Formato de cedula incorrecto, indicar valores numéricos sin espacios")
             @Size(min = 7, max = 10, message = "La longitud de la cedula debe estar entre 7 y 10")
-            @PathParam("cedula") String cedula) {
+            @PathParam("cedula") String cedula) throws ObjectNotFoundException, NoResponseBDException {
 
         DocentePOJO docente = logicaDocente.obtenerPorCedula(cedula);
         return Response.status(Response.Status.OK).entity(docente).build();
@@ -181,7 +186,7 @@ public class DocenteService {
     public Response obtenerDocentesMateria(
             //Campo materia de url con validacion
             @Pattern(regexp = "^[a-zA-Z0-9 ]*$", message = "Formato de materia incorrecto")
-            @PathParam("materia") String materia) {
+            @PathParam("materia") String materia) throws ObjectNotFoundException, NoResponseBDException {
 
         List<DocentePOJO> docentes = logicaDocente.obtenerDocentesMateria(materia);
         return Response.status(Response.Status.OK).entity(docentes).build();
@@ -206,7 +211,7 @@ public class DocenteService {
         @ApiResponse(code = 405, message = "El método de la solicitud no es PUT"),
         @ApiResponse(code = 515, message = "El tipo de cuerpo en la petición no es Json"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
-    public Response editar(@Valid DocentePOJO docente) {
+    public Response editar(@Valid DocentePOJO docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
         logicaDocente.editar(docente);
         return Response.status(Response.Status.OK).entity("Editado correctamente").build();
     }
@@ -230,7 +235,7 @@ public class DocenteService {
     public Response eliminar(
             //Campo id url con validacion
             @NotNull(message = "Campo id requerido")
-            @PathParam("id") Integer id) {
+            @PathParam("id") Integer id) throws ObjectNotFoundException, NoResponseBDException {
         logicaDocente.eliminar(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }

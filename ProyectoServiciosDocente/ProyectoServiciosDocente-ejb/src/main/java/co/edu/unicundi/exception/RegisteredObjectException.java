@@ -12,7 +12,7 @@ package co.edu.unicundi.exception;
  * @author Camilo Sanabria
  * @version 1.0.0
  */
-public class RegisteredObjectException extends RuntimeException {
+public class RegisteredObjectException extends Exception {
 
     /**
      * Constructor de clase

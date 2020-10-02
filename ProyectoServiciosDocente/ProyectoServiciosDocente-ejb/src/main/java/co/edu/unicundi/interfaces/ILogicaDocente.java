@@ -7,6 +7,8 @@ package co.edu.unicundi.interfaces;
 
 import co.edu.unicundi.POJO.DocentePOJO;
 import co.edu.unicundi.exception.IdRequiredException;
+import co.edu.unicundi.exception.ListNoContentException;
+import co.edu.unicundi.exception.NoResponseBDException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
 import java.io.IOException;
@@ -27,33 +29,37 @@ public interface ILogicaDocente {
      *
      * @param docente
      * @throws RegisteredObjectException
+     * @throws NoResponseBDException
      */
-    public void registrar(DocentePOJO docente) throws RegisteredObjectException;
+    public void registrar(DocentePOJO docente) throws RegisteredObjectException, NoResponseBDException;
     
     /**
      * Registra el docente especificado dentro del fichero
      *
      * @param docente
-     * @throws RegisteredObjectException
+     * @throws IOException
+     * @throws NoResponseBDException
      */
-    public void registrarFichero(DocentePOJO docente) throws IOException;
+    public void registrarFichero(DocentePOJO docente) throws IOException, NoResponseBDException;
     
     /**
      * Lista todos los docentes registrados
      *
      * @return Lista de docentes
-     * @throws ObjectNotFoundException
+     * @throws ListNoContentException
+     * @throws NoResponseBDException
      */
-    public List<DocentePOJO> listar() throws ObjectNotFoundException;
+    public List<DocentePOJO> listar() throws ListNoContentException, NoResponseBDException;
     
     
      /**
      * Lista todos los docentes registrados
      *
      * @return Lista de docentes
-     * @throws ObjectNotFoundException
+     * @throws IOException
+     * @throws NoResponseBDException
      */
-    public List<DocentePOJO> listarFichero() throws IOException;
+    public List<DocentePOJO> listarFichero() throws IOException, NoResponseBDException;
     
     
     /**
@@ -62,8 +68,9 @@ public interface ILogicaDocente {
      * @param cedula
      * @return Docente filtrado
      * @throws ObjectNotFoundException
+     * @throws NoResponseBDException
      */
-    public DocentePOJO obtenerPorCedula(String cedula) throws ObjectNotFoundException;
+    public DocentePOJO obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException;
     
     /**
      * Edita los datos del docente especificado
@@ -72,8 +79,9 @@ public interface ILogicaDocente {
      * @throws RegisteredObjectException
      * @throws ObjectNotFoundException
      * @throws IdRequiredException
+     * @throws NoResponseBDException
      */
-    public void editar(DocentePOJO docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException;
+    public void editar(DocentePOJO docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException;
     
     /**
      * Lista los docentes con la materia especificada
@@ -81,16 +89,18 @@ public interface ILogicaDocente {
      * @param materia
      * @return Lista de docentes
      * @throws ObjectNotFoundException
+     * @throws NoResponseBDException
      */
-    public List<DocentePOJO> obtenerDocentesMateria(String materia) throws ObjectNotFoundException;
+    public List<DocentePOJO> obtenerDocentesMateria(String materia) throws ObjectNotFoundException, NoResponseBDException;
     
     /**
      * Elimina un docente de acuerdo al id especificado
      *
      * @param id
      * @throws ObjectNotFoundException
+     * @throws NoResponseBDException
      */
-    public void eliminar(int id) throws ObjectNotFoundException;
+    public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException;
     
     
 }

@@ -6,6 +6,7 @@
 package co.edu.unicundi.BD;
 
 import co.edu.unicundi.POJO.DocentePOJO;
+import co.edu.unicundi.exception.NoResponseBDException;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class DAODocente {
      *
      * @param docente
      */
-    public void registrar(DocentePOJO docente) {
+    public void registrar(DocentePOJO docente) throws NoResponseBDException {
         Connection conexion = new BDConector().open();
         if (conexion != null) {
             try {
@@ -57,7 +58,7 @@ public class DAODocente {
      *
      * @return lista de docentes
      */
-    public ArrayList<DocentePOJO> listar() {
+    public ArrayList<DocentePOJO> listar() throws NoResponseBDException {
         ArrayList<DocentePOJO> docentes = new ArrayList();
         Connection conexion = new BDConector().open();
         if (conexion != null) {
@@ -98,7 +99,7 @@ public class DAODocente {
      * @param cedula
      * @return docente filtrado
      */
-    public DocentePOJO obtenerPorCedula(String cedula) {
+    public DocentePOJO obtenerPorCedula(String cedula) throws NoResponseBDException {
         DocentePOJO docente = new DocentePOJO();
         Connection conexion = new BDConector().open();
         if (conexion != null) {
@@ -136,7 +137,7 @@ public class DAODocente {
      *
      * @param docente
      */
-    public void editar(DocentePOJO docente) {
+    public void editar(DocentePOJO docente) throws NoResponseBDException {
         Connection conexion = new BDConector().open();
         if (conexion != null) {
             try {
@@ -162,7 +163,7 @@ public class DAODocente {
      *
      * @param id
      */
-    public void eliminar(int id) {
+    public void eliminar(int id) throws NoResponseBDException {
         Connection conexion = new BDConector().open();
         if (conexion != null) {
             try {
@@ -183,7 +184,7 @@ public class DAODocente {
      * @param id
      * @return docente filtrado
      */
-    public DocentePOJO obtenerPorId(int id) {
+    public DocentePOJO obtenerPorId(int id) throws NoResponseBDException {
         DocentePOJO docente = new DocentePOJO();
         Connection conexion = new BDConector().open();
         if (conexion != null) {
@@ -222,7 +223,7 @@ public class DAODocente {
      * @param cedula
      * @return lista de docentes
      */
-    public List<DocentePOJO> obtenerPorCedulaYCorreo(String cedula, String correo) {
+    public List<DocentePOJO> obtenerPorCedulaYCorreo(String cedula, String correo) throws NoResponseBDException {
         List<DocentePOJO> docentes = new ArrayList();
         Connection conexion = new BDConector().open();
         if (conexion != null) {

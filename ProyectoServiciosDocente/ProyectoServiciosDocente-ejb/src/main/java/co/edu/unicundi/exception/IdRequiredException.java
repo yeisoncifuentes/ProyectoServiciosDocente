@@ -11,7 +11,7 @@ package co.edu.unicundi.exception;
  * @author Camilo Sanabria
  * @version 1.0.0
  */
-public class IdRequiredException extends RuntimeException {
+public class IdRequiredException extends Exception {
 
     /**
      * Constructor de clase

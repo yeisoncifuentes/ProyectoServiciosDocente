@@ -11,7 +11,7 @@ package co.edu.unicundi.exception;
  * @author Camilo Sanabria
  * @version 1.0.0
  */
-public class ListNoContentException extends RuntimeException {
+public class ListNoContentException extends Exception {
 
     /**
      * Constructor vacio de clase

@@ -11,7 +11,7 @@ package co.edu.unicundi.exception;
  * @author Camilo Sanabria
  * @version 1.0.0
  */
-public class ObjectNotFoundException extends RuntimeException {
+public class ObjectNotFoundException extends Exception {
 
     /**
      * Constructor de clase

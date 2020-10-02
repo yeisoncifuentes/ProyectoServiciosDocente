@@ -5,7 +5,6 @@
  */
 package co.edu.unicundi.BD;
 
-import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -58,7 +57,7 @@ public class BDConector implements Serializable {
      *
      * @return La conexion realizada
      */
-    public Connection open() {
+    public Connection open() throws NoResponseBDException {
         try {
             Class.forName(JDBC_DRIVER);
             try {
