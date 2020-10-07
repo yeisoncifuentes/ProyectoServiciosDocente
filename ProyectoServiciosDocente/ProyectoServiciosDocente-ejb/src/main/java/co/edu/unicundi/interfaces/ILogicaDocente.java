@@ -50,7 +50,7 @@ public interface ILogicaDocente {
      * @throws ListNoContentException
      * @throws NoResponseBDException
      */
-    public List<DocentePOJO> listar() throws ListNoContentException, NoResponseBDException;
+    public List<Docente> listar() throws ListNoContentException, NoResponseBDException;
     
     
      /**

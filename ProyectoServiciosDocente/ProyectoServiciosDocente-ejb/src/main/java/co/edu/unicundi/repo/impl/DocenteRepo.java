@@ -12,10 +12,12 @@ import co.edu.unicundi.exception.NoResponseBDException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.repo.IDocenteRepo;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -34,12 +36,23 @@ public class DocenteRepo implements IDocenteRepo {
 
     @Override
     public List<Docente> listar() throws ListNoContentException, NoResponseBDException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TypedQuery<Docente> query = this.entity.createQuery("SELECT d FROM Docente d", Docente.class);
+        
+        List<Docente> resultado = new ArrayList();
+        resultado = query.getResultList();
+
+        List<Docente> docentes = new ArrayList();
+
+        for (Docente docente : resultado) {
+            docentes.add(new Docente(docente.getId(), docente.getCedula(), docente.getMateria(), docente.getNombre(), docente.getApellido(), docente.getCorreo()));
+        }
+
+        return docentes;
     }
 
     @Override
     public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.entity.find(Docente.class, cedula);
     }
 
     @Override

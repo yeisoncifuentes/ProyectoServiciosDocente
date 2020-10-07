@@ -118,7 +118,7 @@ public class DocenteService {
         @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     public Response listar() throws ListNoContentException, NoResponseBDException {
-        List<DocentePOJO> docentes = logicaDocente.listar();
+        List<Docente> docentes = logicaDocente.listar();
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
     

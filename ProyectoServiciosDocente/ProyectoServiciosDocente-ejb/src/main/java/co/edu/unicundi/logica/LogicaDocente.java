@@ -67,9 +67,9 @@ public class LogicaDocente implements ILogicaDocente {
      * @throws NoResponseBDException
      */
     @Override
-    public List<DocentePOJO> listar() throws ListNoContentException, NoResponseBDException {
+    public List<Docente> listar() throws ListNoContentException, NoResponseBDException {
         try {
-            ArrayList<DocentePOJO> docentes = new DAODocente().listar();
+            List<Docente> docentes = repo.listar();
             if (docentes.size() > 0) {
                 return docentes;
             } else {

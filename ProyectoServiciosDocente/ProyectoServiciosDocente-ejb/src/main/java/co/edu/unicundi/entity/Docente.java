@@ -60,7 +60,8 @@ public class Docente implements Serializable {
     public Docente() {
     }
 
-    public Docente(String cedula, String materia, String nombre, String apellido, String correo) {
+    public Docente(Integer id, String cedula, String materia, String nombre, String apellido, String correo) {
+        this.id = id;
         this.cedula = cedula;
         this.materia = materia;
         this.nombre = nombre;
