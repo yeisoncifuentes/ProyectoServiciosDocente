@@ -38,15 +38,8 @@ public class DocenteRepo implements IDocenteRepo {
     public List<Docente> listar() throws ListNoContentException, NoResponseBDException {
         TypedQuery<Docente> query = this.entity.createQuery("SELECT d FROM Docente d", Docente.class);
         
-        List<Docente> resultado = new ArrayList();
-        resultado = query.getResultList();
-
-        List<Docente> docentes = new ArrayList();
-
-        for (Docente docente : resultado) {
-            docentes.add(new Docente(docente.getId(), docente.getCedula(), docente.getMateria(), docente.getNombre(), docente.getApellido(), docente.getCorreo()));
-        }
-
+        List<Docente> docentes = query.getResultList();
+        
         return docentes;
     }
 
@@ -55,9 +48,8 @@ public class DocenteRepo implements IDocenteRepo {
         TypedQuery<Docente> query = entity.createQuery("SELECT d FROM Docente d WHERE d.cedula = ?1", Docente.class);
         query.setParameter(1, cedula);
         
-        List<Docente> resultado = new ArrayList();
-        resultado = query.getResultList();
-
+        List<Docente> resultado = query.getResultList();
+        
         Docente docente = new Docente();
         
         for (Docente result : resultado) {
