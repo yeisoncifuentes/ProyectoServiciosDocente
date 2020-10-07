@@ -6,6 +6,7 @@
 package co.edu.unicundi.interfaces;
 
 import co.edu.unicundi.POJO.DocentePOJO;
+import co.edu.unicundi.entity.Docente;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
@@ -31,7 +32,7 @@ public interface ILogicaDocente {
      * @throws RegisteredObjectException
      * @throws NoResponseBDException
      */
-    public void registrar(DocentePOJO docente) throws RegisteredObjectException, NoResponseBDException;
+    public void registrar(Docente docente);
     
     /**
      * Registra el docente especificado dentro del fichero

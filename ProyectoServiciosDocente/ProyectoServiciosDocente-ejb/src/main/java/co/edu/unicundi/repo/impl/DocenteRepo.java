@@ -28,8 +28,8 @@ public class DocenteRepo implements IDocenteRepo {
     private EntityManager entity;
 
     @Override
-    public void registrar(Docente docente) throws RegisteredObjectException, NoResponseBDException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void registrar(Docente docente)  {
+        this.entity.persist(docente);
     }
 
     @Override

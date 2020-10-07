@@ -7,12 +7,15 @@ package co.edu.unicundi.logica;
 
 import co.edu.unicundi.BD.DAODocente;
 import co.edu.unicundi.POJO.DocentePOJO;
+import co.edu.unicundi.entity.Docente;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.interfaces.ILogicaDocente;
+import co.edu.unicundi.repo.IDocenteRepo;
+import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
@@ -39,6 +43,9 @@ public class LogicaDocente implements ILogicaDocente {
 
     private static String ruta = "C:\\Users\\cass4\\Desktop\\UDEC\\Semestre 8\\LINEA DE PROFUNDIZACION II\\Proyectos\\ProyectoServiciosDocente\\ProyectoServiciosDocente\\ProyectoServiciosDocente-ejb\\src\\main\\java\\co\\edu\\unicundi\\logica\\docentes.txt";
 
+    @EJB
+    private IDocenteRepo repo;
+    
     /**
      * Registra el docente especificado
      *
@@ -47,18 +54,9 @@ public class LogicaDocente implements ILogicaDocente {
      * @throws NoResponseBDException
      */
     @Override
-    public void registrar(DocentePOJO docente) throws RegisteredObjectException, NoResponseBDException {
-        try {
-            List<DocentePOJO> docentes = new DAODocente().obtenerPorCedulaYCorreo(docente.getCedula(), docente.getCorreo());
-
-            if (docentes.size() == 0) {
-                new DAODocente().registrar(docente);
-            } else {
-                throw new RegisteredObjectException("La cedula y/o el correo del docente ya existen");
-            }
-        } catch (RegisteredObjectException ex) {
-            throw new RegisteredObjectException(ex.getMessage());
-        }
+    public void registrar(Docente docente)  {
+       
+        repo.registrar(docente);
     }
 
     /**

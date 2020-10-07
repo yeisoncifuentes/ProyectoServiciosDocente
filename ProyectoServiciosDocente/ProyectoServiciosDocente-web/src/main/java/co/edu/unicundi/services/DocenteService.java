@@ -6,6 +6,7 @@
 package co.edu.unicundi.services;
 
 import co.edu.unicundi.POJO.DocentePOJO;
+import co.edu.unicundi.entity.Docente;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
@@ -49,6 +50,8 @@ public class DocenteService {
     @EJB
     public ILogicaDocente logicaDocente;
     
+   
+    
     /**
      * Servicio que registra un docente
      *
@@ -68,7 +71,7 @@ public class DocenteService {
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registrar(@Valid DocentePOJO docente) throws RegisteredObjectException, NoResponseBDException  {
+    public Response registrar(@Valid Docente docente) {
         logicaDocente.registrar(docente);
         return Response.status(Response.Status.CREATED).entity(docente).build();
     }

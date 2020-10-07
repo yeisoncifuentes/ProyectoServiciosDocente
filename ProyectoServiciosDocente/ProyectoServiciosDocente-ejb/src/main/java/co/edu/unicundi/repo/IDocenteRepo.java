@@ -5,6 +5,7 @@
  */
 package co.edu.unicundi.repo;
 
+import co.edu.unicundi.POJO.DocentePOJO;
 import co.edu.unicundi.entity.Docente;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
@@ -28,7 +29,7 @@ public interface IDocenteRepo {
      * @throws RegisteredObjectException
      * @throws NoResponseBDException
      */
-    public void registrar(Docente docente) throws RegisteredObjectException, NoResponseBDException;
+    public void registrar(Docente docente);
     
     /**
      * Lista todos los docentes registrados
@@ -78,4 +79,6 @@ public interface IDocenteRepo {
      * @throws NoResponseBDException
      */
     public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException;
+
+    
 }
