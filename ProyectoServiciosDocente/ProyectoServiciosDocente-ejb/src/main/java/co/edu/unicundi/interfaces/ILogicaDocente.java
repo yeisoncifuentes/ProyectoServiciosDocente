@@ -71,7 +71,7 @@ public interface ILogicaDocente {
      * @throws ObjectNotFoundException
      * @throws NoResponseBDException
      */
-    public DocentePOJO obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException;
+    public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException;
     
     /**
      * Edita los datos del docente especificado

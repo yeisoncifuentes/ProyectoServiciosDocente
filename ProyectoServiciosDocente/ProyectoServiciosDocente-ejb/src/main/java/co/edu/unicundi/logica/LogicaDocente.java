@@ -89,10 +89,10 @@ public class LogicaDocente implements ILogicaDocente {
      * @throws NoResponseBDException
      */
     @Override
-    public DocentePOJO obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException {
+    public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException {
         try {
-            DocentePOJO docente = new DAODocente().obtenerPorCedula(cedula);
-            if (docente.getId() > 0) {
+            Docente docente = repo.obtenerPorCedula(cedula);
+            if (docente.getId() != null) {
                 return docente;
             } else {
                 throw new ObjectNotFoundException("La cedula ingresada no existe");

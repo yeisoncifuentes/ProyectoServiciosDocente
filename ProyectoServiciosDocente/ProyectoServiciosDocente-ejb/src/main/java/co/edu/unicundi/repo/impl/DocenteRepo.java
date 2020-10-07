@@ -52,7 +52,19 @@ public class DocenteRepo implements IDocenteRepo {
 
     @Override
     public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException {
-        return this.entity.find(Docente.class, cedula);
+        TypedQuery<Docente> query = entity.createQuery("SELECT d FROM Docente d WHERE d.cedula = ?1", Docente.class);
+        query.setParameter(1, cedula);
+        
+        List<Docente> resultado = new ArrayList();
+        resultado = query.getResultList();
+
+        Docente docente = new Docente();
+        
+        for (Docente result : resultado) {
+            docente = new Docente(result.getId(), result.getCedula(), result.getMateria(), result.getNombre(), result.getApellido(), result.getCorreo());
+        }
+
+        return docente;
     }
 
     @Override

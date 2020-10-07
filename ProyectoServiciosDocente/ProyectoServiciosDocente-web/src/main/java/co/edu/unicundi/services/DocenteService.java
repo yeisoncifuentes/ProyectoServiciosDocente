@@ -166,7 +166,7 @@ public class DocenteService {
             @Size(min = 7, max = 10, message = "La longitud de la cedula debe estar entre 7 y 10")
             @PathParam("cedula") String cedula) throws ObjectNotFoundException, NoResponseBDException {
 
-        DocentePOJO docente = logicaDocente.obtenerPorCedula(cedula);
+        Docente docente = logicaDocente.obtenerPorCedula(cedula);
         return Response.status(Response.Status.OK).entity(docente).build();
     }
 
