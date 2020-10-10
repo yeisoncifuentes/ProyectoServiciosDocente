@@ -40,6 +40,9 @@ public interface IDocenteRepo {
      */
     public List<Docente> listar() throws ListNoContentException, NoResponseBDException;
     
+   
+   
+    
     /**
      * Obtiene un docente filtrado por la cedula especificada
      *
@@ -49,6 +52,26 @@ public interface IDocenteRepo {
      * @throws NoResponseBDException
      */
     public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException;
+    
+    /**
+     * Obtiene un lista con los docentes que ya tienen la cedula 
+     *
+     * @param cedula
+     * @return Docente filtrado
+     * @throws ObjectNotFoundException
+     * @throws NoResponseBDException
+     */
+    public List<Docente> validarCedula(String cedula) throws NoResponseBDException;
+    
+    /**
+     * Obtiene un lista con los docentes que ya tienen el correo
+     *
+     * @param correo
+     * @return Docente filtrado
+     * @throws ObjectNotFoundException
+     * @throws NoResponseBDException
+     */
+    public List<Docente> validarCorreo(String correo) throws NoResponseBDException;
     
     /**
      * Edita los datos del docente especificado

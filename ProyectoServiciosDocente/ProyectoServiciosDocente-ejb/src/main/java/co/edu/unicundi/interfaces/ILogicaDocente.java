@@ -18,7 +18,7 @@ import javax.ejb.Local;
 
 /**
  * Interface que contiene los metodos de logica docente
- * 
+ *
  * @author Camilo Sanabria
  * @version 1.0.0
  */
@@ -32,8 +32,8 @@ public interface ILogicaDocente {
      * @throws RegisteredObjectException
      * @throws NoResponseBDException
      */
-    public void registrar(Docente docente);
-    
+    public void registrar(Docente docente) throws RegisteredObjectException,NoResponseBDException;
+
     /**
      * Registra el docente especificado dentro del fichero
      *
@@ -42,7 +42,7 @@ public interface ILogicaDocente {
      * @throws NoResponseBDException
      */
     public void registrarFichero(DocentePOJO docente) throws IOException, NoResponseBDException;
-    
+
     /**
      * Lista todos los docentes registrados
      *
@@ -51,9 +51,8 @@ public interface ILogicaDocente {
      * @throws NoResponseBDException
      */
     public List<Docente> listar() throws ListNoContentException, NoResponseBDException;
-    
-    
-     /**
+
+    /**
      * Lista todos los docentes registrados
      *
      * @return Lista de docentes
@@ -61,8 +60,7 @@ public interface ILogicaDocente {
      * @throws NoResponseBDException
      */
     public List<DocentePOJO> listarFichero() throws IOException, NoResponseBDException;
-    
-    
+
     /**
      * Obtiene un docente filtrado por la cedula especificada
      *
@@ -72,7 +70,9 @@ public interface ILogicaDocente {
      * @throws NoResponseBDException
      */
     public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException;
+
     
+
     /**
      * Edita los datos del docente especificado
      *
@@ -83,7 +83,7 @@ public interface ILogicaDocente {
      * @throws NoResponseBDException
      */
     public void editar(DocentePOJO docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException;
-    
+
     /**
      * Lista los docentes con la materia especificada
      *
@@ -93,7 +93,7 @@ public interface ILogicaDocente {
      * @throws NoResponseBDException
      */
     public List<DocentePOJO> obtenerDocentesMateria(String materia) throws ObjectNotFoundException, NoResponseBDException;
-    
+
     /**
      * Elimina un docente de acuerdo al id especificado
      *
@@ -102,6 +102,5 @@ public interface ILogicaDocente {
      * @throws NoResponseBDException
      */
     public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException;
-    
-    
+
 }

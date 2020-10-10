@@ -5,7 +5,9 @@
  */
 package co.edu.unicundi.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -37,8 +41,8 @@ public class Docente implements Serializable {
     @Column(name = "cedula", nullable = false)
     private String cedula;
 
-    @Column(name = "materia")
-    private String materia;
+    @Column(name = "materias")
+    private List<String> materias;
 
     @NotNull(message = "Campo nombre requerido")
     @Pattern(regexp = "^[a-zA-Z ]*$", message = "Formato de nombre incorrecto")
@@ -57,16 +61,23 @@ public class Docente implements Serializable {
     @Column(name = "correo", nullable = false)
     private String correo;
 
+    @NotNull(message = "Campo fecha requerido")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @Column(name = "fecha", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date fecha;
+
     public Docente() {
     }
 
-    public Docente(Integer id, String cedula, String materia, String nombre, String apellido, String correo) {
+    public Docente(Integer id, String cedula, List<String> materias, String nombre, String apellido, String correo, Date fecha) {
         this.id = id;
         this.cedula = cedula;
-        this.materia = materia;
+        this.materias = materias;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
+        this.fecha = fecha;
     }
 
     /**
@@ -100,15 +111,15 @@ public class Docente implements Serializable {
     /**
      * @return the materias
      */
-    public String getMateria() {
-        return materia;
+    public List<String> getMaterias() {
+        return materias;
     }
 
     /**
-     * @param materia the materias to set
+     * @param materias the materias to set
      */
-    public void setMateria(String materia) {
-        this.materia = materia;
+    public void setMaterias(List<String> materias) {
+        this.materias = materias;
     }
 
     /**
@@ -151,6 +162,20 @@ public class Docente implements Serializable {
      */
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    /**
+     * @return the fecha
+     */
+    public Date getFecha() {
+        return fecha;
+    }
+
+    /**
+     * @param fecha the fechaVincucion to set
+     */
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
 }
