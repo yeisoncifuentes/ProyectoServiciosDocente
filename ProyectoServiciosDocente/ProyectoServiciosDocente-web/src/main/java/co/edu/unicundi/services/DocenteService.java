@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.edu.unicundi.controller;
+package co.edu.unicundi.services;
 
 import co.edu.unicundi.POJO.DocentePOJO;
 import co.edu.unicundi.entity.Docente;
@@ -13,7 +13,7 @@ import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
-import co.edu.unicundi.service.IDocenteService;
+import co.edu.unicundi.interfaces.ILogicaDocente;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -46,10 +46,10 @@ import javax.ws.rs.core.Response;
 @Stateless
 @Path("/docentes")
 @Api(value = "/docentes", description = "Manejo de datos docente")
-public class DocenteController {
+public class DocenteService {
 
     @EJB
-    public IDocenteService logicaDocente;
+    public ILogicaDocente logicaDocente;
     
    
     

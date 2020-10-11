@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.edu.unicundi.service;
+package co.edu.unicundi.interfaces;
 
 import co.edu.unicundi.POJO.DocentePOJO;
 import co.edu.unicundi.entity.Docente;
@@ -23,7 +23,7 @@ import javax.ejb.Local;
  * @version 1.0.0
  */
 @Local
-public interface IDocenteService {
+public interface ILogicaDocente {
 
     /**
      * Registra el docente especificado

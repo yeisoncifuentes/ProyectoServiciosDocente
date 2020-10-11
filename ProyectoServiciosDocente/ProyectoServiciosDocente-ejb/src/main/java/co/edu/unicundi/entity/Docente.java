@@ -65,19 +65,19 @@ public class Docente implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date fechaNacimiento;
+    private Date fecha;
 
     public Docente() {
     }
 
-    public Docente(Integer id, String cedula, List<String> materias, String nombre, String apellido, String correo, Date fechaNacimiento) {
+    public Docente(Integer id, String cedula, List<String> materias, String nombre, String apellido, String correo, Date fecha) {
         this.id = id;
         this.cedula = cedula;
         this.materias = materias;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
-        this.fechaNacimiento = fechaNacimiento;
+        this.fecha = fecha;
     }
 
     /**
@@ -168,14 +168,14 @@ public class Docente implements Serializable {
      * @return the fecha
      */
     public Date getFecha() {
-        return fechaNacimiento;
+        return fecha;
     }
 
     /**
      * @param fecha the fechaVincucion to set
      */
     public void setFecha(Date fecha) {
-        this.fechaNacimiento = fecha;
+        this.fecha = fecha;
     }
 
 }
