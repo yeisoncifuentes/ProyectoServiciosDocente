@@ -215,7 +215,7 @@ public class DocenteService {
         @ApiResponse(code = 405, message = "El método de la solicitud no es PUT"),
         @ApiResponse(code = 515, message = "El tipo de cuerpo en la petición no es Json"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
-    public Response editar(@Valid DocentePOJO docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
+    public Response editar(@Valid Docente docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
         logicaDocente.editar(docente);
         return Response.status(Response.Status.OK).entity("Editado correctamente").build();
     }

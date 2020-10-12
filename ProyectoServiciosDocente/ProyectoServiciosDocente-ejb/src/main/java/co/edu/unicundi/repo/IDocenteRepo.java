@@ -95,13 +95,21 @@ public interface IDocenteRepo {
     public List<Docente> obtenerDocentesMateria(String materia) throws ObjectNotFoundException, NoResponseBDException;
     
     /**
-     * Elimina un docente de acuerdo al id especificado
-     *
+     * Obtiene el docente filtrado por el id especificado
+     * 
      * @param id
+     * @return Docente correspondiente al id
+     */
+    public Docente obtenerPorId(Integer id);
+    
+    /**
+     * Elimina el docente de acuerdo especificado
+     *
+     * @param docente
      * @throws ObjectNotFoundException
      * @throws NoResponseBDException
      */
-    public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException;
+    public void eliminar(Docente docente) throws ObjectNotFoundException, NoResponseBDException;
 
     
 }

@@ -55,20 +55,19 @@ public class DocenteRepo implements IDocenteRepo {
 
     @Override
     public List<Docente> listar() throws ListNoContentException, NoResponseBDException {
-       Query query = this.entity.createNativeQuery("SELECT id,cedula,materias,nombre,apellido,correo, fecha FROM docente.tbl_docente");
-       
+        Query query = this.entity.createNativeQuery("SELECT id,cedula,materias,nombre,apellido,correo, fecha FROM docente.tbl_docente");
 
         List<Object[]> result = query.getResultList();
         List<Docente> docentes = new ArrayList();
 
         for (Object[] datos : result) {
-           
+
             ObjectMapper mapper = new ObjectMapper();
-            List<String> materias = new ArrayList();         
+            List<String> materias = new ArrayList();
 
             try {
                 materias = mapper.readValue((String) datos[2], List.class);
-                docentes.add(new Docente(((Long)datos[0]).intValue(),(String) datos[1], materias,(String) datos[3],(String) datos[4],(String) datos[5],(Date) datos[6]));
+                docentes.add(new Docente(((Long) datos[0]).intValue(), (String) datos[1], materias, (String) datos[3], (String) datos[4], (String) datos[5], (Date) datos[6]));
 
             } catch (IOException ex) {
                 Logger.getLogger(DocenteRepo.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,8 +75,7 @@ public class DocenteRepo implements IDocenteRepo {
 
         }
         return docentes;
-    }     
-    
+    }
 
     @Override
     public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException {
@@ -103,14 +101,14 @@ public class DocenteRepo implements IDocenteRepo {
         List<Object[]> result = query.getResultList();
         List<Docente> docentes = new ArrayList();
 
-        for (Object[] datos : result) {         
+        for (Object[] datos : result) {
 
             ObjectMapper mapper = new ObjectMapper();
-            List<String> materias = new ArrayList();           
+            List<String> materias = new ArrayList();
 
             try {
                 materias = mapper.readValue((String) datos[2], List.class);
-                docentes.add(new Docente(((Long)datos[0]).intValue(),(String) datos[1], materias,(String) datos[3],(String) datos[4],(String) datos[5],(Date) datos[6]));
+                docentes.add(new Docente(((Long) datos[0]).intValue(), (String) datos[1], materias, (String) datos[3], (String) datos[4], (String) datos[5], (Date) datos[6]));
 
             } catch (IOException ex) {
                 Logger.getLogger(DocenteRepo.class.getName()).log(Level.SEVERE, null, ex);
@@ -129,14 +127,14 @@ public class DocenteRepo implements IDocenteRepo {
         List<Object[]> result = query.getResultList();
         List<Docente> docentes = new ArrayList();
 
-        for (Object[] datos : result) {          
+        for (Object[] datos : result) {
 
             ObjectMapper mapper = new ObjectMapper();
-            List<String> materias = new ArrayList();           
+            List<String> materias = new ArrayList();
 
             try {
                 materias = mapper.readValue((String) datos[2], List.class);
-                docentes.add(new Docente(((Long)datos[0]).intValue(),(String) datos[1], materias,(String) datos[3],(String) datos[4],(String) datos[5],(Date) datos[6]));
+                docentes.add(new Docente(((Long) datos[0]).intValue(), (String) datos[1], materias, (String) datos[3], (String) datos[4], (String) datos[5], (Date) datos[6]));
 
             } catch (IOException ex) {
                 Logger.getLogger(DocenteRepo.class.getName()).log(Level.SEVERE, null, ex);
@@ -149,7 +147,16 @@ public class DocenteRepo implements IDocenteRepo {
 
     @Override
     public void editar(Docente docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String materias = new Gson().toJson(docente.getMaterias());
+        entity.createNativeQuery("UPDATE docente.tbl_docente SET cedula=?, nombre=?, apellido=?, correo=?, fecha=?, materias=? WHERE id=?")
+                .setParameter(1, docente.getCedula())
+                .setParameter(2, docente.getNombre())
+                .setParameter(3, docente.getApellido())
+                .setParameter(4, docente.getCorreo())
+                .setParameter(5, docente.getFecha())
+                .setParameter(6, materias)
+                .setParameter(7, docente.getId())
+                .executeUpdate();
     }
 
     @Override
@@ -158,8 +165,37 @@ public class DocenteRepo implements IDocenteRepo {
     }
 
     @Override
-    public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Docente obtenerPorId(Integer id) {
+        Query query = this.entity.createNativeQuery("SELECT id,cedula,materias,nombre,apellido,correo, fecha FROM docente.tbl_docente WHERE id = ?1");
+        query.setParameter(1, id);
+
+        List<Object[]> result = query.getResultList();
+        Docente docente = new Docente();
+
+        for (Object[] datos : result) {
+
+            ObjectMapper mapper = new ObjectMapper();
+            List<String> materias = new ArrayList();
+
+            try {
+                materias = mapper.readValue((String) datos[2], List.class);
+                docente = new Docente(((Long) datos[0]).intValue(), (String) datos[1], materias, (String) datos[3], (String) datos[4], (String) datos[5], (Date) datos[6]);
+
+            } catch (IOException ex) {
+                Logger.getLogger(DocenteRepo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        return docente;
+    }
+
+    @Override
+    public void eliminar(Docente docente) throws ObjectNotFoundException, NoResponseBDException {
+        //this.entity.remove(docente);
+        entity.createNativeQuery("DELETE FROM docente.tbl_docente WHERE id=?1")
+                .setParameter(1, docente.getId())
+                .executeUpdate();
     }
 
 }

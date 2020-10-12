@@ -82,7 +82,7 @@ public interface ILogicaDocente {
      * @throws IdRequiredException
      * @throws NoResponseBDException
      */
-    public void editar(DocentePOJO docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException;
+    public void editar(Docente docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException;
 
     /**
      * Lista los docentes con la materia especificada
