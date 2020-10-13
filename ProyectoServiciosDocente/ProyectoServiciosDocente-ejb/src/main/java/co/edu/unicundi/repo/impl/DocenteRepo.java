@@ -6,17 +6,11 @@
 package co.edu.unicundi.repo.impl;
 
 import co.edu.unicundi.entity.Docente;
-import co.edu.unicundi.exception.IdRequiredException;
-import co.edu.unicundi.exception.ListNoContentException;
-import co.edu.unicundi.exception.NoResponseBDException;
-import co.edu.unicundi.exception.ObjectNotFoundException;
-import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.repo.IDocenteRepo;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +48,7 @@ public class DocenteRepo implements IDocenteRepo {
     }
 
     @Override
-    public List<Docente> listar() throws ListNoContentException, NoResponseBDException {
+    public List<Docente> listar() {
         Query query = this.entity.createNativeQuery("SELECT id,cedula,materias,nombre,apellido,correo, fecha FROM docente.tbl_docente");
 
         List<Object[]> result = query.getResultList();
@@ -78,7 +72,7 @@ public class DocenteRepo implements IDocenteRepo {
     }
 
     @Override
-    public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException {
+    public Docente obtenerPorCedula(String cedula) {
         TypedQuery<Docente> query = entity.createQuery("SELECT d FROM Docente d WHERE d.cedula = ?1", Docente.class);
         query.setParameter(1, cedula);
 
@@ -94,7 +88,7 @@ public class DocenteRepo implements IDocenteRepo {
     }
 
     @Override
-    public List<Docente> validarCedula(String cedula) throws NoResponseBDException {
+    public List<Docente> validarCedula(String cedula) {
         Query query = this.entity.createNativeQuery("SELECT id,cedula,materias,nombre,apellido,correo, fecha FROM docente.tbl_docente WHERE cedula = ?1");
         query.setParameter(1, cedula);
 
@@ -120,7 +114,7 @@ public class DocenteRepo implements IDocenteRepo {
     }
 
     @Override
-    public List<Docente> validarCorreo(String correo) throws NoResponseBDException {
+    public List<Docente> validarCorreo(String correo) {
         Query query = this.entity.createNativeQuery("SELECT id,cedula,materias,nombre,apellido,correo, fecha FROM docente.tbl_docente WHERE correo = ?1");
         query.setParameter(1, correo);
 
@@ -146,7 +140,7 @@ public class DocenteRepo implements IDocenteRepo {
     }
 
     @Override
-    public void editar(Docente docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
+    public void editar(Docente docente) {
         String materias = new Gson().toJson(docente.getMaterias());
         entity.createNativeQuery("UPDATE docente.tbl_docente SET cedula=?, nombre=?, apellido=?, correo=?, fecha=?, materias=? WHERE id=?")
                 .setParameter(1, docente.getCedula())
@@ -160,7 +154,7 @@ public class DocenteRepo implements IDocenteRepo {
     }
 
     @Override
-    public List<Docente> obtenerDocentesMateria(String materia) throws ObjectNotFoundException, NoResponseBDException {
+    public List<Docente> obtenerDocentesMateria(String materia) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -191,7 +185,7 @@ public class DocenteRepo implements IDocenteRepo {
     }
 
     @Override
-    public void eliminar(Docente docente) throws ObjectNotFoundException, NoResponseBDException {
+    public void eliminar(Docente docente) {
         //this.entity.remove(docente);
         entity.createNativeQuery("DELETE FROM docente.tbl_docente WHERE id=?1")
                 .setParameter(1, docente.getId())
