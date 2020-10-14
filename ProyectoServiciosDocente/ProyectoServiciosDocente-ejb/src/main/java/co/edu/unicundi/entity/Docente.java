@@ -38,28 +38,28 @@ public class Docente implements Serializable {
     @NotNull(message = "Campo cedula requerido")
     @Pattern(regexp = "^([0-9])*$", message = "Formato de cedula incorrecto, indicar valores numéricos sin espacios")
     @Size(min = 7, max = 10, message = "La longitud de la cedula debe estar entre 7 y 10")
-    @Column(name = "cedula", nullable = false)
+    @Column(name = "cedula", nullable = false, unique = true)
     private String cedula;
 
     @NotNull(message = "Campo materias requerido")
-    @Column(name = "materias")
+    @Column(name = "materias", nullable = false)
     private List<String> materias;
 
     @NotNull(message = "Campo nombre requerido")
     @Pattern(regexp = "^[a-zA-Z ]*$", message = "Formato de nombre incorrecto")
     @Size(min = 2, max = 30, message = "Longitud de nombre no valido")
-    @Column(name = "nombre", nullable = false)
+    @Column(name = "nombre", nullable = false, length = 30)
     private String nombre;
 
     @NotNull(message = "Campo apellido requerido")
     @Pattern(regexp = "^[a-zA-Z ]*$", message = "Formato de apellido incorrecto")
     @Size(min = 2, max = 30, message = "Longitud de apellido no valido")
-    @Column(name = "apellido", nullable = false)
+    @Column(name = "apellido", nullable = false, length = 30)
     private String apellido;
 
     @NotNull(message = "Campo correo requerido")
     @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@+[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message = "Formato de correo incorrecto")
-    @Column(name = "correo", nullable = false)
+    @Column(name = "correo", nullable = false, unique = true)
     private String correo;
 
     @NotNull(message = "Campo fecha requerido")
