@@ -41,6 +41,7 @@ public class Docente implements Serializable {
     @Column(name = "cedula", nullable = false)
     private String cedula;
 
+    @NotNull(message = "Campo materias requerido")
     @Column(name = "materias")
     private List<String> materias;
 
