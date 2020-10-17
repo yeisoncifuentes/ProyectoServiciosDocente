@@ -6,11 +6,6 @@
 package co.edu.unicundi.repo;
 
 import co.edu.unicundi.entity.Docente;
-import co.edu.unicundi.exception.IdRequiredException;
-import co.edu.unicundi.exception.ListNoContentException;
-import co.edu.unicundi.exception.NoResponseBDException;
-import co.edu.unicundi.exception.ObjectNotFoundException;
-import co.edu.unicundi.exception.RegisteredObjectException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -36,30 +31,6 @@ public interface IDocenteRepo {
     public List<Docente> listar();
     
     /**
-     * Obtiene un docente filtrado por la cedula especificada
-     *
-     * @param cedula
-     * @return Docente filtrado
-     */
-    public Docente obtenerPorCedula(String cedula);
-    
-    /**
-     * Obtiene un lista con los docentes que ya tienen la cedula 
-     *
-     * @param cedula
-     * @return Docente filtrado
-     */
-    public List<Docente> validarCedula(String cedula);
-    
-    /**
-     * Obtiene un lista con los docentes que ya tienen el correo
-     *
-     * @param correo
-     * @return Docente filtrado
-     */
-    public List<Docente> validarCorreo(String correo);
-    
-    /**
      * Edita los datos del docente especificado
      *
      * @param docente
@@ -67,12 +38,11 @@ public interface IDocenteRepo {
     public void editar(Docente docente);
     
     /**
-     * Lista los docentes con la materia especificada
+     * Elimina el docente de acuerdo especificado
      *
-     * @param materia
-     * @return Lista de docentes
+     * @param docente
      */
-    public List<Docente> obtenerDocentesMateria(String materia);
+    public void eliminar(Docente docente);
     
     /**
      * Obtiene el docente filtrado por el id especificado
@@ -83,10 +53,27 @@ public interface IDocenteRepo {
     public Docente obtenerPorId(Integer id);
     
     /**
-     * Elimina el docente de acuerdo especificado
+     * Obtiene un docente filtrado por la cedula especificada
      *
-     * @param docente
+     * @param cedula
+     * @return Docente filtrado
      */
-    public void eliminar(Docente docente);
-
+    public Docente obtenerPorCedula(String cedula);
+    
+    /**
+     * Obtiene un docente filtrado por el correo especificada
+     *
+     * @param correo
+     * @return Docente filtrado
+     */
+    public Docente obtenerPorCorreo(String correo);
+    
+    /**
+     * Lista los docentes con la materia especificada
+     *
+     * @param materia
+     * @return Lista de docentes
+     */
+    public List<Docente> listarPorMateria(String materia);
+   
 }

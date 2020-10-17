@@ -6,14 +6,18 @@
 package co.edu.unicundi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,7 +32,7 @@ import javax.validation.constraints.Size;
  * @version 1.0.0
  */
 @Entity
-@Table(name = "docente.tbl_docente")
+@Table(name = "docentes.tbl_docente")
 public class Docente implements Serializable {
 
     @Id
@@ -38,12 +42,8 @@ public class Docente implements Serializable {
     @NotNull(message = "Campo cedula requerido")
     @Pattern(regexp = "^([0-9])*$", message = "Formato de cedula incorrecto, indicar valores numéricos sin espacios")
     @Size(min = 7, max = 10, message = "La longitud de la cedula debe estar entre 7 y 10")
-    @Column(name = "cedula", nullable = false, unique = true)
+    @Column(name = "cedula", nullable = false, unique = true, length = 10)
     private String cedula;
-
-    @NotNull(message = "Campo materias requerido")
-    @Column(name = "materias", nullable = false)
-    private List<String> materias;
 
     @NotNull(message = "Campo nombre requerido")
     @Pattern(regexp = "^[a-zA-Z ]*$", message = "Formato de nombre incorrecto")
@@ -62,23 +62,27 @@ public class Docente implements Serializable {
     @Column(name = "correo", nullable = false, unique = true)
     private String correo;
 
-    @NotNull(message = "Campo fecha requerido")
+    @NotNull(message = "Campo fechaNacimiento requerido")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    @Column(name = "fecha", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date fecha;
+    @Column(name = "fecha_nacimiento", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaNacimiento;
+    
+    @ManyToMany(mappedBy = "docentes", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Materia> materias;
 
     public Docente() {
     }
 
-    public Docente(Integer id, String cedula, List<String> materias, String nombre, String apellido, String correo, Date fecha) {
+    public Docente(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, List<Materia> materias) {
         this.id = id;
         this.cedula = cedula;
-        this.materias = materias;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
-        this.fecha = fecha;
+        this.fechaNacimiento = fechaNacimiento;
+        this.materias = materias;
     }
 
     /**
@@ -107,20 +111,6 @@ public class Docente implements Serializable {
      */
     public void setCedula(String cedula) {
         this.cedula = cedula;
-    }
-
-    /**
-     * @return the materias
-     */
-    public List<String> getMaterias() {
-        return materias;
-    }
-
-    /**
-     * @param materias the materias to set
-     */
-    public void setMaterias(List<String> materias) {
-        this.materias = materias;
     }
 
     /**
@@ -166,17 +156,31 @@ public class Docente implements Serializable {
     }
 
     /**
-     * @return the fecha
+     * @return the fechaNacimiento
      */
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
     }
 
     /**
-     * @param fecha the fechaVincucion to set
+     * @param fechaNacimiento the fechaNacimiento to set
      */
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 
+    /**
+     * @return the Materias
+     */
+    public List<Materia> getMaterias() {
+        return materias;
+    }
+
+    /**
+     * @param materias the materias to set
+     */
+    public void setMaterias(List<Materia> materias) {
+        this.materias = materias;
+    }
+    
 }

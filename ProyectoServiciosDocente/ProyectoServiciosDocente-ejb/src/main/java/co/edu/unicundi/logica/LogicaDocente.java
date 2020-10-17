@@ -15,7 +15,6 @@ import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.interfaces.ILogicaDocente;
 import co.edu.unicundi.repo.IDocenteRepo;
-import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,7 +28,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
 
 /**
  * Clase que permite hacer la logica de los servicios docente
@@ -57,15 +55,18 @@ public class LogicaDocente implements ILogicaDocente {
     @Override
     public void registrar(Docente docente) throws RegisteredObjectException, NoResponseBDException {
         try {
-            List<Docente> validarCedula = repo.validarCedula(docente.getCedula());
-            List<Docente> validarCorreo = repo.validarCorreo(docente.getCorreo());
 
-            if (!validarCedula.isEmpty()) {
-                throw new RegisteredObjectException("La cedula del docente ya existe");
-            } else if (!validarCorreo.isEmpty()) {
-                throw new RegisteredObjectException("El correo del docente ya existe");
-            } else {
+            Docente validarCedula = repo.obtenerPorCedula(docente.getCedula());
+            Docente validarCorreo = repo.obtenerPorCorreo(docente.getCorreo());
+
+            if (validarCedula == null && validarCorreo == null) {
                 repo.registrar(docente);
+            } else if (validarCedula == null && validarCorreo != null) {
+                throw new RegisteredObjectException("El correo del docente ya existe");
+            } else if (validarCedula != null && validarCorreo == null) {
+                throw new RegisteredObjectException("La cedula del docente ya existe");
+            } else {
+                throw new RegisteredObjectException("La cedula y el correo del docente ya existen");
             }
         } catch (RegisteredObjectException ex) {
             throw new RegisteredObjectException(ex.getMessage());
@@ -106,7 +107,7 @@ public class LogicaDocente implements ILogicaDocente {
     public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException {
         try {
             Docente docente = repo.obtenerPorCedula(cedula);
-            if (docente.getId() != null) {
+            if (docente != null) {
                 return docente;
             } else {
                 throw new ObjectNotFoundException("La cedula ingresada no existe");
@@ -131,19 +132,29 @@ public class LogicaDocente implements ILogicaDocente {
             if (docente.getId() != null) {
                 Docente docenteFiltradoId = repo.obtenerPorId(docente.getId());
 
-                if (docenteFiltradoId.getId() != null) {
+                if (docenteFiltradoId != null) {
 
-                    List<Docente> validarCedula = repo.validarCedula(docente.getCedula());
-                    List<Docente> validarCorreo = repo.validarCorreo(docente.getCorreo());
+                    Docente validarCedula = repo.obtenerPorCedula(docente.getCedula());
+                    Docente validarCorreo = repo.obtenerPorCorreo(docente.getCorreo());
 
-                    if (validarCedula.isEmpty() && validarCorreo.isEmpty()) {
-                        repo.editar(docente);
-                    } else if (validarCedula.size() == 1 && validarCedula.get(0).getId().equals(docente.getId()) && validarCorreo.size() == 1 && validarCorreo.get(0).getId().equals(docente.getId())) {
-                        repo.editar(docente);
-                    } else if (!validarCedula.isEmpty()) {
-                        throw new RegisteredObjectException("La cedula del docente ya existe");
-                    } else if (!validarCorreo.isEmpty()) {
-                        throw new RegisteredObjectException("El correo del docente ya existe");
+                    if (validarCedula == null) {
+                        if (validarCorreo == null || validarCorreo.getId().equals(docente.getId())) {
+                            repo.editar(docente);
+                        } else {
+                            throw new RegisteredObjectException("El correo del docente ya existe");
+                        }
+                    } else if (validarCedula.getId().equals(docente.getId())) {
+                        if (validarCorreo == null || validarCorreo.getId().equals(docente.getId())) {
+                            repo.editar(docente);
+                        } else {
+                            throw new RegisteredObjectException("El correo del docente ya existe");
+                        }
+                    } else {
+                        if (validarCorreo == null || validarCorreo.getId().equals(docente.getId())) {
+                            throw new RegisteredObjectException("La cedula del docente ya existe");
+                        } else {
+                            throw new RegisteredObjectException("La cedula y el correo del docente ya existen");
+                        }
                     }
                 } else {
                     throw new ObjectNotFoundException("El id del docente no existe");
@@ -153,7 +164,7 @@ public class LogicaDocente implements ILogicaDocente {
             }
         } catch (RegisteredObjectException ex) {
             throw new RegisteredObjectException(ex.getMessage());
-        } catch (ObjectNotFoundException  ex) {
+        } catch (ObjectNotFoundException ex) {
             throw new ObjectNotFoundException(ex.getMessage());
         } catch (IdRequiredException ex) {
             throw new IdRequiredException(ex.getMessage());
@@ -206,7 +217,7 @@ public class LogicaDocente implements ILogicaDocente {
     public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException {
         try {
             Docente docente = repo.obtenerPorId(id);
-            if (docente.getId() != null) {
+            if (docente != null) {
                 repo.eliminar(docente);
             } else {
                 throw new ObjectNotFoundException("El id del docente no existe");
