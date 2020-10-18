@@ -106,7 +106,7 @@ public class LogicaDocente implements ILogicaDocente {
             throw new ListNoContentException();
         }
     }
-
+    
     /**
      * Obtiene un docente filtrado por la cedula especificada
      *
@@ -119,6 +119,27 @@ public class LogicaDocente implements ILogicaDocente {
     public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException {
         try {
             Docente docente = repo.obtenerPorCedula(cedula);
+            if (docente != null) {
+                return docente;
+            } else {
+                throw new ObjectNotFoundException("La cedula ingresada no existe");
+            }
+        } catch (ObjectNotFoundException ex) {
+            throw new ObjectNotFoundException(ex.getMessage());
+        }
+    }
+
+    /**
+     * Obtiene un docente filtrado por el id especificado
+     *
+     * @param id
+     * @return Docente filtrado
+     * @throws ObjectNotFoundException
+     */
+    @Override
+    public Docente obtenerPorId(int id) throws ObjectNotFoundException {
+        try {
+            Docente docente = repo.obtenerPorId(id);
             if (docente != null) {
                 return docente;
             } else {

@@ -74,8 +74,7 @@ public class DocenteService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registrar(@Valid Docente docente) throws RegisteredObjectException, NoResponseBDException {
         logicaDocente.registrar(docente);
-        docente.setEstudiantes(null);
-        return Response.status(Response.Status.CREATED).entity(docente).build();
+        return Response.status(Response.Status.CREATED).entity("Docente creado correctamente").build();
     }
     
     
@@ -152,6 +151,31 @@ public class DocenteService {
     }
 
     /**
+     * Servicio que obtiene un docente filtrado por id
+     *
+     * @param id
+     * @return Response con docente filtrado
+     */
+    @Path("/obtenerPorId/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Obtiene un docente registrado filtrando por id")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "El docente filtrado se obtuvo correctamente"),
+        @ApiResponse(code = 400, message = "Error en la petición, puede suceder si se envía body"),
+        @ApiResponse(code = 404, message = "Recurso o docente no encontrado"),
+        @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
+        @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
+    public Response obtenerPorId(
+            //Campo id de url con validacion
+            @NotNull(message = "Campo id requerido")
+            @PathParam("id") Integer id) throws ObjectNotFoundException {
+
+        Docente docente = logicaDocente.obtenerPorId(id);
+        return Response.status(Response.Status.OK).entity(docente).build();
+    }
+    
+    /**
      * Servicio que obtiene un docente filtrado por cedula
      *
      * @param cedula
@@ -223,7 +247,7 @@ public class DocenteService {
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     public Response editar(@Valid Docente docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
         logicaDocente.editar(docente);
-        return Response.status(Response.Status.OK).entity("Editado correctamente").build();
+        return Response.status(Response.Status.OK).entity("Docente editado correctamente").build();
     }
 
     /**

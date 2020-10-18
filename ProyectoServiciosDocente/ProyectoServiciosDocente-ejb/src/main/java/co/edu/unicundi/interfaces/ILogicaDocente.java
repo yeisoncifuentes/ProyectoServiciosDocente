@@ -71,7 +71,14 @@ public interface ILogicaDocente {
      */
     public Docente obtenerPorCedula(String cedula) throws ObjectNotFoundException, NoResponseBDException;
 
-    
+    /**
+     * Obtiene un docente filtrado por el id especificado
+     *
+     * @param id
+     * @return Docente filtrado
+     * @throws ObjectNotFoundException
+     */
+    public Docente obtenerPorId(int id) throws ObjectNotFoundException;
 
     /**
      * Edita los datos del docente especificado
