@@ -74,6 +74,7 @@ public class DocenteService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registrar(@Valid Docente docente) throws RegisteredObjectException, NoResponseBDException {
         logicaDocente.registrar(docente);
+        docente.setEstudiantes(null);
         return Response.status(Response.Status.CREATED).entity(docente).build();
     }
     

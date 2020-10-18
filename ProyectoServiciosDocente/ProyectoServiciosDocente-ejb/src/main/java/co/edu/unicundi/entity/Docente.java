@@ -18,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -67,22 +68,22 @@ public class Docente implements Serializable {
     @Column(name = "fecha_nacimiento", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaNacimiento;
-    
-    @ManyToMany(mappedBy = "docentes", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Materia> materias;
+
+    @OneToMany(mappedBy = "docente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Estudiante> estudiantes;
 
     public Docente() {
     }
 
-    public Docente(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, List<Materia> materias) {
+    public Docente(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, List<Estudiante> estudiantes) {
         this.id = id;
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.fechaNacimiento = fechaNacimiento;
-        this.materias = materias;
+        this.estudiantes=estudiantes;
+        
     }
 
     /**
@@ -169,18 +170,20 @@ public class Docente implements Serializable {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    /**
-     * @return the Materias
+     /**
+     * @return the estudiantes
      */
-    public List<Materia> getMaterias() {
-        return materias;
+    public List<Estudiante> getEstudiantes() {
+        return estudiantes;
     }
 
-    /**
-     * @param materias the materias to set
+     /**
+     * @param estudiantes the estudiantes to set
      */
-    public void setMaterias(List<Materia> materias) {
-        this.materias = materias;
+    public void setEstudiantes(List<Estudiante> estudiantes) {
+        this.estudiantes = estudiantes;
     }
-    
+
+   
+
 }

@@ -8,6 +8,7 @@ package co.edu.unicundi.logica;
 import co.edu.unicundi.BD.DAODocente;
 import co.edu.unicundi.POJO.DocentePOJO;
 import co.edu.unicundi.entity.Docente;
+import co.edu.unicundi.entity.Estudiante;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
@@ -60,6 +61,11 @@ public class LogicaDocente implements ILogicaDocente {
             Docente validarCorreo = repo.obtenerPorCorreo(docente.getCorreo());
 
             if (validarCedula == null && validarCorreo == null) {
+                if(!docente.getEstudiantes().isEmpty()){
+                    for (Estudiante estudiante : docente.getEstudiantes()) {
+                        estudiante.setDocente(docente);
+                    }
+                }
                 repo.registrar(docente);
             } else if (validarCedula == null && validarCorreo != null) {
                 throw new RegisteredObjectException("El correo del docente ya existe");
