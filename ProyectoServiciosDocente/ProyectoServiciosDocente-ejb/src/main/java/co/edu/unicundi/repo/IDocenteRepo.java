@@ -24,11 +24,18 @@ public interface IDocenteRepo {
     public void registrar(Docente docente);
     
     /**
-     * Lista todos los docentes registrados
+     * Lista todos los docentes registrados con sus respectivos estudiantes
      *
      * @return Lista de docentes
      */
     public List<Docente> listar();
+    
+     /**
+     * Lista todos los docentes registrados sin los estudiantes
+     *
+     * @return Lista de docentes
+     */
+    public List<Docente> listarNoEstudiantes();
     
     /**
      * Edita los datos del docente especificado

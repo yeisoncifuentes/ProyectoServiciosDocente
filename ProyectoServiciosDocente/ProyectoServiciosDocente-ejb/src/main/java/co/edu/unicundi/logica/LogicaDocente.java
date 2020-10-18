@@ -61,7 +61,7 @@ public class LogicaDocente implements ILogicaDocente {
             Docente validarCorreo = repo.obtenerPorCorreo(docente.getCorreo());
 
             if (validarCedula == null && validarCorreo == null) {
-                if(!docente.getEstudiantes().isEmpty()){
+                if (!docente.getEstudiantes().isEmpty()) {
                     for (Estudiante estudiante : docente.getEstudiantes()) {
                         estudiante.setDocente(docente);
                     }
@@ -88,14 +88,20 @@ public class LogicaDocente implements ILogicaDocente {
      * @throws NoResponseBDException
      */
     @Override
-    public List<Docente> listar() throws ListNoContentException, NoResponseBDException {
+    public List<Docente> listar(boolean filtro) throws ListNoContentException, NoResponseBDException {
         try {
-            List<Docente> docentes = repo.listar();
+            List<Docente> docentes = new ArrayList();
+            if (filtro) {
+                docentes = repo.listar();
+            } else {
+                docentes = repo.listarNoEstudiantes();
+            }
             if (docentes.size() > 0) {
                 return docentes;
             } else {
                 throw new ListNoContentException();
             }
+
         } catch (ListNoContentException ex) {
             throw new ListNoContentException();
         }

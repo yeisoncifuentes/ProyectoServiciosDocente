@@ -85,6 +85,16 @@ public class Docente implements Serializable {
         this.estudiantes=estudiantes;
         
     }
+    
+    public Docente(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento) {
+        this.id = id;
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.fechaNacimiento = fechaNacimiento;      
+        
+    }
 
     /**
      * @return the id
