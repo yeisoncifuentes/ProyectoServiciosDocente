@@ -143,7 +143,7 @@ public class LogicaDocente implements ILogicaDocente {
             if (docente != null) {
                 return docente;
             } else {
-                throw new ObjectNotFoundException("La cedula ingresada no existe");
+                throw new ObjectNotFoundException("El id ingresado no existe");
             }
         } catch (ObjectNotFoundException ex) {
             throw new ObjectNotFoundException(ex.getMessage());
