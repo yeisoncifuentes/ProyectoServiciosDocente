@@ -5,7 +5,6 @@
  */
 package co.edu.unicundi.logica;
 
-import co.edu.unicundi.BD.DAODocente;
 import co.edu.unicundi.POJO.DocentePOJO;
 import co.edu.unicundi.entity.Docente;
 import co.edu.unicundi.entity.Estudiante;
@@ -29,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import org.modelmapper.ModelMapper;
 
 /**
  * Clase que permite hacer la logica de los servicios docente
@@ -61,7 +61,7 @@ public class LogicaDocente implements ILogicaDocente {
             Docente validarCorreo = repo.obtenerPorCorreo(docente.getCorreo());
 
             if (validarCedula == null && validarCorreo == null) {
-                if (!docente.getEstudiantes().isEmpty()) {
+                if (docente.getEstudiantes() != null) {
                     for (Estudiante estudiante : docente.getEstudiantes()) {
                         estudiante.setDocente(docente);
                     }
@@ -88,16 +88,26 @@ public class LogicaDocente implements ILogicaDocente {
      * @throws NoResponseBDException
      */
     @Override
-    public List<Docente> listar(boolean filtro) throws ListNoContentException, NoResponseBDException {
+    public List<DocentePOJO> listar(boolean filtro) throws ListNoContentException, NoResponseBDException {
         try {
             List<Docente> docentes = new ArrayList();
-            if (filtro) {
-                docentes = repo.listar();
-            } else {
-                docentes = repo.listarNoEstudiantes();
-            }
+            List<DocentePOJO> docentesPojo = new ArrayList();
+
+            docentes = repo.listar();
             if (docentes.size() > 0) {
-                return docentes;
+                for (Docente docente : docentes) {
+                    ModelMapper model = new ModelMapper();
+                    DocentePOJO doc = model.map(docente, DocentePOJO.class);
+                    docentesPojo.add(doc);
+                }
+
+                if (!filtro) {
+                    for (DocentePOJO doc : docentesPojo) {
+                        doc.setEstudiantes(null);
+                    }
+                }
+                
+                return docentesPojo;
             } else {
                 throw new ListNoContentException();
             }
@@ -106,7 +116,7 @@ public class LogicaDocente implements ILogicaDocente {
             throw new ListNoContentException();
         }
     }
-    
+
     /**
      * Obtiene un docente filtrado por la cedula especificada
      *
@@ -214,29 +224,7 @@ public class LogicaDocente implements ILogicaDocente {
      */
     @Override
     public List<DocentePOJO> obtenerDocentesMateria(String materia) throws ObjectNotFoundException, NoResponseBDException {
-        try {
-            List<DocentePOJO> todosDocentes = new DAODocente().listar();
-
-            List<DocentePOJO> docentesMateria = new ArrayList();
-
-            for (DocentePOJO docente : todosDocentes) {
-                for (String materiaDocente : docente.getMaterias()) {
-
-                    if (materiaDocente.equals(materia)) {
-                        System.out.println(materiaDocente);
-                        docentesMateria.add(docente);
-                    }
-                }
-            }
-
-            if (docentesMateria.size() > 0) {
-                return docentesMateria;
-            } else {
-                throw new ObjectNotFoundException("La materia ingresada no existe");
-            }
-        } catch (ObjectNotFoundException ex) {
-            throw new ObjectNotFoundException(ex.getMessage());
-        }
+        return null;
     }
 
     /**

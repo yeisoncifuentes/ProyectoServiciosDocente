@@ -50,7 +50,7 @@ public interface ILogicaDocente {
      * @throws ListNoContentException
      * @throws NoResponseBDException
      */
-    public List<Docente> listar(boolean filtro) throws ListNoContentException, NoResponseBDException;
+    public List<DocentePOJO> listar(boolean filtro) throws ListNoContentException, NoResponseBDException;
 
     /**
      * Lista todos los docentes registrados
