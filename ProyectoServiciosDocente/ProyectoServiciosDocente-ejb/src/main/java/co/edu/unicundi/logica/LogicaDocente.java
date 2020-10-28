@@ -287,15 +287,8 @@ public class LogicaDocente implements ILogicaDocente {
 
     @Override
     public void bloquear(int id) throws ObjectNotFoundException, NoResponseBDException {
-        Docente docente = repo.obtenerPorId(id);
-        if (docente != null) {
-            Docente docenteAux = new Docente();
-            docenteAux.setId(docente.getId());
-            docenteAux.setCedula(docente.getCedula());
-            docenteAux.setNombre(docente.getNombre());
-            docenteAux.setApellido(docente.getApellido());
-            docenteAux.setCorreo(docente.getCorreo());
-            docenteAux.setFechaNacimiento(docente.getFechaNacimiento());
+        Docente docenteAux = repo.obtenerPorId(id);
+        if (docenteAux != null) {
             docenteAux.setEstado(false);
             repo.editar(docenteAux);
 
@@ -307,15 +300,8 @@ public class LogicaDocente implements ILogicaDocente {
 
     @Override
     public void habilitar(int id) throws ObjectNotFoundException, NoResponseBDException {
-        Docente docente = repo.obtenerPorId(id);
-        if (docente != null) {
-            Docente docenteAux = new Docente();
-            docenteAux.setId(docente.getId());
-            docenteAux.setCedula(docente.getCedula());
-            docenteAux.setNombre(docente.getNombre());
-            docenteAux.setApellido(docente.getApellido());
-            docenteAux.setCorreo(docente.getCorreo());
-            docenteAux.setFechaNacimiento(docente.getFechaNacimiento());
+        Docente docenteAux = repo.obtenerPorId(id);
+        if (docenteAux != null) {
             docenteAux.setEstado(true);
             repo.editar(docenteAux);
 
