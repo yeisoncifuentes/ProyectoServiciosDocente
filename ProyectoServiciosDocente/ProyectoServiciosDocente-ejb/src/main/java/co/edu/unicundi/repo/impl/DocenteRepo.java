@@ -55,13 +55,13 @@ public class DocenteRepo implements IDocenteRepo {
 
     @Override
     public List<Docente> listarNoEstudiantes() {
-        Query query = this.entity.createNativeQuery("SELECT id,cedula,nombre,apellido,correo,fecha_nacimiento FROM docentes.tbl_docente");
+        Query query = this.entity.createNativeQuery("SELECT id,cedula,nombre,apellido,correo,fecha_nacimiento,estado FROM docentes.tbl_docente");
 
         List<Object[]> result = query.getResultList();
         List<Docente> docentes = new ArrayList();
 
         for (Object[] datos : result) {
-            docentes.add(new Docente((Integer) datos[0], (String) datos[1], (String) datos[2], (String) datos[3], (String) datos[4], (Date) datos[5]));
+            docentes.add(new Docente((Integer)datos[0], (String) datos[1], (String) datos[2], (String) datos[3], (String) datos[4], (Date)datos[5], (boolean)datos[6]));
         }
         return docentes;
     }
