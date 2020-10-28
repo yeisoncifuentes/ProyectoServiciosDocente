@@ -60,7 +60,7 @@ public interface ILogicaDocente {
      * @throws ListNoContentException
      * @throws NoResponseBDException
      */
-    public List<Docente> listar2() throws ListNoContentException, NoResponseBDException;
+    public List<DocentePOJO> listar2() throws ListNoContentException, NoResponseBDException;
 
     /**
      * Lista todos los docentes registrados
@@ -72,6 +72,15 @@ public interface ILogicaDocente {
      */
     public List<Docente> listar3(boolean filtro) throws ListNoContentException, NoResponseBDException;
 
+    /**
+     * Elimina un docente de acuerdo al id especificado si no tiene estudiantes
+     *
+     * @param id
+     * @throws ObjectNotFoundException
+     * @throws NoResponseBDException
+     */
+    public void eliminarSoloDocente(int id) throws ObjectNotFoundException, NoResponseBDException, RegisteredObjectException;
+    
     /**
      * Lista todos los docentes registrados
      *

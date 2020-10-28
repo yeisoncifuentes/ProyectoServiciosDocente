@@ -125,8 +125,27 @@ public class LogicaDocente implements ILogicaDocente {
      * @throws NoResponseBDException
      */
     @Override
-    public List<Docente> listar2() throws ListNoContentException, NoResponseBDException {
-        return repo.listar2();
+    public List<DocentePOJO> listar2() throws ListNoContentException, NoResponseBDException {
+        try {
+            List<Docente> docentes = new ArrayList();
+            List<DocentePOJO> docentesPojo = new ArrayList();
+
+            docentes = repo.listar2();
+            if (docentes.size() > 0) {
+                for (Docente docente : docentes) {
+                    ModelMapper model = new ModelMapper();
+                    DocentePOJO doc = model.map(docente, DocentePOJO.class);
+                    docentesPojo.add(doc);
+                }
+
+                return docentesPojo;
+            } else {
+                throw new ListNoContentException();
+            }
+
+        } catch (ListNoContentException ex) {
+            throw new ListNoContentException();
+        }
     }
 
     /**
@@ -327,6 +346,32 @@ public class LogicaDocente implements ILogicaDocente {
             Docente docente = repo.obtenerPorId(id);
             if (docente != null) {
                 repo.eliminar(docente);
+            } else {
+                throw new ObjectNotFoundException("El id del docente no existe");
+            }
+        } catch (ObjectNotFoundException ex) {
+            throw new ObjectNotFoundException(ex.getMessage());
+        }
+    }
+    
+    /**
+     * Elimina un docente de acuerdo al id especificado si no tiene estudiantes
+     *
+     * @param id
+     * @throws ObjectNotFoundException
+     * @throws NoResponseBDException
+     */
+    @Override
+    public void eliminarSoloDocente(int id) throws ObjectNotFoundException, NoResponseBDException, RegisteredObjectException {
+        try {
+            Docente docente = repo.obtenerPorId(id);
+            if (docente != null) {
+                Integer nEstudiantes = repo.contarEstudiantes(id);
+                if (nEstudiantes > 0) {
+                    repo.eliminar(docente);
+                } else {
+                    throw new RegisteredObjectException("No se puede eliminar este docente porque tiene estudiantes asociados");
+                }
             } else {
                 throw new ObjectNotFoundException("El id del docente no existe");
             }

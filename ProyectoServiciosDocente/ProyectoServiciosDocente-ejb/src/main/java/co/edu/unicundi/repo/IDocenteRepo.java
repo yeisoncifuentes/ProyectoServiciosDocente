@@ -65,6 +65,14 @@ public interface IDocenteRepo {
      * @param docente
      */
     public void eliminar(Docente docente);
+    
+    /**
+     * Cuenta el numero de estudiantes que tiene el id docente especificado
+     * 
+     * @param idDocente
+     * @return Numero de estudiantes
+     */
+    public Integer contarEstudiantes(int idDocente);
 
     /**
      * Obtiene el docente filtrado por el id especificado

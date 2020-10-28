@@ -65,6 +65,16 @@ public class DocenteRepo implements IDocenteRepo {
         }
         return docentes;
     }
+    
+    @Override
+    public Integer contarEstudiantes(int idDocente) {
+        Query query = this.entity.createQuery("SELECT COUNT (d) FROM Docente d WHERE d.id = ?1", Long.class);
+        query.setParameter(1, idDocente);
+        
+        Integer nEstudiantes = (Integer) query.getSingleResult();
+        
+        return nEstudiantes;
+    }
 
     @Override
     public void editar(Docente docente) {

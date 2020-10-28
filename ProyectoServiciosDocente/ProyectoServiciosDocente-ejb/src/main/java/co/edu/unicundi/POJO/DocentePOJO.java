@@ -31,6 +31,8 @@ public class DocentePOJO implements Serializable {
     private Date fechaNacimiento;
 
     private List<Estudiante> estudiantes;
+    
+    private boolean estado;
 
     /**
      * Constructor vacio
@@ -155,6 +157,20 @@ public class DocentePOJO implements Serializable {
      */
     public void setEstudiantes(List<Estudiante> estudiantes) {
         this.estudiantes = estudiantes;
+    }
+
+    /**
+     * @return the estado
+     */
+    public boolean isEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
     
 }

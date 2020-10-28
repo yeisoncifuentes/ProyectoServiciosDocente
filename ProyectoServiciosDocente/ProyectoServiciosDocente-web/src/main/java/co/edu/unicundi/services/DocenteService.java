@@ -126,6 +126,55 @@ public class DocenteService {
     }
 
     /**
+     * Servicio que lista todos los docentes
+     *
+     * @return Response con lista de docentes
+     * @throws co.edu.unicundi.exception.ListNoContentException
+     * @throws co.edu.unicundi.exception.NoResponseBDException
+     */
+    @Path("/listar2")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Lista todos los docentes registrados sin estudiantes")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Los docentes se obtuvieron correctamente"),
+        @ApiResponse(code = 204, message = "La lista de docentes está vacía"),
+        @ApiResponse(code = 400, message = "Error en la petición, puede suceder si se envía body"),
+        @ApiResponse(code = 404, message = "Recurso no encontrado"),
+        @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
+        @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
+    public Response listar2() throws ListNoContentException, NoResponseBDException {
+        List<DocentePOJO> docentes = logicaDocente.listar2();
+        return Response.status(Response.Status.OK).entity(docentes).build();
+    }
+
+    /**
+     * Servicio que lista todos los docentes
+     *
+     * @param filtro
+     * @return Response con lista de docentes
+     * @throws co.edu.unicundi.exception.ListNoContentException
+     * @throws co.edu.unicundi.exception.NoResponseBDException
+     */
+    @Path("/listar3/{filtro}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Lista todos los docentes registrados")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Los docentes se obtuvieron correctamente"),
+        @ApiResponse(code = 204, message = "La lista de docentes está vacía"),
+        @ApiResponse(code = 400, message = "Error en la petición, puede suceder si se envía body"),
+        @ApiResponse(code = 404, message = "Recurso no encontrado"),
+        @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
+        @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
+    public Response listar3(
+            @NotNull(message = "Campo filtro requerido")
+            @PathParam("filtro") boolean filtro) throws ListNoContentException, NoResponseBDException {
+        List<Docente> docentes = logicaDocente.listar3(filtro);
+        return Response.status(Response.Status.OK).entity(docentes).build();
+    }
+
+    /**
      * Servicio que lista todos los docentes del fichero
      *
      * @return Response con lista de docentes
@@ -248,10 +297,11 @@ public class DocenteService {
 
     /**
      * Servicio que bloquea al usuario
+     *
      * @param id
      * @return
      * @throws ObjectNotFoundException
-     * @throws NoResponseBDException 
+     * @throws NoResponseBDException
      */
     @Path("/bloquear/{id}")
     @PUT
@@ -262,15 +312,15 @@ public class DocenteService {
         logicaDocente.bloquear(id);
         return Response.status(Response.Status.OK).entity("Docente bloqueado correctamente").build();
     }
-    
+
     /**
      * Servicio que habilitar al docente
+     *
      * @param id
-     * @return   
-     * @throws ObjectNotFoundException   
-     * @throws NoResponseBDException 
+     * @return
+     * @throws ObjectNotFoundException
+     * @throws NoResponseBDException
      */
-    
     @Path("/habilitar/{id}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -302,6 +352,30 @@ public class DocenteService {
             @NotNull(message = "Campo id requerido")
             @PathParam("id") Integer id) throws ObjectNotFoundException, NoResponseBDException {
         logicaDocente.eliminar(id);
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+    
+    /**
+     * Servicio que elimina un docente
+     *
+     * @param id
+     * @return Response
+     */
+    @Path("/eliminar2/{id}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Elimina un docente registrado con el id especificado")
+    @ApiResponses(value = {
+        @ApiResponse(code = 204, message = "El docente se eliminó correctamente"),
+        @ApiResponse(code = 400, message = "Error en la petición, puede suceder sí se envía body"),
+        @ApiResponse(code = 404, message = "Recurso o docente no encontrado"),
+        @ApiResponse(code = 405, message = "El método de la solicitud no es DELETE"),
+        @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
+    public Response eliminar2(
+            //Campo id url con validacion
+            @NotNull(message = "Campo id requerido")
+            @PathParam("id") Integer id) throws ObjectNotFoundException, NoResponseBDException, RegisteredObjectException {
+        logicaDocente.eliminarSoloDocente(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
