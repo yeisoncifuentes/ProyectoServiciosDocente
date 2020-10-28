@@ -121,7 +121,7 @@ public class DocenteService {
     public Response listar(
             @NotNull(message = "Campo filtro requerido")
             @PathParam("filtro") boolean filtro) throws ListNoContentException, NoResponseBDException {
-        List<Docente> docentes = logicaDocente.listar(filtro);
+        List<DocentePOJO> docentes = logicaDocente.listar(filtro);
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
 
