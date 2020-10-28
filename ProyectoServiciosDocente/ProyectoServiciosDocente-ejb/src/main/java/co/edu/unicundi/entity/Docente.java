@@ -68,6 +68,11 @@ public class Docente implements Serializable {
     @Column(name = "fecha_nacimiento", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaNacimiento;
+    
+    
+    @NotNull(message = "Campo estado requerido")   
+    @Column(name = "estado", nullable = false)
+    private boolean estado;
 
     @OneToMany(mappedBy = "docente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Estudiante> estudiantes;
@@ -75,24 +80,26 @@ public class Docente implements Serializable {
     public Docente() {
     }
 
-    public Docente(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, List<Estudiante> estudiantes) {
+    public Docente(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, List<Estudiante> estudiantes, boolean estado) {
         this.id = id;
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.fechaNacimiento = fechaNacimiento;
+        this.estado=estado;
         this.estudiantes=estudiantes;
         
     }
     
-    public Docente(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento) {
+    public Docente(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, boolean estado) {
         this.id = id;
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.fechaNacimiento = fechaNacimiento;      
+        this.estado=estado;
         
     }
 
@@ -192,6 +199,20 @@ public class Docente implements Serializable {
      */
     public void setEstudiantes(List<Estudiante> estudiantes) {
         this.estudiantes = estudiantes;
+    }
+
+     /**
+     * @return the estado
+     */
+    public boolean isEstado() {
+        return estado;
+    }
+
+    /**s
+     * @param estado the estado to set
+     */
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
    

@@ -106,7 +106,7 @@ public class LogicaDocente implements ILogicaDocente {
             throw new ListNoContentException();
         }
     }
-    
+
     /**
      * Obtiene un docente filtrado por la cedula especificada
      *
@@ -163,22 +163,27 @@ public class LogicaDocente implements ILogicaDocente {
     public void editar(Docente docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
         try {
             if (docente.getId() != null) {
-                Docente docenteFiltradoId = repo.obtenerPorId(docente.getId());
+                Docente docenteAux = repo.obtenerPorId(docente.getId());
 
-                if (docenteFiltradoId != null) {
-
+                if (docenteAux != null) {
                     Docente validarCedula = repo.obtenerPorCedula(docente.getCedula());
                     Docente validarCorreo = repo.obtenerPorCorreo(docente.getCorreo());
 
+                    docenteAux.setCedula(docente.getCedula());
+                    docenteAux.setNombre(docente.getNombre());
+                    docenteAux.setApellido(docente.getApellido());
+                    docenteAux.setCorreo(docente.getCorreo());
+                    docenteAux.setFechaNacimiento(docente.getFechaNacimiento());
+
                     if (validarCedula == null) {
                         if (validarCorreo == null || validarCorreo.getId().equals(docente.getId())) {
-                            repo.editar(docente);
+                            repo.editar(docenteAux);
                         } else {
                             throw new RegisteredObjectException("El correo del docente ya existe");
                         }
                     } else if (validarCedula.getId().equals(docente.getId())) {
                         if (validarCorreo == null || validarCorreo.getId().equals(docente.getId())) {
-                            repo.editar(docente);
+                            repo.editar(docenteAux);
                         } else {
                             throw new RegisteredObjectException("El correo del docente ya existe");
                         }
@@ -201,6 +206,45 @@ public class LogicaDocente implements ILogicaDocente {
             throw new ObjectNotFoundException(ex.getMessage());
         } catch (IdRequiredException ex) {
             throw new IdRequiredException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void bloquear(int id) throws ObjectNotFoundException, NoResponseBDException {
+        Docente docente = repo.obtenerPorId(id);
+        if (docente != null) {
+            Docente docenteAux = new Docente();
+            docenteAux.setId(docente.getId());
+            docenteAux.setCedula(docente.getCedula());
+            docenteAux.setNombre(docente.getNombre());
+            docenteAux.setApellido(docente.getApellido());
+            docenteAux.setCorreo(docente.getCorreo());
+            docenteAux.setFechaNacimiento(docente.getFechaNacimiento());
+            docenteAux.setEstado(false);
+            repo.editar(docenteAux);
+
+        } else {
+            throw new ObjectNotFoundException("El id del docente no existe");
+        }
+
+    }
+
+    @Override
+    public void habilitar(int id) throws ObjectNotFoundException, NoResponseBDException {
+        Docente docente = repo.obtenerPorId(id);
+        if (docente != null) {
+            Docente docenteAux = new Docente();
+            docenteAux.setId(docente.getId());
+            docenteAux.setCedula(docente.getCedula());
+            docenteAux.setNombre(docente.getNombre());
+            docenteAux.setApellido(docente.getApellido());
+            docenteAux.setCorreo(docente.getCorreo());
+            docenteAux.setFechaNacimiento(docente.getFechaNacimiento());
+            docenteAux.setEstado(true);
+            repo.editar(docenteAux);
+
+        } else {
+            throw new ObjectNotFoundException("El id del docente no existe");
         }
     }
 

@@ -91,6 +91,24 @@ public interface ILogicaDocente {
      */
     public void editar(Docente docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException;
 
+     /**
+     * bloquea al docente 
+     * @param id
+     * @throws ObjectNotFoundException 
+     * @throws NoResponseBDException
+     */
+    public void bloquear(int id) throws ObjectNotFoundException,NoResponseBDException;
+    
+     /**
+     * desbloquear el docente
+     *       
+     * @param id
+     * @throws ObjectNotFoundException    
+     * @throws NoResponseBDException
+     */
+    public void habilitar(int id) throws ObjectNotFoundException, NoResponseBDException;
+
+    
     /**
      * Lista los docentes con la materia especificada
      *
@@ -109,5 +127,7 @@ public interface ILogicaDocente {
      * @throws NoResponseBDException
      */
     public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException;
+    
+    
 
 }
