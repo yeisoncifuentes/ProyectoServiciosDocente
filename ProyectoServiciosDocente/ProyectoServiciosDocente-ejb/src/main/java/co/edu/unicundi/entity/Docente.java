@@ -61,7 +61,10 @@ public class Docente implements Serializable {
     @NotNull(message = "Campo correo requerido")
     @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@+[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message = "Formato de correo incorrecto")
     @Column(name = "correo", nullable = false, unique = true)
-    private String correo;
+    private String correo;    
+      
+    @Column(name = "estado", nullable = false)
+    private boolean estado;
 
     @NotNull(message = "Campo fechaNacimiento requerido")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -70,9 +73,7 @@ public class Docente implements Serializable {
     private Date fechaNacimiento;
     
     
-    @NotNull(message = "Campo estado requerido")   
-    @Column(name = "estado", nullable = false)
-    private boolean estado;
+   
 
     @OneToMany(mappedBy = "docente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Estudiante> estudiantes;

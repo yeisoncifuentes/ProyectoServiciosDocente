@@ -67,6 +67,7 @@ public class LogicaDocente implements ILogicaDocente {
                         estudiante.setDocente(docente);
                     }
                 }
+                docente.setEstado(true);
                 repo.registrar(docente);
             } else if (validarCedula == null && validarCorreo != null) {
                 throw new RegisteredObjectException("El correo del docente ya existe");
@@ -238,16 +239,18 @@ public class LogicaDocente implements ILogicaDocente {
             if (docente.getId() != null) {
                 Docente docenteAux = repo.obtenerPorId(docente.getId());
 
-                if (docenteAux != null) {
-                    Docente validarCedula = repo.obtenerPorCedula(docente.getCedula());
-                    Docente validarCorreo = repo.obtenerPorCorreo(docente.getCorreo());
+                if (docenteAux != null) {                  
+                    Docente validarCedula = repo.obtenerPorCedula(docenteAux.getCedula());
+                    Docente validarCorreo = repo.obtenerPorCorreo(docenteAux.getCorreo());
 
+                    
                     docenteAux.setCedula(docente.getCedula());
                     docenteAux.setNombre(docente.getNombre());
                     docenteAux.setApellido(docente.getApellido());
                     docenteAux.setCorreo(docente.getCorreo());
                     docenteAux.setFechaNacimiento(docente.getFechaNacimiento());
-
+                    
+                   
                     if (validarCedula == null) {
                         if (validarCorreo == null || validarCorreo.getId().equals(docente.getId())) {
                             repo.editar(docenteAux);
