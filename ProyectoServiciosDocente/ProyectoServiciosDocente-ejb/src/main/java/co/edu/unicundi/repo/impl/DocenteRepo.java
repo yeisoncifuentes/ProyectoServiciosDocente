@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -39,6 +41,19 @@ public class DocenteRepo implements IDocenteRepo {
     }
 
     @Override
+    public List<Docente> listar2() {
+        TypedQuery<Docente> query = this.entity.createQuery("SELECT d.id, d.apellido, d.cedula, d.correo, d.fechaNacimiento, d.nombre FROM Docente d", Docente.class);
+        return query.getResultList();
+    }
+
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @Override
+    public List<Docente> listar3() {
+        TypedQuery<Docente> query = this.entity.createQuery("SELECT d FROM Docente d", Docente.class);
+        return query.getResultList();
+    }
+
+    @Override
     public List<Docente> listarNoEstudiantes() {
         Query query = this.entity.createNativeQuery("SELECT id,cedula,nombre,apellido,correo,fecha_nacimiento FROM docentes.tbl_docente");
 
@@ -46,7 +61,7 @@ public class DocenteRepo implements IDocenteRepo {
         List<Docente> docentes = new ArrayList();
 
         for (Object[] datos : result) {
-            docentes.add(new Docente((Integer)datos[0], (String) datos[1], (String) datos[2], (String) datos[3], (String) datos[4], (Date)datos[5]));
+            docentes.add(new Docente((Integer) datos[0], (String) datos[1], (String) datos[2], (String) datos[3], (String) datos[4], (Date) datos[5]));
         }
         return docentes;
     }

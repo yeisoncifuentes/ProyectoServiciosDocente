@@ -106,8 +106,51 @@ public class LogicaDocente implements ILogicaDocente {
                         doc.setEstudiantes(null);
                     }
                 }
-                
+
                 return docentesPojo;
+            } else {
+                throw new ListNoContentException();
+            }
+
+        } catch (ListNoContentException ex) {
+            throw new ListNoContentException();
+        }
+    }
+
+    /**
+     * Lista todos los docentes registrados sin estudiantes
+     *
+     * @return Lista de docentes
+     * @throws ListNoContentException
+     * @throws NoResponseBDException
+     */
+    @Override
+    public List<Docente> listar2() throws ListNoContentException, NoResponseBDException {
+        return repo.listar2();
+    }
+
+    /**
+     * Lista todos los docentes registrados
+     *
+     * @param filtro
+     * @return Lista de docentes
+     * @throws ListNoContentException
+     * @throws NoResponseBDException
+     */
+    @Override
+    public List<Docente> listar3(boolean filtro) throws ListNoContentException, NoResponseBDException {
+        try {
+            List<Docente> docentes = new ArrayList();
+
+            docentes = repo.listar3();
+            if (docentes.size() > 0) {
+                if (!filtro) {
+                    for (Docente doc : docentes) {
+                        doc.setEstudiantes(null);
+                    }
+                }
+
+                return docentes;
             } else {
                 throw new ListNoContentException();
             }

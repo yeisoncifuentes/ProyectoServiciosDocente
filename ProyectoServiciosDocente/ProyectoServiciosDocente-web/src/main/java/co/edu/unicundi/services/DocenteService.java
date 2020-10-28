@@ -50,9 +50,7 @@ public class DocenteService {
 
     @EJB
     public ILogicaDocente logicaDocente;
-    
-   
-    
+
     /**
      * Servicio que registra un docente
      *
@@ -76,9 +74,8 @@ public class DocenteService {
         logicaDocente.registrar(docente);
         return Response.status(Response.Status.CREATED).entity("Docente creado correctamente").build();
     }
-    
-    
-     /**
+
+    /**
      * Servicio que registra un docente en el fichero
      *
      * @param docente
@@ -97,7 +94,7 @@ public class DocenteService {
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registrarFichero(@Valid DocentePOJO docente) throws IOException, NoResponseBDException  {
+    public Response registrarFichero(@Valid DocentePOJO docente) throws IOException, NoResponseBDException {
         logicaDocente.registrarFichero(docente);
         return Response.status(Response.Status.CREATED).entity(docente).build();
     }
@@ -105,7 +102,7 @@ public class DocenteService {
     /**
      * Servicio que lista todos los docentes
      *
-     * @param filtro   
+     * @param filtro
      * @return Response con lista de docentes
      * @throws co.edu.unicundi.exception.ListNoContentException
      * @throws co.edu.unicundi.exception.NoResponseBDException
@@ -121,15 +118,63 @@ public class DocenteService {
         @ApiResponse(code = 404, message = "Recurso no encontrado"),
         @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
-    public Response listar(  
+    public Response listar(
             @NotNull(message = "Campo filtro requerido")
             @PathParam("filtro") boolean filtro) throws ListNoContentException, NoResponseBDException {
         List<DocentePOJO> docentes = logicaDocente.listar(filtro);
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
-    
-    
-     /**
+
+    /**
+     * Servicio que lista todos los docentes
+     *
+     * @return Response con lista de docentes
+     * @throws co.edu.unicundi.exception.ListNoContentException
+     * @throws co.edu.unicundi.exception.NoResponseBDException
+     */
+    @Path("/listar2")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Lista todos los docentes registrados sin estudiantes")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Los docentes se obtuvieron correctamente"),
+        @ApiResponse(code = 204, message = "La lista de docentes está vacía"),
+        @ApiResponse(code = 400, message = "Error en la petición, puede suceder si se envía body"),
+        @ApiResponse(code = 404, message = "Recurso no encontrado"),
+        @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
+        @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
+    public Response listar2() throws ListNoContentException, NoResponseBDException {
+        List<Docente> docentes = logicaDocente.listar2();
+        return Response.status(Response.Status.OK).entity(docentes).build();
+    }
+
+    /**
+     * Servicio que lista todos los docentes
+     *
+     * @param filtro
+     * @return Response con lista de docentes
+     * @throws co.edu.unicundi.exception.ListNoContentException
+     * @throws co.edu.unicundi.exception.NoResponseBDException
+     */
+    @Path("/listar3/{filtro}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Lista todos los docentes registrados")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Los docentes se obtuvieron correctamente"),
+        @ApiResponse(code = 204, message = "La lista de docentes está vacía"),
+        @ApiResponse(code = 400, message = "Error en la petición, puede suceder si se envía body"),
+        @ApiResponse(code = 404, message = "Recurso no encontrado"),
+        @ApiResponse(code = 405, message = "El método de la solicitud no es GET"),
+        @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
+    public Response listar3(
+            @NotNull(message = "Campo filtro requerido")
+            @PathParam("filtro") boolean filtro) throws ListNoContentException, NoResponseBDException {
+        List<Docente> docentes = logicaDocente.listar3(filtro);
+        return Response.status(Response.Status.OK).entity(docentes).build();
+    }
+
+    /**
      * Servicio que lista todos los docentes del fichero
      *
      * @return Response con lista de docentes
@@ -174,7 +219,7 @@ public class DocenteService {
         Docente docente = logicaDocente.obtenerPorId(id);
         return Response.status(Response.Status.OK).entity(docente).build();
     }
-    
+
     /**
      * Servicio que obtiene un docente filtrado por cedula
      *

@@ -32,7 +32,7 @@ public interface ILogicaDocente {
      * @throws RegisteredObjectException
      * @throws NoResponseBDException
      */
-    public void registrar(Docente docente) throws RegisteredObjectException,NoResponseBDException;
+    public void registrar(Docente docente) throws RegisteredObjectException, NoResponseBDException;
 
     /**
      * Registra el docente especificado dentro del fichero
@@ -46,11 +46,31 @@ public interface ILogicaDocente {
     /**
      * Lista todos los docentes registrados
      *
+     * @param filtro
      * @return Lista de docentes
      * @throws ListNoContentException
      * @throws NoResponseBDException
      */
     public List<DocentePOJO> listar(boolean filtro) throws ListNoContentException, NoResponseBDException;
+
+    /**
+     * Lista todos los docentes registrados sin estudiantes
+     *
+     * @return Lista de docentes
+     * @throws ListNoContentException
+     * @throws NoResponseBDException
+     */
+    public List<Docente> listar2() throws ListNoContentException, NoResponseBDException;
+
+    /**
+     * Lista todos los docentes registrados
+     *
+     * @param filtro
+     * @return Lista de docentes
+     * @throws ListNoContentException
+     * @throws NoResponseBDException
+     */
+    public List<Docente> listar3(boolean filtro) throws ListNoContentException, NoResponseBDException;
 
     /**
      * Lista todos los docentes registrados
