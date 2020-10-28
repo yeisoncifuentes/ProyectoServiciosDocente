@@ -42,7 +42,7 @@ public class DocenteRepo implements IDocenteRepo {
 
     @Override
     public List<Docente> listar2() {
-        TypedQuery<Docente> query = this.entity.createQuery("SELECT d.id, d.apellido, d.cedula, d.correo, d.fechaNacimiento, d.nombre FROM Docente d", Docente.class);
+        TypedQuery<Docente> query = this.entity.createQuery("SELECT d.id, d.cedula, d.nombre, d.apellido, d.correo, d.fechaNacimiento, d.estado FROM Docente d", Docente.class);
         return query.getResultList();
     }
 
@@ -67,13 +67,13 @@ public class DocenteRepo implements IDocenteRepo {
     }
     
     @Override
-    public Integer contarEstudiantes(int idDocente) {
-        Query query = this.entity.createQuery("SELECT COUNT (d) FROM Docente d WHERE d.id = ?1", Long.class);
-        query.setParameter(1, idDocente);
+    public Integer contarEstudiantes(Docente docente) {
+        Query query = this.entity.createQuery("SELECT COUNT (e) FROM Estudiante e WHERE e.docente = ?1", Long.class);
+        query.setParameter(1, docente);
         
-        Integer nEstudiantes = (Integer) query.getSingleResult();
+        Long nEstudiantes = (Long) query.getSingleResult();
         
-        return nEstudiantes;
+        return nEstudiantes.intValue();
     }
 
     @Override

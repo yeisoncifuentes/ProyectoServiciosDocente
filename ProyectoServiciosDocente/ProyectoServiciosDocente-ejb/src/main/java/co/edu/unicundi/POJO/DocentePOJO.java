@@ -50,8 +50,9 @@ public class DocentePOJO implements Serializable {
      * @param correo
      * @param fechaNacimiento
      * @param estudiantes 
+     * @param estado
      */
-    public DocentePOJO(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, List<Estudiante> estudiantes) {
+    public DocentePOJO(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, List<Estudiante> estudiantes, boolean estado) {
         this.id = id;
         this.cedula = cedula;
         this.nombre = nombre;
@@ -59,6 +60,27 @@ public class DocentePOJO implements Serializable {
         this.correo = correo;
         this.fechaNacimiento = fechaNacimiento;
         this.estudiantes = estudiantes;
+        this.estado = estado;
+    }
+    
+    /**
+     * 
+     * @param id
+     * @param cedula
+     * @param nombre
+     * @param apellido
+     * @param correo
+     * @param fechaNacimiento
+     * @param estado
+     */
+    public DocentePOJO(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, boolean estado) {
+        this.id = id;
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.fechaNacimiento = fechaNacimiento;
+        this.estado = estado;
     }
 
     /**

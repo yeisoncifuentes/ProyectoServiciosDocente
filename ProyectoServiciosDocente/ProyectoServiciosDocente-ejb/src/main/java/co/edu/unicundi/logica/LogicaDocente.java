@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -132,10 +133,10 @@ public class LogicaDocente implements ILogicaDocente {
 
             docentes = repo.listar2();
             if (docentes.size() > 0) {
-                for (Docente docente : docentes) {
+                for(int i = 0;i<docentes.size();i++) {
                     ModelMapper model = new ModelMapper();
-                    DocentePOJO doc = model.map(docente, DocentePOJO.class);
-                    docentesPojo.add(doc);
+                    Object[] doc = model.map(docentes.get(i), Object[].class);
+                    docentesPojo.add(new DocentePOJO((Integer) doc[0], (String) doc[1], (String) doc[2], (String) doc[3], (String) doc[4], (Date) doc[5], (Boolean) doc[6]));
                 }
 
                 return docentesPojo;
@@ -366,8 +367,8 @@ public class LogicaDocente implements ILogicaDocente {
         try {
             Docente docente = repo.obtenerPorId(id);
             if (docente != null) {
-                Integer nEstudiantes = repo.contarEstudiantes(id);
-                if (nEstudiantes > 0) {
+                Integer nEstudiantes = repo.contarEstudiantes(docente);
+                if (nEstudiantes == 0) {
                     repo.eliminar(docente);
                 } else {
                     throw new RegisteredObjectException("No se puede eliminar este docente porque tiene estudiantes asociados");
