@@ -194,6 +194,7 @@ public class LogicaDocente implements ILogicaDocente {
         try {
             Docente docente = repo.obtenerPorCedula(cedula);
             if (docente != null) {
+                docente.setEstudiantes(null);
                 return docente;
             } else {
                 throw new ObjectNotFoundException("La cedula ingresada no existe");
@@ -215,6 +216,7 @@ public class LogicaDocente implements ILogicaDocente {
         try {
             Docente docente = repo.obtenerPorId(id);
             if (docente != null) {
+                docente.setEstudiantes(null);
                 return docente;
             } else {
                 throw new ObjectNotFoundException("El id ingresado no existe");

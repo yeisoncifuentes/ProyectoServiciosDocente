@@ -75,6 +75,7 @@ public class DocenteRepo extends AbstractFacade<Docente, Integer> implements IDo
         return nEstudiantes.intValue();
     }
 
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
     public Docente obtenerPorCedula(String cedula) {
         try {

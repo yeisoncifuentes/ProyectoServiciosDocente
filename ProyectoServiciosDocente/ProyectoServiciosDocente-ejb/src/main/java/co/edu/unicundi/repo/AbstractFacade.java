@@ -6,6 +6,8 @@
 package co.edu.unicundi.repo;
 
 import java.util.List;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 
 /**
@@ -40,6 +42,7 @@ public abstract class AbstractFacade<T, V> {
         getEntityManager().remove(entity);
     }
 
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public T obtenerPorId(V id) {
         return getEntityManager().find(entityClass, id);
     }
