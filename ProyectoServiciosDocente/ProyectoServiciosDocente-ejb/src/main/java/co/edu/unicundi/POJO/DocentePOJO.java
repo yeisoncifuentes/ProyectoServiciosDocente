@@ -33,6 +33,10 @@ public class DocentePOJO implements Serializable {
     private List<Estudiante> estudiantes;
     
     private boolean estado;
+    
+     private DireccionPOJO direccion;
+    
+    
 
     /**
      * Constructor vacio
@@ -62,6 +66,32 @@ public class DocentePOJO implements Serializable {
         this.estudiantes = estudiantes;
         this.estado = estado;
     }
+
+    /**
+     * 
+     * @param id
+     * @param cedula
+     * @param nombre
+     * @param apellido
+     * @param correo
+     * @param fechaNacimiento
+     * @param estudiantes
+     * @param estado
+     * @param direccion 
+     */
+    public DocentePOJO(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, List<Estudiante> estudiantes, boolean estado, DireccionPOJO direccion) {
+        this.id = id;
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.fechaNacimiento = fechaNacimiento;
+        this.estudiantes = estudiantes;
+        this.estado = estado;
+        this.direccion = direccion;
+    }
+    
+    
     
     /**
      * 
@@ -194,5 +224,22 @@ public class DocentePOJO implements Serializable {
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
+
+    /**
+     * 
+     * @return 
+     */
+    public DireccionPOJO getDireccion() {
+        return direccion;
+    }
+
+    /**
+     * 
+     * @param direccion 
+     */
+    public void setDireccion(DireccionPOJO direccion) {
+        this.direccion = direccion;
+    }
+    
     
 }

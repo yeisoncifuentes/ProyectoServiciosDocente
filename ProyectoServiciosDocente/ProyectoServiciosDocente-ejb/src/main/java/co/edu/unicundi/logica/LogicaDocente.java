@@ -67,6 +67,9 @@ public class LogicaDocente implements ILogicaDocente {
                         estudiante.setDocente(docente);
                     }
                 }
+                if(docente.getDireccion()!=null){
+                    docente.getDireccion().setDocente(docente);
+                }
                 docente.setEstado(true);
                 repo.registrar(docente);
             } else if (validarCedula == null && validarCorreo != null) {
@@ -134,7 +137,7 @@ public class LogicaDocente implements ILogicaDocente {
 
             docentes = repo.listar2();
             if (docentes.size() > 0) {
-                for(int i = 0;i<docentes.size();i++) {
+                for (int i = 0; i < docentes.size(); i++) {
                     ModelMapper model = new ModelMapper();
                     Object[] doc = model.map(docentes.get(i), Object[].class);
                     docentesPojo.add(new DocentePOJO((Integer) doc[0], (String) doc[1], (String) doc[2], (String) doc[3], (String) doc[4], (Date) doc[5], (Boolean) doc[6]));
@@ -170,7 +173,6 @@ public class LogicaDocente implements ILogicaDocente {
                         doc.setEstudiantes(null);
                     }
                 }
-
                 return docentes;
             } else {
                 throw new ListNoContentException();
@@ -241,18 +243,21 @@ public class LogicaDocente implements ILogicaDocente {
             if (docente.getId() != null) {
                 Docente docenteAux = repo.obtenerPorId(docente.getId());
 
-                if (docenteAux != null) {                  
+                if (docenteAux != null) {
                     Docente validarCedula = repo.obtenerPorCedula(docenteAux.getCedula());
                     Docente validarCorreo = repo.obtenerPorCorreo(docenteAux.getCorreo());
 
-                    
                     docenteAux.setCedula(docente.getCedula());
                     docenteAux.setNombre(docente.getNombre());
                     docenteAux.setApellido(docente.getApellido());
                     docenteAux.setCorreo(docente.getCorreo());
                     docenteAux.setFechaNacimiento(docente.getFechaNacimiento());
-                    
-                   
+
+                    if (docente.getDireccion() != null) {
+                        docenteAux.getDireccion().setBarrio(docente.getDireccion().getBarrio());
+                        docenteAux.getDireccion().setDireccion(docente.getDireccion().getDireccion());
+                    }
+
                     if (validarCedula == null) {
                         if (validarCorreo == null || validarCorreo.getId().equals(docente.getId())) {
                             repo.editar(docenteAux);
@@ -345,7 +350,7 @@ public class LogicaDocente implements ILogicaDocente {
             throw new ObjectNotFoundException(ex.getMessage());
         }
     }
-    
+
     /**
      * Elimina un docente de acuerdo al id especificado si no tiene estudiantes
      *

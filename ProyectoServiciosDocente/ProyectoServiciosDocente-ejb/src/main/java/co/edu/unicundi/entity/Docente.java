@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -70,13 +71,15 @@ public class Docente implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "fecha_nacimiento", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaNacimiento;
-    
-    
+    private Date fechaNacimiento; 
    
 
     @OneToMany(mappedBy = "docente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Estudiante> estudiantes;
+    
+   
+    @OneToOne(mappedBy = "docente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Direccion direccion;
 
     public Docente() {
     }
@@ -92,6 +95,20 @@ public class Docente implements Serializable {
         this.estudiantes=estudiantes;
         
     }
+
+    public Docente(Integer id, String cedula, String nombre, String apellido, String correo, boolean estado, Date fechaNacimiento, List<Estudiante> estudiantes, Direccion direccion) {
+        this.id = id;
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.estado = estado;
+        this.fechaNacimiento = fechaNacimiento;
+        this.estudiantes = estudiantes;
+        this.direccion = direccion;
+    }
+    
+    
     
     public Docente(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, boolean estado) {
         this.id = id;
@@ -216,6 +233,23 @@ public class Docente implements Serializable {
         this.estado = estado;
     }
 
+    /**
+     * 
+     * @return 
+     */
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    /**
+     * 
+     * @param direccion 
+     */
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+
+    
    
 
 }
