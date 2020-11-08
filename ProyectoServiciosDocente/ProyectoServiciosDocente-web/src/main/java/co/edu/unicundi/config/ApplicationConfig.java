@@ -47,6 +47,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.edu.unicundi.exception.filter.UnsupportedMediaTypeExceptionFilter.class);
         resources.add(co.edu.unicundi.exception.filter.WebApplicationExceptionFilter.class);
         resources.add(co.edu.unicundi.services.DocenteService.class);
+        resources.add(co.edu.unicundi.services.EstudianteService.class);
     }
   
 }
