@@ -39,7 +39,7 @@ public abstract class AbstractFacade<T, V> {
     }
 
     public void eliminar(T entity) {
-        getEntityManager().remove(entity);
+        getEntityManager().remove(getEntityManager().merge(entity));
     }
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
