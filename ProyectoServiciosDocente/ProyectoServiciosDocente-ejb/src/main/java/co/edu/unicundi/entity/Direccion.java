@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * Entidad direccion de la BD
@@ -40,6 +41,7 @@ public class Direccion implements Serializable {
     
     @OneToOne
     @MapsId
+    @JsonIgnore
     private Docente docente;
 
     public Direccion() {
