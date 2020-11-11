@@ -33,7 +33,7 @@ public class DocenteRepo extends AbstractFacade<Docente, Integer> implements IDo
     public DocenteRepo() {
         super(Docente.class);
     }
-    
+
     @Override
     protected EntityManager getEntityManager() {
         return entity;
@@ -43,6 +43,17 @@ public class DocenteRepo extends AbstractFacade<Docente, Integer> implements IDo
     public List<Docente> listar2() {
         TypedQuery<Docente> query = this.entity.createQuery("SELECT d.id, d.cedula, d.nombre, d.apellido, d.correo, d.fechaNacimiento, d.estado FROM Docente d", Docente.class);
         return query.getResultList();
+    }
+
+    @Override
+    public List<Docente> listarPaginado(int cantidadDatos, int paginaActual) {
+        TypedQuery<Docente> query = this.entity.createQuery("SELECT d.id, d.cedula, d.nombre, d.apellido, d.correo, d.fechaNacimiento, d.estado FROM Docente d", Docente.class);
+
+        query.setFirstResult((paginaActual - 1) * cantidadDatos);
+        query.setMaxResults(cantidadDatos);
+        
+        return query.getResultList();
+
     }
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -60,18 +71,18 @@ public class DocenteRepo extends AbstractFacade<Docente, Integer> implements IDo
         List<Docente> docentes = new ArrayList();
 
         for (Object[] datos : result) {
-            docentes.add(new Docente((Integer)datos[0], (String) datos[1], (String) datos[2], (String) datos[3], (String) datos[4], (Date)datos[5], (boolean)datos[6]));
+            docentes.add(new Docente((Integer) datos[0], (String) datos[1], (String) datos[2], (String) datos[3], (String) datos[4], (Date) datos[5], (boolean) datos[6]));
         }
         return docentes;
     }
-    
+
     @Override
     public Integer contarEstudiantes(Docente docente) {
         Query query = this.entity.createQuery("SELECT COUNT (e) FROM Estudiante e WHERE e.docente = ?1", Long.class);
         query.setParameter(1, docente);
-        
+
         Long nEstudiantes = (Long) query.getSingleResult();
-        
+
         return nEstudiantes.intValue();
     }
 

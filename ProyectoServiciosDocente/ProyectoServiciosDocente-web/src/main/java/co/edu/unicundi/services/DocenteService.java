@@ -5,8 +5,11 @@
  */
 package co.edu.unicundi.services;
 
+import co.edu.unicundi.POJO.DocenteMateriaPOJO;
 import co.edu.unicundi.POJO.DocentePOJO;
+import co.edu.unicundi.POJO.GenericoPOJO;
 import co.edu.unicundi.entity.Docente;
+import co.edu.unicundi.entity.DocenteMateria;
 
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
@@ -73,6 +76,15 @@ public class DocenteService {
     public Response registrar(@Valid Docente docente) throws RegisteredObjectException, NoResponseBDException {
         logicaDocente.registrar(docente);
         return Response.status(Response.Status.CREATED).entity("Docente creado correctamente").build();
+    }
+
+    @Path("/asociarDocente")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response asoicarLector(@Valid DocenteMateria docenteMateria) {
+        logicaDocente.asociarDocenteMateria(docenteMateria);
+        return Response.status(Response.Status.CREATED).entity("Asociación creada correctamente").build();
     }
 
     /**
@@ -145,6 +157,18 @@ public class DocenteService {
         @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
     public Response listar2() throws ListNoContentException, NoResponseBDException {
         List<DocentePOJO> docentes = logicaDocente.listar2();
+        return Response.status(Response.Status.OK).entity(docentes).build();
+    }
+
+ 
+
+    @Path("/listarPaginado/{cantidadDatos}/{paginaActual}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listar3(
+            @NotNull(message = "Campo filtro requerido")
+            @PathParam("cantidadDatos") int cantidadDatos, @PathParam("paginaActual")int paginaActual) throws ListNoContentException, NoResponseBDException {
+        GenericoPOJO docentes = logicaDocente.listarPaginado( cantidadDatos, paginaActual);
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
 
@@ -354,7 +378,7 @@ public class DocenteService {
         logicaDocente.eliminar(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
-    
+
     /**
      * Servicio que elimina un docente
      *
@@ -378,4 +402,13 @@ public class DocenteService {
         logicaDocente.eliminarSoloDocente(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
+
+    @Path("/docenteMateria/{idDocente}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listarLector(@PathParam("idDocente") Integer id) {
+        List<DocenteMateriaPOJO> lista = logicaDocente.listarDocenteMateria(id);
+        return Response.status(Response.Status.OK).entity(lista).build();
+    }
+
 }

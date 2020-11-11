@@ -5,8 +5,11 @@
  */
 package co.edu.unicundi.interfaces;
 
+import co.edu.unicundi.POJO.DocenteMateriaPOJO;
 import co.edu.unicundi.POJO.DocentePOJO;
+import co.edu.unicundi.POJO.GenericoPOJO;
 import co.edu.unicundi.entity.Docente;
+import co.edu.unicundi.entity.DocenteMateria;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
@@ -62,6 +65,16 @@ public interface ILogicaDocente {
      */
     public List<DocentePOJO> listar2() throws ListNoContentException, NoResponseBDException;
 
+    /**
+     * 
+     * @param cantidadDatos
+     * @param paginaActual
+     * @return
+     * @throws ListNoContentException
+     * @throws NoResponseBDException 
+     */
+    public GenericoPOJO listarPaginado(int cantidadDatos, int paginaActual) throws ListNoContentException, NoResponseBDException;
+    
     /**
      * Lista todos los docentes registrados
      *
@@ -157,6 +170,10 @@ public interface ILogicaDocente {
      */
     public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException;
     
+    
+    public void asociarDocenteMateria(DocenteMateria docenteMateria);
+    
+    public List<DocenteMateriaPOJO> listarDocenteMateria(Integer idDocente);
     
 
 }

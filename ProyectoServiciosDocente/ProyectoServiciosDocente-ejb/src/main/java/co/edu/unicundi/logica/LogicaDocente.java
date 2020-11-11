@@ -5,8 +5,11 @@
  */
 package co.edu.unicundi.logica;
 
+import co.edu.unicundi.POJO.DocenteMateriaPOJO;
 import co.edu.unicundi.POJO.DocentePOJO;
+import co.edu.unicundi.POJO.GenericoPOJO;
 import co.edu.unicundi.entity.Docente;
+import co.edu.unicundi.entity.DocenteMateria;
 import co.edu.unicundi.entity.Estudiante;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
@@ -14,6 +17,7 @@ import co.edu.unicundi.exception.NoResponseBDException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.interfaces.ILogicaDocente;
+import co.edu.unicundi.repo.IDocenteMateriaRepo;
 import co.edu.unicundi.repo.IDocenteRepo;
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,6 +51,9 @@ public class LogicaDocente implements ILogicaDocente {
     @EJB
     private IDocenteRepo repo;
 
+    @EJB
+    private IDocenteMateriaRepo repoDocenteMateria;
+
     /**
      * Registra el docente especificado
      *
@@ -67,7 +74,7 @@ public class LogicaDocente implements ILogicaDocente {
                         estudiante.setDocente(docente);
                     }
                 }
-                if(docente.getDireccion()!=null){
+                if (docente.getDireccion() != null) {
                     docente.getDireccion().setDocente(docente);
                 }
                 docente.setEstado(true);
@@ -136,6 +143,34 @@ public class LogicaDocente implements ILogicaDocente {
             List<DocentePOJO> docentesPojo = new ArrayList();
 
             docentes = repo.listar2();
+            if (docentes.size() > 0) {
+                for (int i = 0; i < docentes.size(); i++) {
+                    ModelMapper model = new ModelMapper();
+                    Object[] doc = model.map(docentes.get(i), Object[].class);
+                    docentesPojo.add(new DocentePOJO((Integer) doc[0], (String) doc[1], (String) doc[2], (String) doc[3], (String) doc[4], (Date) doc[5], (Boolean) doc[6]));
+                }
+
+                return docentesPojo;
+            } else {
+                throw new ListNoContentException();
+            }
+
+        } catch (ListNoContentException ex) {
+            throw new ListNoContentException();
+        }
+    }
+    
+    
+     @Override
+    public GenericoPOJO listarPaginado(int cantidadDatos, int paginaActual) throws ListNoContentException, NoResponseBDException {
+        try {
+            
+            List<Docente> docentes = new ArrayList();
+            
+            GenericoPOJO <DocentePOJO> docentesPojo = new GenericoPOJO<DocentePOJO>();
+            docentesPojo.setPaginado(this.listar2().size());
+
+            docentes = repo.listarPaginado(cantidadDatos, paginaActual);
             if (docentes.size() > 0) {
                 for (int i = 0; i < docentes.size(); i++) {
                     ModelMapper model = new ModelMapper();
@@ -444,6 +479,25 @@ public class LogicaDocente implements ILogicaDocente {
         }
         return docentes;
 
+    }
+
+    @Override
+    public void asociarDocenteMateria(DocenteMateria ocenteMateria) {
+        repoDocenteMateria.guardar(ocenteMateria);
+    }
+
+    @Override
+    public List<DocenteMateriaPOJO> listarDocenteMateria(Integer idDocente) {
+        List<DocenteMateria> listaDocenteMateria = repoDocenteMateria.listarDocenteMateria(idDocente);
+        List<DocenteMateriaPOJO> lista = new ArrayList<>();
+        for (DocenteMateria lis : listaDocenteMateria) {
+            ModelMapper modelMapper = new ModelMapper();
+            DocenteMateriaPOJO docenteMateriaPOJO = modelMapper.map(lis, DocenteMateriaPOJO.class);
+            docenteMateriaPOJO.getDocente().setEstudiantes(null);
+            // docenteMateriaPOJO.setDocente(null);
+            lista.add(docenteMateriaPOJO);
+        }
+        return lista;
     }
 
 }

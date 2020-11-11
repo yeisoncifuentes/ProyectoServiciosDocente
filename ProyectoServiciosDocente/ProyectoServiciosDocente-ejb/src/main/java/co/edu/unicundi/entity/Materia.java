@@ -30,7 +30,7 @@ import javax.validation.constraints.Size;
  * @version 1.0.0
  */
 @Entity
-@Table(name = "materias.tbl_materia")
+@Table(name = "docentes.tbl_materia")
 public class Materia implements Serializable {
     
     @Id
@@ -43,22 +43,16 @@ public class Materia implements Serializable {
     @Column(name = "nombre", nullable = false, length = 30)
     private String nombre;
     
-    @JoinTable(
-        name = "materias.tbl_docente_materia",
-        joinColumns = @JoinColumn(name = "id_materia", nullable = false),
-        inverseJoinColumns = @JoinColumn(name="id_docente", nullable = false)
-    )
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Docente> docentes;
+  
+   
 
     public Materia() {
     }
 
-    public Materia(Integer id, String nombre, List<Docente> docentes) {
+    public Materia(Integer id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.docentes = docentes;
+      
     }
 
     /**
@@ -89,18 +83,6 @@ public class Materia implements Serializable {
         this.nombre = nombre;
     }
 
-    /**
-     * @return the docentes
-     */
-    public List<Docente> getDocentes() {
-        return docentes;
-    }
-
-    /**
-     * @param docentes the docentes to set
-     */
-    public void setDocentes(List<Docente> docentes) {
-        this.docentes = docentes;
-    }
+   
     
 }

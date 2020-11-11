@@ -36,6 +36,13 @@ public interface IDocenteRepo {
      * @return Lista de docentes
      */
     public List<Docente> listar2();
+    
+     /**
+     * Lista todos los docentes registrados para query que no tenga estudiantes
+     *
+     * @return Lista de docentes
+     */
+    public List<Docente> listarPaginado(int cantidadDatos, int paginaActual);
 
     /**
      * Lista todos los docentes registrados con sus respectivos estudiantes y
