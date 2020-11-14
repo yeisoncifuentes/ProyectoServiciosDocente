@@ -175,5 +175,6 @@ public interface ILogicaDocente {
     
     public List<DocenteMateriaPOJO> listarDocenteMateria(Integer idDocente);
     
-
+    public void eliminarDocenteMateria(int idDocente, int idMateria) throws ObjectNotFoundException, NoResponseBDException;
+    
 }

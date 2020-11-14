@@ -160,15 +160,13 @@ public class DocenteService {
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
 
- 
-
     @Path("/listarPaginado/{cantidadDatos}/{paginaActual}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listar3(
             @NotNull(message = "Campo filtro requerido")
-            @PathParam("cantidadDatos") int cantidadDatos, @PathParam("paginaActual")int paginaActual) throws ListNoContentException, NoResponseBDException {
-        GenericoPOJO docentes = logicaDocente.listarPaginado( cantidadDatos, paginaActual);
+            @PathParam("cantidadDatos") int cantidadDatos, @PathParam("paginaActual") int paginaActual) throws ListNoContentException, NoResponseBDException {
+        GenericoPOJO docentes = logicaDocente.listarPaginado(cantidadDatos, paginaActual);
         return Response.status(Response.Status.OK).entity(docentes).build();
     }
 
@@ -411,4 +409,23 @@ public class DocenteService {
         return Response.status(Response.Status.OK).entity(lista).build();
     }
 
+    @Path("/eliminarDocenteMateria/{idDocente}/{idMateria}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Elimina un docente registrado con el id especificado")
+    @ApiResponses(value = {
+        @ApiResponse(code = 204, message = "El docente se eliminó correctamente"),
+        @ApiResponse(code = 400, message = "Error en la petición, puede suceder sí se envía body"),
+        @ApiResponse(code = 404, message = "Recurso o docente no encontrado"),
+        @ApiResponse(code = 405, message = "El método de la solicitud no es DELETE"),
+        @ApiResponse(code = 500, message = "Error en el servidor o base de datos")})
+    public Response eliminarDocenteMateria(
+            //Campo id url con validacion
+            @NotNull(message = "Campo idDocente requerido")
+            @PathParam("idDocente") Integer idDocente,
+            @NotNull(message = "Campo idMateria requerido")
+            @PathParam("idMateria") Integer idMateria) throws ObjectNotFoundException, NoResponseBDException, RegisteredObjectException {
+        logicaDocente.eliminarDocenteMateria(idDocente, idMateria);
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
 }

@@ -12,6 +12,7 @@ import co.edu.unicundi.repo.IDocenteMateriaRepo;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -36,6 +37,24 @@ public class DocenteMateriaRepo implements IDocenteMateriaRepo {
     @Override
     public void guardar(DocenteMateria docenteMateria) {
         entity.persist(docenteMateria);
+    }
+
+    @Override
+    public void eliminar(DocenteMateria docenteMateria) {
+        entity.remove(docenteMateria);
+    }
+
+    @Override
+    public DocenteMateria obtener(int idDocente, int idMateria) {
+        try {
+            Query query = entity.createQuery("SELECT dm FROM DocenteMateria dm WHERE dm.docente.id = ?1 AND dm.materia.id = ?2", Docente.class);
+            query.setParameter(1, idDocente);
+            query.setParameter(1, idMateria);
+
+            return (DocenteMateria) query.getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
 
 }

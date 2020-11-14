@@ -500,4 +500,18 @@ public class LogicaDocente implements ILogicaDocente {
         return lista;
     }
 
+    @Override
+    public void eliminarDocenteMateria(int idDocente, int idMateria) throws ObjectNotFoundException, NoResponseBDException {
+        try {
+            DocenteMateria docenteMateria = repoDocenteMateria.obtener(idDocente, idMateria);
+            if (docenteMateria != null) {
+                repoDocenteMateria.eliminar(docenteMateria);
+            } else {
+                throw new ObjectNotFoundException("El id del docente y/o materia no existe");
+            }
+        } catch (ObjectNotFoundException ex) {
+            throw new ObjectNotFoundException(ex.getMessage());
+        }
+    }
+
 }

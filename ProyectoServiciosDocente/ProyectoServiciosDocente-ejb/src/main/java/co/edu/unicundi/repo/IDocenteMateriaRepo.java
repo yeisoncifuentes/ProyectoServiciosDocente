@@ -20,4 +20,8 @@ public interface IDocenteMateriaRepo {
     
     public List<DocenteMateria> listarDocenteMateria(Integer idDocente);
     
+    public void eliminar(DocenteMateria docenteMateria);
+    
+    public DocenteMateria obtener(int idDocente, int idMateria);
+    
 }
