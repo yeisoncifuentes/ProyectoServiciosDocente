@@ -19,7 +19,7 @@ public interface IEstudianteRepo {
 
     public void registrar(Estudiante estudiante);
 
-    public List<Estudiante> listar3();
+    public List<Estudiante> listar();
 
     public void editar(Estudiante estudiante);
     

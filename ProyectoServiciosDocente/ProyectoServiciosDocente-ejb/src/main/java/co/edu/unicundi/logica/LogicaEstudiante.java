@@ -5,15 +5,20 @@
  */
 package co.edu.unicundi.logica;
 
+import co.edu.unicundi.POJO.EstudiantePOJO;
 import co.edu.unicundi.entity.Estudiante;
 import co.edu.unicundi.exception.IdRequiredException;
+import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.interfaces.ILogicaEstudiante;
 import co.edu.unicundi.repo.IEstudianteRepo;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import org.modelmapper.ModelMapper;
 
 /**
  *
@@ -31,6 +36,30 @@ public class LogicaEstudiante implements ILogicaEstudiante {
             throw new IdRequiredException("IdDocente es necesario");
         } else {            
             repo.registrar(estudiante);
+        }
+    }
+    
+    @Override
+    public List<EstudiantePOJO> listar() throws ListNoContentException, NoResponseBDException {
+        try {
+            List<Estudiante> estudiantes = new ArrayList();
+            List<EstudiantePOJO> estudiantesPOJO = new ArrayList();
+
+            estudiantes= repo.listar();
+            if (estudiantes.size() > 0) {
+                for (Estudiante estudiante : estudiantes) {
+                    ModelMapper model = new ModelMapper();
+                    EstudiantePOJO est = model.map(estudiante, EstudiantePOJO.class);
+                    estudiantesPOJO.add(est);
+                }
+
+                return estudiantesPOJO;
+            } else {
+                throw new ListNoContentException();
+            }
+
+        } catch (ListNoContentException ex) {
+            throw new ListNoContentException();
         }
     }
 

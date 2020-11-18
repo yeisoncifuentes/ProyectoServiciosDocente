@@ -404,7 +404,7 @@ public class DocenteService {
     @Path("/docenteMateria/{idDocente}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listarLector(@PathParam("idDocente") Integer id) {
+    public Response listarMaterias(@PathParam("idDocente") Integer id) {
         List<DocenteMateriaPOJO> lista = logicaDocente.listarDocenteMateria(id);
         return Response.status(Response.Status.OK).entity(lista).build();
     }

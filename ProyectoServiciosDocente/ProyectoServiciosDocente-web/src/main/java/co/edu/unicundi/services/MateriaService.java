@@ -6,15 +6,14 @@
 package co.edu.unicundi.services;
 
 
-import co.edu.unicundi.POJO.EstudiantePOJO;
-import co.edu.unicundi.entity.Estudiante;
+import co.edu.unicundi.POJO.MateriaPOJO;
+import co.edu.unicundi.entity.Materia;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
-import co.edu.unicundi.interfaces.ILogicaEstudiante;
-import com.wordnik.swagger.annotations.Api;
+import co.edu.unicundi.interfaces.ILogicaMateria;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -36,34 +35,27 @@ import javax.ws.rs.core.Response;
  * @author YEISON
  */
 @Stateless
-@Path("/estudiantes")
-@Api(value = "/estudiantes", description = "Manejo de datos estudiantes")
-public class EstudianteService {
+@Path("/materias")
+public class MateriaService {
 
     @EJB
-    public ILogicaEstudiante logicaEstudiante;
+    public ILogicaMateria logicaMateria;
 
-    /**
-     * Servicio que registra un estudiante
-     *
-     * @param docente
-     * @return Response con docente creado
-     */
     @POST
     @Path("/registrar")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registrar(@Valid Estudiante estudiante) throws RegisteredObjectException, NoResponseBDException, IdRequiredException {
-        logicaEstudiante.registrar(estudiante);
-        return Response.status(Response.Status.CREATED).entity("Estudiante creado correctamente").build();
+    public Response registrar(@Valid Materia materia) throws RegisteredObjectException, NoResponseBDException, IdRequiredException {
+        logicaMateria.registrar(materia);
+        return Response.status(Response.Status.CREATED).entity("Materia creada correctamente").build();
     }
-
-    @Path("/listar")
+    
+     @Path("/listar")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listar() throws ListNoContentException, NoResponseBDException {
-        List<EstudiantePOJO> estudiantes = logicaEstudiante.listar();
-        return Response.status(Response.Status.OK).entity(estudiantes).build();
+        List<MateriaPOJO> materias = logicaMateria.listar();
+        return Response.status(Response.Status.OK).entity(materias).build();
     }
 
     /**
@@ -80,8 +72,8 @@ public class EstudianteService {
             @NotNull(message = "Campo id requerido")
             @PathParam("id") Integer id) throws ObjectNotFoundException {
 
-        Estudiante estudiante = logicaEstudiante.obtenerPorId(id);
-        return Response.status(Response.Status.OK).entity(estudiante).build();
+        Materia materia = logicaMateria.obtenerPorId(id);
+        return Response.status(Response.Status.OK).entity(materia).build();
     }
 
     /**
@@ -94,9 +86,9 @@ public class EstudianteService {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response editar(@Valid Estudiante estudiante) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
-        logicaEstudiante.editar(estudiante);
-        return Response.status(Response.Status.OK).entity("Estudiante editado correctamente").build();
+    public Response editar(@Valid Materia materia) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
+        logicaMateria.editar(materia);
+        return Response.status(Response.Status.OK).entity("Materia editada correctamente").build();
     }
 
     /**
@@ -112,7 +104,7 @@ public class EstudianteService {
             //Campo id url con validacion
             @NotNull(message = "Campo id requerido")
             @PathParam("id") Integer id) throws ObjectNotFoundException, NoResponseBDException {
-        logicaEstudiante.eliminar(id);
+        logicaMateria.eliminar(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 

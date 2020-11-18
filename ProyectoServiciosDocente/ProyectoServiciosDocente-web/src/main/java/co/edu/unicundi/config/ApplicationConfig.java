@@ -48,6 +48,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.edu.unicundi.exception.filter.WebApplicationExceptionFilter.class);
         resources.add(co.edu.unicundi.services.DocenteService.class);
         resources.add(co.edu.unicundi.services.EstudianteService.class);
+        resources.add(co.edu.unicundi.services.MateriaService.class);
         resources.add(co.edu.unicundi.services.ViewDocenteService.class);
     }
   

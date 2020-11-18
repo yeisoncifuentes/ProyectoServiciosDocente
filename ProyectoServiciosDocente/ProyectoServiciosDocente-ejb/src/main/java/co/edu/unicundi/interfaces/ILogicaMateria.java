@@ -5,9 +5,9 @@
  */
 package co.edu.unicundi.interfaces;
 
-import co.edu.unicundi.POJO.DocentePOJO;
-import co.edu.unicundi.POJO.EstudiantePOJO;
-import co.edu.unicundi.entity.Estudiante;
+
+import co.edu.unicundi.POJO.MateriaPOJO;
+import co.edu.unicundi.entity.Materia;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
@@ -21,13 +21,13 @@ import javax.ejb.Local;
  * @author YEISON
  */
 @Local
-public interface ILogicaEstudiante {
+public interface ILogicaMateria {
 
-    public void registrar(Estudiante estudiante) throws RegisteredObjectException, NoResponseBDException, IdRequiredException;
+    public void registrar(Materia materia) throws RegisteredObjectException, NoResponseBDException, IdRequiredException;
 
-    public List<EstudiantePOJO> listar() throws ListNoContentException, NoResponseBDException;
-
-    public Estudiante obtenerPorId(int id) throws ObjectNotFoundException;
+     public List<MateriaPOJO> listar() throws ListNoContentException, NoResponseBDException;
+    
+    public Materia obtenerPorId(int id) throws ObjectNotFoundException;
 
     public void bloquear(int id) throws ObjectNotFoundException, NoResponseBDException;
 
@@ -35,6 +35,6 @@ public interface ILogicaEstudiante {
 
     public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException;
 
-    public void editar(Estudiante estudiante) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException;
+    public void editar(Materia materia) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException;
 
 }

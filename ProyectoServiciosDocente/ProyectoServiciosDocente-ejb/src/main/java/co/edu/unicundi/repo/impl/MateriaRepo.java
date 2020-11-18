@@ -5,13 +5,17 @@
  */
 package co.edu.unicundi.repo.impl;
 
-import co.edu.unicundi.entity.Docente;
+
 import co.edu.unicundi.entity.Materia;
 import co.edu.unicundi.repo.AbstractFacade;
 import co.edu.unicundi.repo.IMateriaRepo;
+import java.util.List;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -35,4 +39,7 @@ public class MateriaRepo extends AbstractFacade<Materia, Integer> implements IMa
     protected EntityManager getEntityManager() {
         return entity;
     }
+
+    
+
 }

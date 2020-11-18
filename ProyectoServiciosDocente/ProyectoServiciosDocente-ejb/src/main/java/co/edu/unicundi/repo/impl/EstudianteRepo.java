@@ -35,11 +35,6 @@ public class EstudianteRepo extends AbstractFacade<Estudiante, Integer> implemen
         return entity;
     }
 
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    @Override
-    public List<Estudiante> listar3() {
-        TypedQuery<Estudiante> query = this.entity.createQuery("SELECT e FROM Estudiante e", Estudiante.class);
-        return query.getResultList();
-    }
+   
 
 }

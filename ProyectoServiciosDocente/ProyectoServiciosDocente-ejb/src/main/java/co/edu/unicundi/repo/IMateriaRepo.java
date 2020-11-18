@@ -5,11 +5,23 @@
  */
 package co.edu.unicundi.repo;
 
+import co.edu.unicundi.entity.Materia;
+import java.util.List;
+
 /**
  *
  * @author YEISON
  */
 public interface IMateriaRepo {
-    
-    
+
+    public void registrar(Materia materia);
+
+    public List<Materia> listar();
+
+    public void editar(Materia materia);
+
+    public void eliminar(Materia materia);
+
+    public Materia obtenerPorId(Integer id);
+
 }
