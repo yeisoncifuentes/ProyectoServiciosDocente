@@ -47,9 +47,9 @@ public class DocenteMateriaRepo implements IDocenteMateriaRepo {
     @Override
     public DocenteMateria obtener(int idDocente, int idMateria) {
         try {
-            Query query = entity.createQuery("SELECT dm FROM DocenteMateria dm WHERE dm.docente.id = ?1 AND dm.materia.id = ?2", Docente.class);
+            Query query = entity.createQuery("SELECT dm FROM DocenteMateria dm WHERE dm.docente.id = ?1 AND dm.materia.id = ?2", DocenteMateria.class);
             query.setParameter(1, idDocente);
-            query.setParameter(1, idMateria);
+            query.setParameter(2, idMateria);
 
             return (DocenteMateria) query.getSingleResult();
         } catch (NoResultException ex) {
