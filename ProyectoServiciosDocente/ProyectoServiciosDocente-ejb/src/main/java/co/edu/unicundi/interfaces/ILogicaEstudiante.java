@@ -23,7 +23,7 @@ import javax.ejb.Local;
 @Local
 public interface ILogicaEstudiante {
 
-    public void registrar(Estudiante estudiante) throws RegisteredObjectException, NoResponseBDException, IdRequiredException;
+    public void registrar(Estudiante estudiante) throws IdRequiredException, ObjectNotFoundException;
 
     public List<EstudiantePOJO> listar() throws ListNoContentException, NoResponseBDException;
 

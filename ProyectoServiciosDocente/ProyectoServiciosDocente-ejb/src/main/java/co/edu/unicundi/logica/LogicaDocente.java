@@ -11,6 +11,7 @@ import co.edu.unicundi.POJO.GenericoPOJO;
 import co.edu.unicundi.entity.Docente;
 import co.edu.unicundi.entity.DocenteMateria;
 import co.edu.unicundi.entity.Estudiante;
+import co.edu.unicundi.entity.Materia;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
 import co.edu.unicundi.exception.NoResponseBDException;
@@ -19,6 +20,7 @@ import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.interfaces.ILogicaDocente;
 import co.edu.unicundi.repo.IDocenteMateriaRepo;
 import co.edu.unicundi.repo.IDocenteRepo;
+import co.edu.unicundi.repo.IMateriaRepo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -54,6 +56,9 @@ public class LogicaDocente implements ILogicaDocente {
     @EJB
     private IDocenteMateriaRepo repoDocenteMateria;
 
+    @EJB
+    private IMateriaRepo repoMateria;
+
     /**
      * Registra el docente especificado
      *
@@ -64,6 +69,10 @@ public class LogicaDocente implements ILogicaDocente {
     @Override
     public void registrar(Docente docente) throws RegisteredObjectException, NoResponseBDException {
         try {
+
+            if (docente.getDireccion() == null || docente.getDireccion().getBarrio() == null || docente.getDireccion().getDireccion() == null) {
+                throw new IdRequiredException("Direccion y barrio requerido dentro de objeto direccion");
+            }
 
             Docente validarCedula = repo.obtenerPorCedula(docente.getCedula());
             Docente validarCorreo = repo.obtenerPorCorreo(docente.getCorreo());
@@ -88,7 +97,8 @@ public class LogicaDocente implements ILogicaDocente {
             }
         } catch (RegisteredObjectException ex) {
             throw new RegisteredObjectException(ex.getMessage());
-
+        } catch (IdRequiredException ex) {
+            throw new RegisteredObjectException(ex.getMessage());
         }
     }
 
@@ -159,15 +169,14 @@ public class LogicaDocente implements ILogicaDocente {
             throw new ListNoContentException();
         }
     }
-    
-    
-     @Override
+
+    @Override
     public GenericoPOJO listarPaginado(int cantidadDatos, int paginaActual) throws ListNoContentException, NoResponseBDException {
         try {
-            
+
             List<Docente> docentes = new ArrayList();
-            
-            GenericoPOJO <DocentePOJO> docentesPojo = new GenericoPOJO<DocentePOJO>();
+
+            GenericoPOJO<DocentePOJO> docentesPojo = new GenericoPOJO<DocentePOJO>();
             docentesPojo.setPaginado(this.listar2().size());
 
             docentes = repo.listarPaginado(cantidadDatos, paginaActual);
@@ -275,6 +284,9 @@ public class LogicaDocente implements ILogicaDocente {
     @Override
     public void editar(Docente docente) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
         try {
+            if (docente.getDireccion() == null || docente.getDireccion().getBarrio() == null || docente.getDireccion().getDireccion() == null) {
+                throw new IdRequiredException("Direccion y barrio requerido dentro de objeto direccion");
+            }
             if (docente.getId() != null) {
                 Docente docenteAux = repo.obtenerPorId(docente.getId());
 
@@ -482,22 +494,51 @@ public class LogicaDocente implements ILogicaDocente {
     }
 
     @Override
-    public void asociarDocenteMateria(DocenteMateria ocenteMateria) {
-        repoDocenteMateria.guardar(ocenteMateria);
+    public void asociarDocenteMateria(DocenteMateria docenteMateria) throws RegisteredObjectException, ObjectNotFoundException {
+        try {
+            DocenteMateria docMat = repoDocenteMateria.obtener(docenteMateria.getDocente().getId(), docenteMateria.getMateria().getId());
+
+            if (docMat != null) {
+                throw new RegisteredObjectException("La relacion ya existe");
+            }
+
+            Docente docente = repo.obtenerPorId(docenteMateria.getDocente().getId());
+            Materia materia = repoMateria.obtenerPorId(docenteMateria.getMateria().getId());
+
+            if (docente == null || materia == null) {
+                throw new ObjectNotFoundException("El id de docente y/o materia no existe");
+            }
+
+            repoDocenteMateria.guardar(docenteMateria);
+        } catch (RegisteredObjectException ex) {
+            throw new RegisteredObjectException(ex.getMessage());
+        } catch (ObjectNotFoundException ex) {
+            throw new ObjectNotFoundException(ex.getMessage());
+        }
     }
 
     @Override
-    public List<DocenteMateriaPOJO> listarDocenteMateria(Integer idDocente) {
-        List<DocenteMateria> listaDocenteMateria = repoDocenteMateria.listarDocenteMateria(idDocente);
-        List<DocenteMateriaPOJO> lista = new ArrayList<>();
-        for (DocenteMateria lis : listaDocenteMateria) {
-            ModelMapper modelMapper = new ModelMapper();
-            DocenteMateriaPOJO docenteMateriaPOJO = modelMapper.map(lis, DocenteMateriaPOJO.class);
-            docenteMateriaPOJO.getDocente().setEstudiantes(null);
-            // docenteMateriaPOJO.setDocente(null);
-            lista.add(docenteMateriaPOJO);
+    public List<DocenteMateriaPOJO> listarDocenteMateria(Integer idDocente) throws ObjectNotFoundException {
+        try {
+            Docente docente = repo.obtenerPorId(idDocente);
+
+            if (docente == null) {
+                throw new ObjectNotFoundException("El id del docente no existe");
+            }
+
+            List<DocenteMateria> listaDocenteMateria = repoDocenteMateria.listarDocenteMateria(idDocente);
+            List<DocenteMateriaPOJO> lista = new ArrayList<>();
+            for (DocenteMateria lis : listaDocenteMateria) {
+                ModelMapper modelMapper = new ModelMapper();
+                DocenteMateriaPOJO docenteMateriaPOJO = modelMapper.map(lis, DocenteMateriaPOJO.class);
+                docenteMateriaPOJO.getDocente().setEstudiantes(null);
+                // docenteMateriaPOJO.setDocente(null);
+                lista.add(docenteMateriaPOJO);
+            }
+            return lista;
+        } catch (ObjectNotFoundException ex) {
+            throw new ObjectNotFoundException(ex.getMessage());
         }
-        return lista;
     }
 
     @Override

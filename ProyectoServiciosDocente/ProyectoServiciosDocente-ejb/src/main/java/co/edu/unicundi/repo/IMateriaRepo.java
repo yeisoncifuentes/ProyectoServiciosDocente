@@ -23,5 +23,7 @@ public interface IMateriaRepo {
     public void eliminar(Materia materia);
 
     public Materia obtenerPorId(Integer id);
+    
+    public Materia obtenerPorNombre(String nombre);
 
 }

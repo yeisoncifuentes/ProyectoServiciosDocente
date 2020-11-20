@@ -171,9 +171,9 @@ public interface ILogicaDocente {
     public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException;
     
     
-    public void asociarDocenteMateria(DocenteMateria docenteMateria);
+    public void asociarDocenteMateria(DocenteMateria docenteMateria) throws RegisteredObjectException, ObjectNotFoundException;
     
-    public List<DocenteMateriaPOJO> listarDocenteMateria(Integer idDocente);
+    public List<DocenteMateriaPOJO> listarDocenteMateria(Integer idDocente) throws ObjectNotFoundException;
     
     public void eliminarDocenteMateria(int idDocente, int idMateria) throws ObjectNotFoundException, NoResponseBDException;
     

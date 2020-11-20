@@ -6,6 +6,7 @@
 package co.edu.unicundi.logica;
 
 import co.edu.unicundi.POJO.EstudiantePOJO;
+import co.edu.unicundi.entity.Docente;
 import co.edu.unicundi.entity.Estudiante;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
@@ -13,6 +14,7 @@ import co.edu.unicundi.exception.NoResponseBDException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.interfaces.ILogicaEstudiante;
+import co.edu.unicundi.repo.IDocenteRepo;
 import co.edu.unicundi.repo.IEstudianteRepo;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,27 +32,45 @@ public class LogicaEstudiante implements ILogicaEstudiante {
     @EJB
     private IEstudianteRepo repo;
 
+    @EJB
+    private IDocenteRepo repoDocente;
+
     @Override
-    public void registrar(Estudiante estudiante) throws RegisteredObjectException, IdRequiredException, NoResponseBDException {
-        if (estudiante.getDocente() == null || estudiante.getDocente().getId() == null) {
-            throw new IdRequiredException("IdDocente es necesario");
-        } else {            
-            repo.registrar(estudiante);
+    public void registrar(Estudiante estudiante) throws IdRequiredException, ObjectNotFoundException {
+        try {
+            if (estudiante.getDocente() == null || estudiante.getDocente().getId() == null) {
+                throw new IdRequiredException("Id requerido dentro de objeto docente");
+            } else {
+                Docente docente = repoDocente.obtenerPorId(estudiante.getDocente().getId());
+                if (docente != null) {
+                    repo.registrar(estudiante);
+                } else {
+                    throw new ObjectNotFoundException("El id del docente no existe");
+                }
+            }
+        } catch (IdRequiredException ex) {
+            throw new IdRequiredException(ex.getMessage());
+        } catch (ObjectNotFoundException ex) {
+            throw new ObjectNotFoundException(ex.getMessage());
         }
     }
-    
+
     @Override
     public List<EstudiantePOJO> listar() throws ListNoContentException, NoResponseBDException {
         try {
             List<Estudiante> estudiantes = new ArrayList();
             List<EstudiantePOJO> estudiantesPOJO = new ArrayList();
 
-            estudiantes= repo.listar();
+            estudiantes = repo.listar();
             if (estudiantes.size() > 0) {
                 for (Estudiante estudiante : estudiantes) {
                     ModelMapper model = new ModelMapper();
                     EstudiantePOJO est = model.map(estudiante, EstudiantePOJO.class);
                     estudiantesPOJO.add(est);
+                }
+
+                for (EstudiantePOJO est : estudiantesPOJO) {
+                    est.setDocente(null);
                 }
 
                 return estudiantesPOJO;
@@ -101,20 +121,34 @@ public class LogicaEstudiante implements ILogicaEstudiante {
 
     @Override
     public void editar(Estudiante estudiante) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
-        if (estudiante.getId() == null) {
-            throw new IdRequiredException("Id es requerido para edición");
+        try {
+            if (estudiante.getId() == null) {
+                throw new IdRequiredException("Id es requerido para edición");
+            }
+
+            if (estudiante.getDocente() == null || estudiante.getDocente().getId() == null) {
+                throw new IdRequiredException("Id requerido dentro de objeto docente");
+            } else {
+                Docente docente = repoDocente.obtenerPorId(estudiante.getDocente().getId());
+                if (docente == null) {
+                    throw new ObjectNotFoundException("El id del docente no existe");
+                }
+            }
+
+            Estudiante estudianteAux = repo.obtenerPorId(estudiante.getId());
+
+            if (estudianteAux == null) {
+                throw new ObjectNotFoundException("Estudiante no existe.");
+            }
+
+            estudianteAux.setNombre(estudiante.getNombre());
+            estudianteAux.setApellido(estudiante.getApellido());
+            repo.editar(estudianteAux);
+        } catch (IdRequiredException ex) {
+            throw new IdRequiredException(ex.getMessage());
+        } catch (ObjectNotFoundException ex) {
+            throw new ObjectNotFoundException(ex.getMessage());
         }
-
-        Estudiante estudianteAux = repo.obtenerPorId(estudiante.getId());
-
-        if (estudianteAux == null) {
-            throw new ObjectNotFoundException("Estudiante no existe.");
-        }
-
-        estudianteAux.setNombre(estudiante.getNombre());
-        estudianteAux.setApellido(estudiante.getApellido());
-        repo.editar(estudianteAux);
-
     }
 
 }

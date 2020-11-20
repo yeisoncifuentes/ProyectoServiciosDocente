@@ -5,7 +5,6 @@
  */
 package co.edu.unicundi.logica;
 
-
 import co.edu.unicundi.POJO.MateriaPOJO;
 import co.edu.unicundi.entity.Materia;
 import co.edu.unicundi.exception.IdRequiredException;
@@ -33,9 +32,15 @@ public class LogicaMateria implements ILogicaMateria {
 
     @Override
     public void registrar(Materia materia) throws RegisteredObjectException, IdRequiredException, NoResponseBDException {
-
-        repo.registrar(materia);
-
+        try {
+            if (repo.obtenerPorNombre(materia.getNombre()) == null) {
+                repo.registrar(materia);
+            } else {
+                throw new RegisteredObjectException("El nombre de la materia ya se encuentra registrada");
+            }
+        } catch (RegisteredObjectException ex) {
+            throw new RegisteredObjectException(ex.getMessage());
+        }
     }
 
     @Override
@@ -99,19 +104,30 @@ public class LogicaMateria implements ILogicaMateria {
 
     @Override
     public void editar(Materia materia) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
-        if (materia.getId() == null) {
-            throw new IdRequiredException("Id es requerido para edición");
+        try {
+            if (materia.getId() == null) {
+                throw new IdRequiredException("Id es requerido para edición");
+            }
+
+            if (repo.obtenerPorNombre(materia.getNombre()) != null) {
+                throw new RegisteredObjectException("El nombre de la materia ya se encuentra registrada");
+            }
+
+            Materia materiaAux = repo.obtenerPorId(materia.getId());
+
+            if (materiaAux == null) {
+                throw new ObjectNotFoundException("El id de la materia no existe.");
+            }
+
+            materiaAux.setNombre(materia.getNombre());
+            repo.editar(materiaAux);
+        } catch (IdRequiredException ex) {
+            throw new IdRequiredException(ex.getMessage());
+        } catch (RegisteredObjectException ex) {
+            throw new RegisteredObjectException(ex.getMessage());
+        } catch (ObjectNotFoundException ex) {
+            throw new ObjectNotFoundException(ex.getMessage());
         }
-
-        Materia materiaAux = repo.obtenerPorId(materia.getId());
-
-        if (materiaAux == null) {
-            throw new ObjectNotFoundException("Materia no existe.");
-        }
-
-        materiaAux.setNombre(materia.getNombre());
-        repo.editar(materiaAux);
-
     }
 
 }

@@ -14,7 +14,9 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -33,6 +35,18 @@ public class MateriaRepo extends AbstractFacade<Materia, Integer> implements IMa
 
     public MateriaRepo(Class<Materia> entityClass) {
         super(entityClass);
+    }
+    
+    @Override
+    public Materia obtenerPorNombre(String nombre) {
+        try {
+            Query query = entity.createQuery("SELECT m FROM Materia m WHERE m.nombre = ?1", Materia.class);
+            query.setParameter(1, nombre);
+
+            return (Materia) query.getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
 
     @Override
