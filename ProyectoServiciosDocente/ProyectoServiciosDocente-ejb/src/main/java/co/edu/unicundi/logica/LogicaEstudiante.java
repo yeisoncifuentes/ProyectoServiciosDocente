@@ -143,6 +143,7 @@ public class LogicaEstudiante implements ILogicaEstudiante {
 
             estudianteAux.setNombre(estudiante.getNombre());
             estudianteAux.setApellido(estudiante.getApellido());
+            estudianteAux.setDocente(estudiante.getDocente());
             repo.editar(estudianteAux);
         } catch (IdRequiredException ex) {
             throw new IdRequiredException(ex.getMessage());

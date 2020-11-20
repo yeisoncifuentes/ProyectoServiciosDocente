@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -117,9 +118,13 @@ public class LogicaDocente implements ILogicaDocente {
 
             docentes = repo.listar();
             if (docentes.size() > 0) {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 for (Docente docente : docentes) {
                     ModelMapper model = new ModelMapper();
                     DocentePOJO doc = model.map(docente, DocentePOJO.class);
+                    
+                    String fechaTexto = formatter.format(doc.getFechaNacimiento());
+                    doc.setFechaNacimientoFormato(fechaTexto);
                     docentesPojo.add(doc);
                 }
 
@@ -494,8 +499,12 @@ public class LogicaDocente implements ILogicaDocente {
     }
 
     @Override
-    public void asociarDocenteMateria(DocenteMateria docenteMateria) throws RegisteredObjectException, ObjectNotFoundException {
+    public void asociarDocenteMateria(DocenteMateria docenteMateria) throws IdRequiredException, RegisteredObjectException, ObjectNotFoundException {
         try {
+            if (docenteMateria.getDocente().getId() == null || docenteMateria.getMateria().getId() == null) {
+                throw new IdRequiredException("Id docente e id materia requeridos");
+            }
+            
             DocenteMateria docMat = repoDocenteMateria.obtener(docenteMateria.getDocente().getId(), docenteMateria.getMateria().getId());
 
             if (docMat != null) {
@@ -514,6 +523,8 @@ public class LogicaDocente implements ILogicaDocente {
             throw new RegisteredObjectException(ex.getMessage());
         } catch (ObjectNotFoundException ex) {
             throw new ObjectNotFoundException(ex.getMessage());
+        } catch (IdRequiredException ex) {
+            throw new IdRequiredException(ex.getMessage());
         }
     }
 

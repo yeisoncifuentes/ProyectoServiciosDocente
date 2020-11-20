@@ -53,7 +53,7 @@ public class EstudianteService {
     @Path("/registrar")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registrar(@Valid Estudiante estudiante) throws RegisteredObjectException, NoResponseBDException, IdRequiredException {
+    public Response registrar(@Valid Estudiante estudiante) throws RegisteredObjectException, NoResponseBDException, IdRequiredException, ObjectNotFoundException {
         logicaEstudiante.registrar(estudiante);
         return Response.status(Response.Status.CREATED).entity("Estudiante creado correctamente").build();
     }

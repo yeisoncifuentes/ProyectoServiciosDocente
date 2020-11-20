@@ -32,12 +32,12 @@ public class DocenteMateria implements Serializable {
     @EmbeddedId
     private DocenteMateriaPK docenteMateriaId;
 
-    @NotNull(message = "Campo docente requerido")
+    @NotNull(message = "Objeto docente requerido")
     @ManyToOne
     @MapsId("idDocente")
     private Docente docente;
 
-    @NotNull(message = "Campo materia requerido")
+    @NotNull(message = "Objeto materia requerido")
     @ManyToOne
     @MapsId("idMateria")
     private Materia materia;

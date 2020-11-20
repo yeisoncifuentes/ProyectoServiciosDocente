@@ -82,7 +82,7 @@ public class DocenteService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response asoicarLector(@Valid DocenteMateria docenteMateria) {
+    public Response asoicarLector(@Valid DocenteMateria docenteMateria) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException {
         logicaDocente.asociarDocenteMateria(docenteMateria);
         return Response.status(Response.Status.CREATED).entity("Asociación creada correctamente").build();
     }
@@ -404,7 +404,7 @@ public class DocenteService {
     @Path("/docenteMateria/{idDocente}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listarMaterias(@PathParam("idDocente") Integer id) {
+    public Response listarMaterias(@PathParam("idDocente") Integer id) throws ObjectNotFoundException {
         List<DocenteMateriaPOJO> lista = logicaDocente.listarDocenteMateria(id);
         return Response.status(Response.Status.OK).entity(lista).build();
     }

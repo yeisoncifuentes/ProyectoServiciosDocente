@@ -38,7 +38,7 @@ public class Materia implements Serializable {
     private Integer id;
     
     @NotNull(message = "Campo nombre requerido")
-    @Pattern(regexp = "^[a-zA-Z ]*$", message = "Formato de nombre incorrecto")
+    @Pattern(regexp = "^[A-Z ]*$", message = "Formato de nombre incorrecto, solo mayusculas")
     @Size(min = 2, max = 30, message = "Longitud de nombre no valido")
     @Column(name = "nombre", nullable = false, length = 30)
     private String nombre;

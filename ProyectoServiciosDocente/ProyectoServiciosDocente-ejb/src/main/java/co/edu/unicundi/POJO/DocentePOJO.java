@@ -30,13 +30,13 @@ public class DocentePOJO implements Serializable {
 
     private Date fechaNacimiento;
 
+    private String fechaNacimientoFormato;
+
     private List<Estudiante> estudiantes;
-    
+
     private boolean estado;
-    
-     private DireccionPOJO direccion;
-    
-    
+
+    private DireccionPOJO direccion;
 
     /**
      * Constructor vacio
@@ -44,16 +44,16 @@ public class DocentePOJO implements Serializable {
     public DocentePOJO() {
 
     }
-    
+
     /**
-     * 
+     *
      * @param id
      * @param cedula
      * @param nombre
      * @param apellido
      * @param correo
      * @param fechaNacimiento
-     * @param estudiantes 
+     * @param estudiantes
      * @param estado
      */
     public DocentePOJO(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, List<Estudiante> estudiantes, boolean estado) {
@@ -68,7 +68,7 @@ public class DocentePOJO implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param id
      * @param cedula
      * @param nombre
@@ -77,7 +77,7 @@ public class DocentePOJO implements Serializable {
      * @param fechaNacimiento
      * @param estudiantes
      * @param estado
-     * @param direccion 
+     * @param direccion
      */
     public DocentePOJO(Integer id, String cedula, String nombre, String apellido, String correo, Date fechaNacimiento, List<Estudiante> estudiantes, boolean estado, DireccionPOJO direccion) {
         this.id = id;
@@ -90,11 +90,9 @@ public class DocentePOJO implements Serializable {
         this.estado = estado;
         this.direccion = direccion;
     }
-    
-    
-    
+
     /**
-     * 
+     *
      * @param id
      * @param cedula
      * @param nombre
@@ -226,20 +224,33 @@ public class DocentePOJO implements Serializable {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public DireccionPOJO getDireccion() {
         return direccion;
     }
 
     /**
-     * 
-     * @param direccion 
+     *
+     * @param direccion
      */
     public void setDireccion(DireccionPOJO direccion) {
         this.direccion = direccion;
     }
-    
-    
+
+    /**
+     * @return the fechaNacimientoFormato
+     */
+    public String getFechaNacimientoFormato() {
+        return fechaNacimientoFormato;
+    }
+
+    /**
+     * @param fechaNacimientoFormato the fechaNacimientoFormato to set
+     */
+    public void setFechaNacimientoFormato(String fechaNacimientoFormato) {
+        this.fechaNacimientoFormato = fechaNacimientoFormato;
+    }
+
 }
