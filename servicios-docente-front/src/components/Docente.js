@@ -18,6 +18,7 @@ import TableRow from '@material-ui/core/TableRow';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import CancelIcon from '@material-ui/icons/Cancel';
 
@@ -31,8 +32,10 @@ class Docente extends Component {
 
         this.state = {
             listaDocentes: [],
-            modalInsertar: false,
+            modalFormulario: false,
+            tipoModal: '',
             formulario: {
+                id: '',
                 cedula: '',
                 nombre: '',
                 apellido: '',
@@ -45,16 +48,20 @@ class Docente extends Component {
             }
         }
 
+        this.solicitarInsercion = this.solicitarInsercion.bind(this);
         this.cambiarEstadoModalInsertar = this.cambiarEstadoModalInsertar.bind(this);
         this.registrarDocente = this.registrarDocente.bind(this);
+        this.editarDocente = this.editarDocente.bind(this);
     }
 
     componentDidMount() {
         this.listarDocentes();
     }
 
+    //Servicios
     registrarDocente() {
         NotificationManager.success("mensaje");
+        delete this.state.formulario.id;
         axios.post(`${urlBase}/api/docentes/registrar`, this.state.formulario)
             .then(response => {
                 this.cambiarEstadoModalInsertar();
@@ -78,8 +85,32 @@ class Docente extends Component {
             });
     }
 
+    editarDocente() {
+        NotificationManager.success("mensaje");
+        console.log(this.state.formulario);
+        axios.put(`${urlBase}/api/docentes/editar`, this.state.formulario)
+            .then(response => {
+                this.cambiarEstadoModalInsertar();
+                this.listarDocentes();
+                NotificationManager.success(response.data);
+            }).catch((error) => {
+                //error.response.data es lo que arrojo el servidor en caso de error
+                console.log(error.response.data);
+                NotificationManager.error(error.response.data.error);
+            });
+    }
+
+    //Metodos
+    solicitarInsercion() {
+        this.setState({
+            formulario: null,
+            tipoModal: 'insertar'
+        });
+        this.cambiarEstadoModalInsertar();
+    }
+
     cambiarEstadoModalInsertar() {
-        this.setState({ modalInsertar: !this.state.modalInsertar });
+        this.setState({ modalFormulario: !this.state.modalFormulario });
     }
 
     capturarData = async e => {
@@ -103,12 +134,41 @@ class Docente extends Component {
         }
     }
 
+    capturarDocente(docente) {
+        this.setState({
+            tipoModal: 'editar',
+            formulario: {
+                id: docente.id,
+                cedula: docente.cedula,
+                nombre: docente.nombre,
+                apellido: docente.apellido,
+                correo: docente.correo,
+                fechaNacimiento: docente.fechaNacimientoFormato,
+                direccion: {
+                    barrio: docente.direccion.barrio,
+                    direccion: docente.direccion.direccion
+                }
+            }
+        });
+        this.cambiarEstadoModalInsertar();
+    }
+
     render() {
+        const { formulario } = this.state; //formulario es this.state.formulario
         return (
             <div className="container">
                 <div className="row">
                     <div className="col-4">
-                        <Button style={{ background: "rgb(58, 183, 17)", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" startIcon={<AddCircleOutlineIcon />} type="submit" onClick={this.cambiarEstadoModalInsertar}>Agregar Docente</Button>{''}
+                        <Button
+                            style={{ background: "rgb(58, 183, 17)", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }}
+                            className="btn btn-dark"
+                            variant="contained"
+                            startIcon={<AddCircleOutlineIcon />}
+                            type="submit"
+                            onClick={this.solicitarInsercion}
+                        >
+                            Agregar Docente
+                        </Button>{''}
                     </div>
 
                     <div className="col-8"></div>
@@ -142,7 +202,7 @@ class Docente extends Component {
                                                 <TableCell>{docente.direccion.barrio}</TableCell>
                                                 <TableCell>{docente.direccion.direccion}</TableCell>
                                                 <TableCell>
-                                                    <IconButton>
+                                                    <IconButton onClick={this.capturarDocente.bind(this, docente)}>
                                                         <EditIcon color="primary"></EditIcon>
                                                     </IconButton>
 
@@ -158,39 +218,43 @@ class Docente extends Component {
                         </TableContainer>
                     </div>
 
-                    <Modal isOpen={this.state.modalInsertar}>
+                    <Modal isOpen={this.state.modalFormulario}>
                         <ModalHeader style={{ display: 'block' }}>
                             Registrar Docente
+                            <span style={{ float: 'right' }} onClick={this.cambiarEstadoModalInsertar}>x</span>
                         </ModalHeader>
 
                         <ModalBody>
                             <div className="form-group">
                                 <label htmlFor="cedula">Cédula</label>
-                                <input className="form-control" type="number" name="cedula" id="cedula" onChange={this.capturarData}></input>
+                                <input className="form-control" type="number" name="cedula" id="cedula" onChange={this.capturarData} value={formulario ? formulario.cedula : ''}></input>
                                 <br />
                                 <label htmlFor="nombre">Nombre</label>
-                                <input className="form-control" type="text" name="nombre" id="nombre" onChange={this.capturarData}></input>
+                                <input className="form-control" type="text" name="nombre" id="nombre" onChange={this.capturarData} value={formulario ? formulario.nombre : ''}></input>
                                 <br />
                                 <label htmlFor="apellido">Apellido</label>
-                                <input className="form-control" type="text" name="apellido" id="apellido" onChange={this.capturarData}></input>
+                                <input className="form-control" type="text" name="apellido" id="apellido" onChange={this.capturarData} value={formulario ? formulario.apellido : ''}></input>
                                 <br />
                                 <label htmlFor="correo">Correo</label>
-                                <input className="form-control" type="text" name="correo" id="correo" onChange={this.capturarData}></input>
+                                <input className="form-control" type="text" name="correo" id="correo" onChange={this.capturarData} value={formulario ? formulario.correo : ''}></input>
                                 <br />
                                 <label htmlFor="fechaNacimiento">Fecha de nacimiento</label>
-                                <input className="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" onChange={this.capturarData}></input>
+                                <input className="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" onChange={this.capturarData} value={formulario ? formulario.fechaNacimiento : ''}></input>
                                 <br />
                                 <label htmlFor="barrio">Barrio</label>
-                                <input className="form-control" type="text" name="barrio" id="barrio" onChange={this.capturarData}></input>
+                                <input className="form-control" type="text" name="barrio" id="barrio" onChange={this.capturarData} value={formulario ? formulario.direccion.barrio : ''}></input>
                                 <br />
                                 <label htmlFor="direccion">Dirección</label>
-                                <input className="form-control" type="text" name="direccion" id="direccion" onChange={this.capturarData}></input>
+                                <input className="form-control" type="text" name="direccion" id="direccion" onChange={this.capturarData} value={formulario ? formulario.direccion.direccion : ''}></input>
                                 <br />
                             </div>
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button style={{ background: "rgb(58, 183, 17)", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<RestoreFromTrashIcon />} type="submit" onClick={this.registrarDocente}>Insertar</Button>{''}
+                            {this.state.tipoModal === 'insertar' ?
+                                <Button style={{ background: "rgb(58, 183, 17)", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<AssignmentTurnedInIcon />} type="submit" onClick={this.registrarDocente}>Insertar</Button> :
+                                <Button style={{ background: "rgb(58, 183, 17)", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<AssignmentTurnedInIcon />} type="submit" onClick={this.editarDocente}>Editar</Button>
+                            }
                             <Button style={{ background: "gray", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark ml-2" variant="contained" startIcon={<CancelIcon />} type="submit" onClick={this.cambiarEstadoModalInsertar}>Cancelar</Button>{''}
                         </ModalFooter>
                     </Modal>
