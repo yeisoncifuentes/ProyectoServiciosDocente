@@ -29,7 +29,7 @@ class MenuLateral extends Component {
   render() {
     return (
       <Drawer
-        style={{ width: '220px' }}
+        style={{ width: '160px' }}
         variant="persistent"
         anchor="left"
         open={true}
