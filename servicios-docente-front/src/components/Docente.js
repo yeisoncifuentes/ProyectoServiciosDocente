@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 //Componentes
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { NotificationManager } from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
@@ -317,6 +317,7 @@ class Docente extends Component {
                         </ModalFooter>
                     </Modal>
                 </div>
+                <NotificationContainer />
             </div>
         );
     }
