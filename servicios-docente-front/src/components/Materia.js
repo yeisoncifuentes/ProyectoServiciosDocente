@@ -78,6 +78,8 @@ class Materia extends Component {
 			});
 	}
 
+	
+
 	render() {
 		return (
 			<div className="container">
@@ -130,7 +132,12 @@ class Materia extends Component {
 											<TableRow key={materia.id}>
 												<TableCell>{materia.nombre}</TableCell>
 												<TableCell>
-													<IconButton>
+													<IconButton
+														onClick={() => {
+															this.seleccionarMateria(materia);
+															this.setState({ modalEliminar: true });
+														}}
+													>
 														<DeleteIcon color="secondary" />
 													</IconButton>
 													<IconButton
@@ -185,16 +192,30 @@ class Materia extends Component {
 
 					<ModalFooter>
 						{this.state.tipoModal == 'insertar' ? (
-							<button className="btn btn-success" onClick={() => this.peticionPost()}>
+							<button className="btn btn-success">
 								Insertar
 							</button>
 						) : (
-							<button className="btn btn-primary" onClick={() => this.peticionPut()}>
+							<button className="btn btn-primary">
 								Actualizar
 							</button>
 						)}
 						<button className="btn btn-danger" onClick={() => this.modalInsertar()}>
 							Cancelar
+						</button>
+					</ModalFooter>
+				</Modal>
+
+				<Modal isOpen={this.state.modalEliminar}>
+					<ModalBody>
+						Estás seguro de eliminar la materia {this.state.form && this.state.form.nombre}
+					</ModalBody>
+					<ModalFooter>
+						<button className="btn btn-danger" >
+							Sí
+						</button>
+						<button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>
+							No
 						</button>
 					</ModalFooter>
 				</Modal>
