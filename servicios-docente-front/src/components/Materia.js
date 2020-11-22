@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 //Componentes
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { NotificationManager } from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,6 +12,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+
+//Estilos 
+import "react-notifications/lib/notifications.css";
 
 //Iconos
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -51,9 +54,7 @@ class Materia extends Component {
 	//Servicios
 
 	registrar() {
-		NotificationManager.success('mensaje');
 		delete this.state.form.id;
-
 		axios
 			.post(`${urlBase}/api/materias/registrar`, this.state.form)
 			.then((response) => {
@@ -77,7 +78,7 @@ class Materia extends Component {
 				});
 			})
 			.catch((error) => {
-				console.log(error);
+				NotificationManager.error(error.response.data.error);
 			});
 	}
 
@@ -104,6 +105,7 @@ class Materia extends Component {
 			.then((response) => {
 				this.setState({ modalEliminar: false });
 				this.listar();
+				NotificationManager.success('Eliminada correctamente');
 			})
 			.catch((error) => {
 				//error.response.data es lo que arrojo el servidor en caso de error
@@ -293,6 +295,7 @@ class Materia extends Component {
 						</button>
 					</ModalFooter>
 				</Modal>
+				<NotificationContainer />
 			</div>
 		);
 	}
