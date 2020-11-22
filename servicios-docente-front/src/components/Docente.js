@@ -33,6 +33,7 @@ class Docente extends Component {
         this.state = {
             listaDocentes: [],
             modalFormulario: false,
+            modalEliminar: false,
             tipoModal: '',
             formulario: {
                 id: '',
@@ -49,9 +50,11 @@ class Docente extends Component {
         }
 
         this.solicitarInsercion = this.solicitarInsercion.bind(this);
-        this.cambiarEstadoModalInsertar = this.cambiarEstadoModalInsertar.bind(this);
+        this.cambiarEstadoModalFormulario = this.cambiarEstadoModalFormulario.bind(this);
+        this.cambiarEstadoModalEliminar = this.cambiarEstadoModalEliminar.bind(this);
         this.registrarDocente = this.registrarDocente.bind(this);
         this.editarDocente = this.editarDocente.bind(this);
+        this.eliminarDocente = this.eliminarDocente.bind(this);
     }
 
     componentDidMount() {
@@ -64,7 +67,7 @@ class Docente extends Component {
         delete this.state.formulario.id;
         axios.post(`${urlBase}/api/docentes/registrar`, this.state.formulario)
             .then(response => {
-                this.cambiarEstadoModalInsertar();
+                this.cambiarEstadoModalFormulario();
                 this.listarDocentes();
                 NotificationManager.success(response.data);
             }).catch((error) => {
@@ -90,9 +93,21 @@ class Docente extends Component {
         console.log(this.state.formulario);
         axios.put(`${urlBase}/api/docentes/editar`, this.state.formulario)
             .then(response => {
-                this.cambiarEstadoModalInsertar();
+                this.cambiarEstadoModalFormulario();
                 this.listarDocentes();
                 NotificationManager.success(response.data);
+            }).catch((error) => {
+                //error.response.data es lo que arrojo el servidor en caso de error
+                console.log(error.response.data);
+                NotificationManager.error(error.response.data.error);
+            });
+    }
+
+    eliminarDocente() {
+        axios.delete(`${urlBase}/api/docentes/eliminar/${this.state.formulario.id}`)
+            .then(response => {
+                this.setState({modalEliminar: false});
+                this.listarDocentes();
             }).catch((error) => {
                 //error.response.data es lo que arrojo el servidor en caso de error
                 console.log(error.response.data);
@@ -106,11 +121,15 @@ class Docente extends Component {
             formulario: null,
             tipoModal: 'insertar'
         });
-        this.cambiarEstadoModalInsertar();
+        this.cambiarEstadoModalFormulario();
     }
 
-    cambiarEstadoModalInsertar() {
+    cambiarEstadoModalFormulario() {
         this.setState({ modalFormulario: !this.state.modalFormulario });
+    }
+
+    cambiarEstadoModalEliminar() {
+        this.setState({ modalEliminar: !this.state.modalEliminar });
     }
 
     capturarData = async e => {
@@ -150,7 +169,25 @@ class Docente extends Component {
                 }
             }
         });
-        this.cambiarEstadoModalInsertar();
+        this.cambiarEstadoModalFormulario();
+    }
+
+    capturarDocenteEliminar(docente) {
+        this.setState({
+            modalEliminar: true,
+            formulario: {
+                id: docente.id,
+                cedula: docente.cedula,
+                nombre: docente.nombre,
+                apellido: docente.apellido,
+                correo: docente.correo,
+                fechaNacimiento: docente.fechaNacimientoFormato,
+                direccion: {
+                    barrio: docente.direccion.barrio,
+                    direccion: docente.direccion.direccion
+                }
+            }
+        });
     }
 
     render() {
@@ -206,7 +243,7 @@ class Docente extends Component {
                                                         <EditIcon color="primary"></EditIcon>
                                                     </IconButton>
 
-                                                    <IconButton>
+                                                    <IconButton onClick={this.capturarDocenteEliminar.bind(this, docente)}>
                                                         <DeleteIcon color="error"></DeleteIcon>
                                                     </IconButton>
                                                 </TableCell>
@@ -218,10 +255,11 @@ class Docente extends Component {
                         </TableContainer>
                     </div>
 
+                    {/*Modal de Formulario (registrar y editar)*/}
                     <Modal isOpen={this.state.modalFormulario}>
                         <ModalHeader style={{ display: 'block' }}>
                             Registrar Docente
-                            <span style={{ float: 'right' }} onClick={this.cambiarEstadoModalInsertar}>x</span>
+                            <span style={{ float: 'right' }} onClick={this.cambiarEstadoModalFormulario}>x</span>
                         </ModalHeader>
 
                         <ModalBody>
@@ -242,10 +280,10 @@ class Docente extends Component {
                                 <input className="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" onChange={this.capturarData} value={formulario ? formulario.fechaNacimiento : ''}></input>
                                 <br />
                                 <label htmlFor="barrio">Barrio</label>
-                                <input className="form-control" type="text" name="barrio" id="barrio" onChange={this.capturarData} value={formulario ? formulario.direccion.barrio : ''}></input>
+                                <input className="form-control" type="text" name="barrio" id="barrio" onChange={this.capturarData} value={formulario ? formulario.direccion? formulario.direccion.barrio : '' : ''}></input>
                                 <br />
                                 <label htmlFor="direccion">Dirección</label>
-                                <input className="form-control" type="text" name="direccion" id="direccion" onChange={this.capturarData} value={formulario ? formulario.direccion.direccion : ''}></input>
+                                <input className="form-control" type="text" name="direccion" id="direccion" onChange={this.capturarData} value={formulario ? formulario.direccion? formulario.direccion.direccion : '' : ''}></input>
                                 <br />
                             </div>
                         </ModalBody>
@@ -253,9 +291,26 @@ class Docente extends Component {
                         <ModalFooter>
                             {this.state.tipoModal === 'insertar' ?
                                 <Button style={{ background: "rgb(58, 183, 17)", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<AssignmentTurnedInIcon />} type="submit" onClick={this.registrarDocente}>Insertar</Button> :
-                                <Button style={{ background: "rgb(58, 183, 17)", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<AssignmentTurnedInIcon />} type="submit" onClick={this.editarDocente}>Editar</Button>
+                                <Button style={{ background: "rgb(58, 183, 17)", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<EditIcon />} type="submit" onClick={this.editarDocente}>Editar</Button>
                             }
-                            <Button style={{ background: "gray", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark ml-2" variant="contained" startIcon={<CancelIcon />} type="submit" onClick={this.cambiarEstadoModalInsertar}>Cancelar</Button>{''}
+                            <Button style={{ background: "gray", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark ml-2" variant="contained" startIcon={<CancelIcon />} type="submit" onClick={this.cambiarEstadoModalFormulario}>Cancelar</Button>{''}
+                        </ModalFooter>
+                    </Modal>
+
+                    {/*Modal de confirmacion al eliminar*/}
+                    <Modal isOpen={this.state.modalEliminar}>
+                        <ModalHeader style={{ display: 'block' }}>
+                            Confirmación
+                            <span style={{ float: 'right' }} onClick={this.cambiarEstadoModalEliminar}>x</span>
+                        </ModalHeader>
+
+                        <ModalBody>
+                            ¿Está seguro de eliminar este registro?
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button style={{ background: "red", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<RestoreFromTrashIcon />} type="submit" onClick={this.eliminarDocente}>Eliminar</Button>
+                            <Button style={{ background: "gray", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark ml-2" variant="contained" startIcon={<CancelIcon />} type="submit" onClick={this.cambiarEstadoModalEliminar}>Cancelar</Button>{''}
                         </ModalFooter>
                     </Modal>
                 </div>
