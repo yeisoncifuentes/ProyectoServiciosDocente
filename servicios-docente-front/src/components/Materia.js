@@ -41,7 +41,7 @@ class Materia extends Component {
 		this.cambiarEstadoModalEliminar = this.cambiarEstadoModalEliminar.bind(this);
 		this.registrar = this.registrar.bind(this);
 		this.editar = this.editar.bind(this);
-        this.eliminar = this.eliminar.bind(this);
+		this.eliminar = this.eliminar.bind(this);
 	}
 
 	componentDidMount() {
@@ -81,7 +81,6 @@ class Materia extends Component {
 			});
 	}
 
-
 	editar() {
 		console.log(this.state.form);
 		axios
@@ -99,7 +98,7 @@ class Materia extends Component {
 	}
 
 	eliminar() {
-		console.log(this.state.form)
+		console.log(this.state.form);
 		axios
 			.delete(`${urlBase}/api/materias/eliminar/${this.state.form.id}`)
 			.then((response) => {
@@ -148,7 +147,6 @@ class Materia extends Component {
 		});
 	};
 
-	
 	render() {
 		return (
 			<div className="container">
@@ -230,6 +228,7 @@ class Materia extends Component {
 
 				<Modal isOpen={this.state.modalInsertar}>
 					<ModalHeader style={{ display: 'block' }}>
+						{this.state.tipoModal == 'insertar' ? 'Registrar Materia' : 'Editar Materia'}
 						<span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>
 							x
 						</span>
