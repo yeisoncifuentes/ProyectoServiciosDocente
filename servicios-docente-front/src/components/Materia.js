@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 //Componentes
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { NotificationManager } from 'react-notifications';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -20,6 +21,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 const urlBase = 'http://localhost:9090/ProyectoServiciosDocente-web';
 
+//Constructor
 class Materia extends Component {
 	constructor(props) {
 		super(props);
@@ -28,40 +30,41 @@ class Materia extends Component {
 			lista: [],
 			modalInsertar: false,
 			modalEliminar: false,
+			tipoModal: '',
 			form: {
 				id: '',
 				nombre: ''
 			}
 		};
+
+		this.cambiarEstadoModal = this.cambiarEstadoModal.bind(this);
+		this.cambiarEstadoModalEliminar = this.cambiarEstadoModalEliminar.bind(this);
+		this.registrar = this.registrar.bind(this);
+		this.editar = this.editar.bind(this);
+        this.eliminar = this.eliminar.bind(this);
 	}
-
-	modalInsertar = () => {
-		this.setState({ modalInsertar: !this.state.modalInsertar });
-	};
-
-	seleccionarMateria = (materia) => {
-		this.setState({
-			tipoModal: 'actualizar',
-			form: {
-				id: materia.id,
-				nombre: materia.nombre
-			}
-		});
-	};
-
-	handleChange = async (e) => {
-		e.persist();
-		await this.setState({
-			form: {
-				...this.state.form,
-				[e.target.name]: e.target.value
-			}
-		});
-		console.log(this.state.form);
-	};
 
 	componentDidMount() {
 		this.listar();
+	}
+
+	//Servicios
+
+	registrar() {
+		NotificationManager.success('mensaje');
+		delete this.state.form.id;
+
+		axios
+			.post(`${urlBase}/api/materias/registrar`, this.state.form)
+			.then((response) => {
+				this.cambiarEstadoModal();
+				this.listar();
+				NotificationManager.success(response.data);
+			})
+			.catch((error) => {
+				console.log(error.response.data);
+				NotificationManager.error(error.response.data.error);
+			});
 	}
 
 	listar() {
@@ -78,8 +81,74 @@ class Materia extends Component {
 			});
 	}
 
-	
 
+	editar() {
+		console.log(this.state.form);
+		axios
+			.put(`${urlBase}/api/materias/editar`, this.state.form)
+			.then((response) => {
+				this.cambiarEstadoModal();
+				this.listar();
+				NotificationManager.success(response.data);
+			})
+			.catch((error) => {
+				//error.response.data es lo que arrojo el servidor en caso de error
+				console.log(error.response.data);
+				NotificationManager.error(error.response.data.error);
+			});
+	}
+
+	eliminar() {
+		console.log(this.state.form)
+		axios
+			.delete(`${urlBase}/api/materias/eliminar/${this.state.form.id}`)
+			.then((response) => {
+				this.setState({ modalEliminar: false });
+				this.listar();
+			})
+			.catch((error) => {
+				//error.response.data es lo que arrojo el servidor en caso de error
+				console.log(error.response.data);
+				NotificationManager.error(error.response.data.error);
+			});
+	}
+
+	//Modal
+	modalInsertar = () => {
+		this.setState({ modalInsertar: !this.state.modalInsertar });
+	};
+
+	cambiarEstadoModal() {
+		this.setState({ modalInsertar: !this.state.modalInsertar });
+	}
+
+	cambiarEstadoModalEliminar() {
+		this.setState({ modalEliminar: !this.state.modalEliminar });
+	}
+
+	//Obtener materia tabla
+	seleccionarMateria = (materia) => {
+		this.setState({
+			tipoModal: 'actualizar',
+			form: {
+				id: materia.id,
+				nombre: materia.nombre
+			}
+		});
+	};
+
+	//Capturar los datos input
+	handleChange = async (e) => {
+		e.persist();
+		await this.setState({
+			form: {
+				...this.state.form,
+				[e.target.name]: e.target.value
+			}
+		});
+	};
+
+	
 	render() {
 		return (
 			<div className="container">
@@ -170,12 +239,12 @@ class Materia extends Component {
 							<label htmlFor="id">ID</label>
 							<input
 								className="form-control"
-								type="text"
+								type="number"
 								name="id"
 								id="id"
 								readOnly
 								onChange={this.handleChange}
-								value={this.state.form ? this.state.form.id : this.state.lista.length + 1}
+								value={this.state.form ? this.state.form.id : 0}
 							/>
 							<br />
 							<label htmlFor="nombre">Nombre</label>
@@ -192,11 +261,11 @@ class Materia extends Component {
 
 					<ModalFooter>
 						{this.state.tipoModal == 'insertar' ? (
-							<button className="btn btn-success">
+							<button className="btn btn-success" onClick={this.registrar}>
 								Insertar
 							</button>
 						) : (
-							<button className="btn btn-primary">
+							<button className="btn btn-primary" onClick={this.editar}>
 								Actualizar
 							</button>
 						)}
@@ -207,11 +276,17 @@ class Materia extends Component {
 				</Modal>
 
 				<Modal isOpen={this.state.modalEliminar}>
+					<ModalHeader style={{ display: 'block' }}>
+						Confirmación
+						<span style={{ float: 'right' }} onClick={this.cambiarEstadoModalEliminar}>
+							x
+						</span>
+					</ModalHeader>
 					<ModalBody>
 						Estás seguro de eliminar la materia {this.state.form && this.state.form.nombre}
 					</ModalBody>
 					<ModalFooter>
-						<button className="btn btn-danger" >
+						<button className="btn btn-danger" onClick={() => this.eliminar()}>
 							Sí
 						</button>
 						<button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>
