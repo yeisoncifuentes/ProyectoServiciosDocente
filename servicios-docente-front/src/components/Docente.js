@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 //Componentes
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { NotificationManager } from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
@@ -15,6 +15,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
+//Estilos 
+import "react-notifications/lib/notifications.css";
 
 //Iconos
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -341,6 +344,7 @@ class Docente extends Component {
                         </ModalFooter>
                     </Modal>
                 </div>
+                <NotificationContainer />
             </div>
         );
     }
