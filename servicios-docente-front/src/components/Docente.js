@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+
+//Estilos 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "react-notifications/lib/notifications.css";
 
 //Componentes
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -15,9 +18,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-//Estilos 
-import "react-notifications/lib/notifications.css";
 
 //Iconos
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -70,7 +70,6 @@ class Docente extends Component {
 
     //Servicios
     registrarDocente() {
-        NotificationManager.success("mensaje");
         //delete this.state.formulario.id;
         axios.post(`${urlBase}/api/docentes/registrar`, this.state.formulario)
             .then(response => {
@@ -96,7 +95,6 @@ class Docente extends Component {
     }
 
     editarDocente() {
-        NotificationManager.success("mensaje");
         let fecha = new Date(this.state.formulario.fechaNacimiento);
         let docente = this.state.formulario;
         docente.fechaNacimiento = fecha;
@@ -118,6 +116,7 @@ class Docente extends Component {
             .then(response => {
                 this.setState({ modalEliminar: false });
                 this.listarDocentes();
+                NotificationManager.success("Docente eliminado correctamente");
             }).catch((error) => {
                 //error.response.data es lo que arrojo el servidor en caso de error
                 console.log(error.response.data);
