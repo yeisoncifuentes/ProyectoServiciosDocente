@@ -13,6 +13,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 //Iconos
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -21,6 +23,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import CancelIcon from '@material-ui/icons/Cancel';
+import CloseIcon from '@material-ui/icons/Close';
 
 const urlBase = 'http://localhost:9090/ProyectoServiciosDocente-web';
 
@@ -41,7 +44,7 @@ class Docente extends Component {
                 nombre: '',
                 apellido: '',
                 correo: '',
-                fechaNacimiento: '',
+                fechaNacimiento: new Date().setMonth(new Date().getMonth() - 240),
                 direccion: {
                     barrio: '',
                     direccion: ''
@@ -55,6 +58,7 @@ class Docente extends Component {
         this.registrarDocente = this.registrarDocente.bind(this);
         this.editarDocente = this.editarDocente.bind(this);
         this.eliminarDocente = this.eliminarDocente.bind(this);
+        this.capturarFecha = this.capturarFecha.bind(this);
     }
 
     componentDidMount() {
@@ -64,7 +68,7 @@ class Docente extends Component {
     //Servicios
     registrarDocente() {
         NotificationManager.success("mensaje");
-        delete this.state.formulario.id;
+        //delete this.state.formulario.id;
         axios.post(`${urlBase}/api/docentes/registrar`, this.state.formulario)
             .then(response => {
                 this.cambiarEstadoModalFormulario();
@@ -90,7 +94,10 @@ class Docente extends Component {
 
     editarDocente() {
         NotificationManager.success("mensaje");
-        console.log(this.state.formulario);
+        let fecha = new Date(this.state.formulario.fechaNacimiento);
+        let docente = this.state.formulario;
+        docente.fechaNacimiento = fecha;
+        //Al parecer 'docente' accede a 'formulario'
         axios.put(`${urlBase}/api/docentes/editar`, this.state.formulario)
             .then(response => {
                 this.cambiarEstadoModalFormulario();
@@ -106,7 +113,7 @@ class Docente extends Component {
     eliminarDocente() {
         axios.delete(`${urlBase}/api/docentes/eliminar/${this.state.formulario.id}`)
             .then(response => {
-                this.setState({modalEliminar: false});
+                this.setState({ modalEliminar: false });
                 this.listarDocentes();
             }).catch((error) => {
                 //error.response.data es lo que arrojo el servidor en caso de error
@@ -118,7 +125,7 @@ class Docente extends Component {
     //Metodos
     solicitarInsercion() {
         this.setState({
-            formulario: null,
+            formulario: { direccion: {} },
             tipoModal: 'insertar'
         });
         this.cambiarEstadoModalFormulario();
@@ -162,7 +169,7 @@ class Docente extends Component {
                 nombre: docente.nombre,
                 apellido: docente.apellido,
                 correo: docente.correo,
-                fechaNacimiento: docente.fechaNacimientoFormato,
+                fechaNacimiento: docente.fechaNacimiento,
                 direccion: {
                     barrio: docente.direccion.barrio,
                     direccion: docente.direccion.direccion
@@ -181,13 +188,17 @@ class Docente extends Component {
                 nombre: docente.nombre,
                 apellido: docente.apellido,
                 correo: docente.correo,
-                fechaNacimiento: docente.fechaNacimientoFormato,
+                fechaNacimiento: docente.fechaNacimiento,
                 direccion: {
                     barrio: docente.direccion.barrio,
                     direccion: docente.direccion.direccion
                 }
             }
         });
+    }
+
+    capturarFecha(date) {
+        this.setState({ formulario: { ...this.state.formulario, fechaNacimiento: date } });
     }
 
     render() {
@@ -258,32 +269,46 @@ class Docente extends Component {
                     {/*Modal de Formulario (registrar y editar)*/}
                     <Modal isOpen={this.state.modalFormulario}>
                         <ModalHeader style={{ display: 'block' }}>
-                            Registrar Docente
-                            <span style={{ float: 'right' }} onClick={this.cambiarEstadoModalFormulario}>x</span>
+                            {this.state.tipoModal === 'insertar' ?
+                                "Registrar Docente" :
+                                "Editar Docente"
+                            }
+
+                            <IconButton style={{ float: 'right' }} onClick={this.cambiarEstadoModalFormulario}>
+                                <CloseIcon color="inherit"></CloseIcon>
+                            </IconButton>
+
                         </ModalHeader>
 
                         <ModalBody>
                             <div className="form-group">
                                 <label htmlFor="cedula">Cédula</label>
-                                <input className="form-control" type="number" name="cedula" id="cedula" onChange={this.capturarData} value={formulario ? formulario.cedula : ''}></input>
+                                <input className="form-control" type="number" name="cedula" id="cedula" required onChange={this.capturarData} value={formulario.cedula ? formulario.cedula : ''}></input>
                                 <br />
                                 <label htmlFor="nombre">Nombre</label>
-                                <input className="form-control" type="text" name="nombre" id="nombre" onChange={this.capturarData} value={formulario ? formulario.nombre : ''}></input>
+                                <input className="form-control" type="text" name="nombre" id="nombre" onChange={this.capturarData} value={formulario.nombre ? formulario.nombre : ''}></input>
                                 <br />
                                 <label htmlFor="apellido">Apellido</label>
-                                <input className="form-control" type="text" name="apellido" id="apellido" onChange={this.capturarData} value={formulario ? formulario.apellido : ''}></input>
+                                <input className="form-control" type="text" name="apellido" id="apellido" onChange={this.capturarData} value={formulario.apellido ? formulario.apellido : ''}></input>
                                 <br />
                                 <label htmlFor="correo">Correo</label>
-                                <input className="form-control" type="text" name="correo" id="correo" onChange={this.capturarData} value={formulario ? formulario.correo : ''}></input>
+                                <input className="form-control" type="text" name="correo" id="correo" onChange={this.capturarData} value={formulario.correo ? formulario.correo : ''}></input>
                                 <br />
                                 <label htmlFor="fechaNacimiento">Fecha de nacimiento</label>
-                                <input className="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" onChange={this.capturarData} value={formulario ? formulario.fechaNacimiento : ''}></input>
+                                <br />
+                                <DatePicker
+                                    onChange={this.capturarFecha}
+                                    selected={formulario.fechaNacimiento ? new Date(this.state.formulario.fechaNacimiento) : ''}
+                                    maxDate={new Date().setMonth(new Date().getMonth() - 240)}
+                                    dateFormat="dd/MM/yyyy"
+                                ></DatePicker>
+                                <br />
                                 <br />
                                 <label htmlFor="barrio">Barrio</label>
-                                <input className="form-control" type="text" name="barrio" id="barrio" onChange={this.capturarData} value={formulario ? formulario.direccion? formulario.direccion.barrio : '' : ''}></input>
+                                <input className="form-control" type="text" name="barrio" id="barrio" onChange={this.capturarData} value={formulario.direccion.barrio ? formulario.direccion.barrio : ''}></input>
                                 <br />
                                 <label htmlFor="direccion">Dirección</label>
-                                <input className="form-control" type="text" name="direccion" id="direccion" onChange={this.capturarData} value={formulario ? formulario.direccion? formulario.direccion.direccion : '' : ''}></input>
+                                <input className="form-control" type="text" name="direccion" id="direccion" onChange={this.capturarData} value={formulario.direccion.direccion ? formulario.direccion.direccion : ''}></input>
                                 <br />
                             </div>
                         </ModalBody>
@@ -301,11 +326,13 @@ class Docente extends Component {
                     <Modal isOpen={this.state.modalEliminar}>
                         <ModalHeader style={{ display: 'block' }}>
                             Confirmación
-                            <span style={{ float: 'right' }} onClick={this.cambiarEstadoModalEliminar}>x</span>
+                            <IconButton style={{ float: 'right' }} onClick={this.cambiarEstadoModalEliminar}>
+                                <CloseIcon color="inherit"></CloseIcon>
+                            </IconButton>
                         </ModalHeader>
 
                         <ModalBody>
-                            ¿Está seguro de eliminar este registro?
+                            ¿Está seguro de eliminar este docente? Los estudiantes asociados también se eliminaran
                         </ModalBody>
 
                         <ModalFooter>
