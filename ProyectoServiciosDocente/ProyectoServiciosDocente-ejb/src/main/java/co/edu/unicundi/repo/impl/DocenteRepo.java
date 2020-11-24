@@ -51,7 +51,7 @@ public class DocenteRepo extends AbstractFacade<Docente, Integer> implements IDo
 
         query.setFirstResult((paginaActual - 1) * cantidadDatos);
         query.setMaxResults(cantidadDatos);
-        
+
         return query.getResultList();
 
     }
@@ -114,5 +114,15 @@ public class DocenteRepo extends AbstractFacade<Docente, Integer> implements IDo
     @Override
     public List<Docente> listarPorMateria(String materia) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int contarMaterias(Docente docente) {
+        Query query = this.entity.createQuery("SELECT COUNT (dm) FROM DocenteMateria dm WHERE dm.docente = ?1", Long.class);
+        query.setParameter(1, docente);
+
+        Long nMaterias = (Long) query.getSingleResult();
+
+        return nMaterias.intValue();
     }
 }

@@ -113,4 +113,6 @@ public interface IDocenteRepo {
      */
     public List<Docente> listarPorMateria(String materia);
 
+    public int contarMaterias(Docente docente);
+
 }
