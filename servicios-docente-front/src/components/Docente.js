@@ -420,7 +420,7 @@ class Docente extends Component {
                         </ModalHeader>
 
                         <ModalBody>
-                            ¿Está seguro de eliminar este docente? Los estudiantes asociados también se eliminaran
+                            ¿Está seguro de eliminar este docente?
                         </ModalBody>
 
                         <ModalFooter>
