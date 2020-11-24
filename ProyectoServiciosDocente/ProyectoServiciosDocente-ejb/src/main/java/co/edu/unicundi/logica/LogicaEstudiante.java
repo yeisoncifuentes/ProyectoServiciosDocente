@@ -66,6 +66,7 @@ public class LogicaEstudiante implements ILogicaEstudiante {
                 for (Estudiante estudiante : estudiantes) {
                     ModelMapper model = new ModelMapper();
                     EstudiantePOJO est = model.map(estudiante, EstudiantePOJO.class);
+                    est.setCedulaDocente(estudiante.getDocente().getCedula());
                     estudiantesPOJO.add(est);
                 }
 
