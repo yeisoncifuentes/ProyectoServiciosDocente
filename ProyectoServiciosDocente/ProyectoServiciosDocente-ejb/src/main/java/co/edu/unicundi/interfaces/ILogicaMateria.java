@@ -33,7 +33,7 @@ public interface ILogicaMateria {
 
     public void habilitar(int id) throws ObjectNotFoundException, NoResponseBDException;
 
-    public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException;
+    public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException, RegisteredObjectException;
 
     public void editar(Materia materia) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException;
 

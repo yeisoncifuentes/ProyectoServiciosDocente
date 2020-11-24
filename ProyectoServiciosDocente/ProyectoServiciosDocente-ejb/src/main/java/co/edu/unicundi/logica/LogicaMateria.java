@@ -92,14 +92,25 @@ public class LogicaMateria implements ILogicaMateria {
     }
 
     @Override
-    public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException {
-        Materia materiaAux = repo.obtenerPorId(id);
-
-        if (materiaAux == null) {
-            throw new ObjectNotFoundException("Materia no existe.");
+    public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException, RegisteredObjectException {
+        try {
+            Materia materia = repo.obtenerPorId(id);
+            if (materia != null) {
+                //Validar numero de docentes
+                int nDocentes = repo.contarDocentes(materia);
+                if (nDocentes > 0) {
+                    throw new RegisteredObjectException("La materia tiene docentes asociados");
+                }
+                
+                repo.eliminar(materia);
+            } else {
+                throw new ObjectNotFoundException("El id de la materia no existe");
+            }
+        } catch (ObjectNotFoundException ex) {
+            throw new ObjectNotFoundException(ex.getMessage());
+        } catch (RegisteredObjectException ex) {
+            throw new RegisteredObjectException(ex.getMessage());
         }
-
-        repo.eliminar(materiaAux);
     }
 
     @Override

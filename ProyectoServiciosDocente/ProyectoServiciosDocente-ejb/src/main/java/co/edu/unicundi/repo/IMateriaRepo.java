@@ -28,4 +28,6 @@ public interface IMateriaRepo {
 
     public List<Materia> listarNoAsociadas(Integer idDocente);
 
+    public int contarDocentes(Materia materia);
+
 }

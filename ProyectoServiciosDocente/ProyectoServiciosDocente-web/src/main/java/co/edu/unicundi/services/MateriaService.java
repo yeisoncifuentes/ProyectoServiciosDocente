@@ -102,7 +102,7 @@ public class MateriaService {
     public Response eliminar(
             //Campo id url con validacion
             @NotNull(message = "Campo id requerido")
-            @PathParam("id") Integer id) throws ObjectNotFoundException, NoResponseBDException {
+            @PathParam("id") Integer id) throws ObjectNotFoundException, NoResponseBDException, RegisteredObjectException {
         logicaMateria.eliminar(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }

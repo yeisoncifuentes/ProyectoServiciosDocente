@@ -61,4 +61,14 @@ public class MateriaRepo extends AbstractFacade<Materia, Integer> implements IMa
         query.setParameter(1, idDocente);
         return query.getResultList();
     }
+
+    @Override
+    public int contarDocentes(Materia materia) {
+        Query query = this.entity.createQuery("SELECT COUNT (dm) FROM DocenteMateria dm WHERE dm.materia = ?1", Long.class);
+        query.setParameter(1, materia);
+
+        Long nDocentes = (Long) query.getSingleResult();
+
+        return nDocentes.intValue();
+    }
 }
