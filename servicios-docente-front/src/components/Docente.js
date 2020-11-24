@@ -55,6 +55,7 @@ class Docente extends Component {
                     direccion: ''
                 }
             },
+            idDocente: '',
             listaMateriasNoAsignadas: [],
             listaMateriasAsignadas: []
         }
@@ -130,11 +131,16 @@ class Docente extends Component {
             });
     }
 
-    asociarDocenteMateria() {
-        axios.post(`${urlBase}/api/docentes/asociarDocente`, this.state.formulario)
+    asociarDocenteMateria(idMateria) {
+        let idDocente = this.state.idDocente;
+        let DocenteMateria = {
+            docente: {id: idDocente},
+            materia: {id: idMateria}
+        }
+        axios.post(`${urlBase}/api/docentes/asociarDocente`, DocenteMateria)
             .then(response => {
-                this.cambiarEstadoModalFormulario();
-                this.listarDocentes();
+                this.listarMateriasNoAsignadas(idDocente);
+                this.listarMateriasAsignadas(idDocente);
                 NotificationManager.success(response.data);
             }).catch((error) => {
                 //error.response.data es lo que arrojo el servidor en caso de error
@@ -168,6 +174,23 @@ class Docente extends Component {
                 });
             }).catch((error) => {
                 console.log(error.response.data);
+            });
+    }
+
+    eliminarDocenteMateria(idMateria) {
+        let idDocente = this.state.idDocente;
+        console.log(idDocente);
+        console.log(idMateria);
+        axios.delete(`${urlBase}/api/docentes/eliminarDocenteMateria/${idDocente}/${idMateria}`)
+            .then(response => {
+                this.listarMateriasNoAsignadas(idDocente);
+                this.listarMateriasAsignadas(idDocente);
+                this.listarDocentes();
+                NotificationManager.success("Materia eliminada correctamente");
+            }).catch((error) => {
+                //error.response.data es lo que arrojo el servidor en caso de error
+                console.log(error.response.data);
+                NotificationManager.error(error.response.data.error);
             });
     }
 
@@ -255,6 +278,7 @@ class Docente extends Component {
     }
 
     listarMaterias(idDocente) {
+        this.setState({idDocente: idDocente});
         this.listarMateriasNoAsignadas(idDocente);
         this.listarMateriasAsignadas(idDocente);
     }
@@ -431,7 +455,7 @@ class Docente extends Component {
                                                 <TableRow key={materia.id}>
                                                     <TableCell>{materia.nombre}</TableCell>
                                                     <TableCell>
-                                                        <IconButton onClick={this.asociarDocenteMateria}>
+                                                        <IconButton onClick={this.asociarDocenteMateria.bind(this, materia.id)}>
                                                             <AddCircleOutlineIcon color="inherit"></AddCircleOutlineIcon>
                                                         </IconButton>
                                                     </TableCell>
@@ -459,7 +483,7 @@ class Docente extends Component {
                                                 <TableRow key={materia.id}>
                                                     <TableCell>{materia.nombre}</TableCell>
                                                     <TableCell>
-                                                        <IconButton onClick={this.asociarDocenteMateria}>
+                                                        <IconButton onClick={this.eliminarDocenteMateria.bind(this, materia.id)}>
                                                             <DeleteIcon color="error"></DeleteIcon>
                                                         </IconButton>
                                                     </TableCell>
