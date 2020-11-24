@@ -5,7 +5,6 @@
  */
 package co.edu.unicundi.services;
 
-
 import co.edu.unicundi.POJO.MateriaPOJO;
 import co.edu.unicundi.entity.Materia;
 import co.edu.unicundi.exception.IdRequiredException;
@@ -49,8 +48,8 @@ public class MateriaService {
         logicaMateria.registrar(materia);
         return Response.status(Response.Status.CREATED).entity("Materia creada correctamente").build();
     }
-    
-     @Path("/listar")
+
+    @Path("/listar")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listar() throws ListNoContentException, NoResponseBDException {
@@ -108,4 +107,11 @@ public class MateriaService {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @Path("/listarNoAsociadas/{idDocente}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listarNoAsociadas(@PathParam("idDocente") Integer idDocente) throws ObjectNotFoundException, ListNoContentException, NoResponseBDException {
+        List<MateriaPOJO> lista = logicaMateria.listarNoAsociadas(idDocente);
+        return Response.status(Response.Status.OK).entity(lista).build();
+    }
 }

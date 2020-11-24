@@ -130,4 +130,28 @@ public class LogicaMateria implements ILogicaMateria {
         }
     }
 
+    @Override
+    public List<MateriaPOJO> listarNoAsociadas(Integer idDocente) throws ListNoContentException, NoResponseBDException {
+        try {
+            List<Materia> materias = new ArrayList();
+            List<MateriaPOJO> materiasPOJO = new ArrayList();
+
+            materias = repo.listarNoAsociadas(idDocente);
+            if (materias.size() > 0) {
+                for (Materia materia : materias) {
+                    ModelMapper model = new ModelMapper();
+                    MateriaPOJO mat = model.map(materia, MateriaPOJO.class);
+                    materiasPOJO.add(mat);
+                }
+
+                return materiasPOJO;
+            } else {
+                throw new ListNoContentException();
+            }
+
+        } catch (ListNoContentException ex) {
+            throw new ListNoContentException();
+        }
+    }
+
 }

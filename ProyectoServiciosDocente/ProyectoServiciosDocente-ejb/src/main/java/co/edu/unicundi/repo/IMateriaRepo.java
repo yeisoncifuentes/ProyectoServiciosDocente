@@ -26,4 +26,6 @@ public interface IMateriaRepo {
     
     public Materia obtenerPorNombre(String nombre);
 
+    public List<Materia> listarNoAsociadas(Integer idDocente);
+
 }

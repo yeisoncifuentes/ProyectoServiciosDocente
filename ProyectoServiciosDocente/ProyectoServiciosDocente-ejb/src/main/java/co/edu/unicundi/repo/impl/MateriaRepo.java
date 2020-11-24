@@ -5,7 +5,6 @@
  */
 package co.edu.unicundi.repo.impl;
 
-
 import co.edu.unicundi.entity.Materia;
 import co.edu.unicundi.repo.AbstractFacade;
 import co.edu.unicundi.repo.IMateriaRepo;
@@ -36,7 +35,7 @@ public class MateriaRepo extends AbstractFacade<Materia, Integer> implements IMa
     public MateriaRepo(Class<Materia> entityClass) {
         super(entityClass);
     }
-    
+
     @Override
     public Materia obtenerPorNombre(String nombre) {
         try {
@@ -54,6 +53,12 @@ public class MateriaRepo extends AbstractFacade<Materia, Integer> implements IMa
         return entity;
     }
 
-    
-
+    @Override
+    public List<Materia> listarNoAsociadas(Integer idDocente) {
+        TypedQuery<Materia> query = entity.createQuery("SELECT m FROM Materia m EXCEPT "
+                + "SELECT m FROM Materia m, DocenteMateria dm "
+                + "WHERE m.id = dm.materia.id AND dm.docente.id = ?1", Materia.class);
+        query.setParameter(1, idDocente);
+        return query.getResultList();
+    }
 }

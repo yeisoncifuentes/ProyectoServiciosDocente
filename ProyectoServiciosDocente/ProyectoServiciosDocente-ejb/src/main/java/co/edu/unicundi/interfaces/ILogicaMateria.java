@@ -37,4 +37,6 @@ public interface ILogicaMateria {
 
     public void editar(Materia materia) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException;
 
+    public List<MateriaPOJO> listarNoAsociadas(Integer idDocente) throws ObjectNotFoundException, ListNoContentException, NoResponseBDException;
+
 }
