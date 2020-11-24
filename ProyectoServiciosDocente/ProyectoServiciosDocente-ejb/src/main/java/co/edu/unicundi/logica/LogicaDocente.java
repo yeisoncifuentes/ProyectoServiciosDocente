@@ -390,16 +390,30 @@ public class LogicaDocente implements ILogicaDocente {
      * @throws NoResponseBDException
      */
     @Override
-    public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException {
+    public void eliminar(int id) throws ObjectNotFoundException, NoResponseBDException, RegisteredObjectException {
         try {
             Docente docente = repo.obtenerPorId(id);
             if (docente != null) {
+                //Validar numero de estudiantes
+                int nEstudiantes = repo.contarEstudiantes(docente);
+                if (nEstudiantes > 0 ) {
+                    throw new RegisteredObjectException("El docente tiene estudiantes asociados");
+                }
+                
+                //Validar numero de materias
+                int nMaterias = repo.contarMaterias(docente);
+                if (nMaterias > 0) {
+                    throw new RegisteredObjectException("El docente tiene materias asociadas");
+                }
+                
                 repo.eliminar(docente);
             } else {
                 throw new ObjectNotFoundException("El id del docente no existe");
             }
         } catch (ObjectNotFoundException ex) {
             throw new ObjectNotFoundException(ex.getMessage());
+        } catch (RegisteredObjectException ex) {
+            throw new RegisteredObjectException(ex.getMessage());
         }
     }
 
