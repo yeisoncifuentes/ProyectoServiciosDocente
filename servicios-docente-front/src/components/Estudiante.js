@@ -21,7 +21,6 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import Docente from './Docente';
 
 const urlBase = 'http://localhost:9090/ProyectoServiciosDocente-web';
 
@@ -31,37 +30,41 @@ class Estudiante extends Component {
 		super(props);
 
 		this.state = {
+			idDocente: '',
 			lista: [],
+			listaDocente: [],
 			modalInsertar: false,
 			modalEliminar: false,
 			tipoModal: '',
 			form: {
-				id : '',
+				id: '',
 				nombre: '',
 				apellido: '',
 				docente: {
-					id: '',					
+					id: '',
 					cedula: ''
 				}
 			}
-		}
+		};
 
 		this.cambiarEstadoModal = this.cambiarEstadoModal.bind(this);
-		this.cambiarEstadoModalEliminar = this.cambiarEstadoModalEliminar.bind(this);		
+		this.cambiarEstadoModalEliminar = this.cambiarEstadoModalEliminar.bind(this);
 		this.registrar = this.registrar.bind(this);
 		this.editar = this.editar.bind(this);
 		this.eliminar = this.eliminar.bind(this);
-	
+		this.handleChanger = this.handleChanger.bind(this);
 	}
 
 	componentDidMount() {
 		this.listar();
+		this.listarDocentes();
 	}
 
 	//Servicios
 
 	registrar() {
 		delete this.state.form.id;
+		this.state.form.docente.id = this.state.idDocente;
 		console.log(this.state.form);
 		axios
 			.post(`${urlBase}/api/estudiantes/registrar`, this.state.form)
@@ -90,8 +93,22 @@ class Estudiante extends Component {
 			});
 	}
 
+	listarDocentes() {
+		axios
+			.get(`${urlBase}/api/docentes/listar/false`)
+			.then((response) => {
+				this.setState({
+					listaDocente: response.data
+				});
+			})
+			.catch((error) => {
+				NotificationManager.error(error.response.data.error);
+			});
+	}
+
 	editar() {
 		console.log(this.state.form);
+
 		axios
 			.put(`${urlBase}/api/estudiantes/editar`, this.state.form)
 			.then((response) => {
@@ -144,37 +161,43 @@ class Estudiante extends Component {
 				nombre: estudiante.nombre,
 				apellido: estudiante.apellido,
 				docente: {
-					id: estudiante.docente.id,					
-					cedula: estudiante.docente.cedula
+					id: estudiante.docente.id,
+					cedula: estudiante.docente.cedula,
+					nombreDocente: estudiante.docente.nombre
 				}
 			}
 		});
+		console.log(this.state.form);
 	};
 
-	
 	//Capturar los datos input
-	handleChange = async e => {
-		
-        if (e.target.name === "id") {
-            await this.setState({
-                form: {
-                    ...this.state.form,
-                    docente: {
-                        ...this.state.form.docente,
-                        [e.target.name]: e.target.value
-                    }
-                }
-            });
-        } else {
-            await this.setState({
-                form: {
-                    ...this.state.form,
-                    [e.target.name]: e.target.value
-                }
-            });
-        }
-    }
-
+	handleChange = async (e) => {
+		if (e.target.name === 'id') {
+			await this.setState({
+				form: {
+					...this.state.form,
+					docente: {
+						...this.state.form.docente,
+						[e.target.name]: e.target.value
+					}
+				}
+			});
+		} else {
+			await this.setState({
+				form: {
+					...this.state.form,
+					[e.target.name]: e.target.value
+				}
+			});
+		}
+	};
+	//Captura el docente seleccionado
+	handleChanger(event) {
+		//console.log(`Seleccionaste ${event.target.value}`);
+		this.state.idDocente = event.target.value;
+		this.state.form.docente.id = this.state.idDocente;
+		//console.log(this.state.form.docente.id);
+	}
 
 	render() {
 		const { form } = this.state;
@@ -195,7 +218,7 @@ class Estudiante extends Component {
 							startIcon={<AddCircleOutlineIcon />}
 							type="submit"
 							onClick={() => {
-								this.setState({  form: {  docente: {} }, tipoModal: 'insertar' });
+								this.setState({ form: { docente: {} }, idDocente: null, tipoModal: 'insertar' });
 								this.modalInsertar();
 							}}
 						>
@@ -231,7 +254,9 @@ class Estudiante extends Component {
 											<TableRow key={estudiante.id}>
 												<TableCell>{estudiante.nombre}</TableCell>
 												<TableCell>{estudiante.apellido}</TableCell>
-												<TableCell>{estudiante.docente.cedula}</TableCell>
+												<TableCell>
+													{estudiante.docente.nombre + ' ' + estudiante.docente.apellido}
+												</TableCell>
 												<TableCell>
 													<IconButton
 														onClick={() => {
@@ -269,7 +294,7 @@ class Estudiante extends Component {
 					</ModalHeader>
 					<ModalBody>
 						<div className="form-group">
-							<label htmlFor="idEstudiante">ID</label>
+							<label htmlFor="idEstudiante">Id</label>
 							<input
 								className="form-control"
 								type="number"
@@ -286,30 +311,36 @@ class Estudiante extends Component {
 								type="text"
 								name="nombre"
 								id="nombre"
-								required 
+								required
 								onChange={this.handleChange}
 								value={form.nombre ? form.nombre : ''}
 							/>
+							<br />
 							<label htmlFor="apellido">Apellido</label>
 							<input
 								className="form-control"
 								type="text"
 								name="apellido"
 								id="apellido"
-								required 
+								required
 								onChange={this.handleChange}
 								value={form.apellido ? form.apellido : ''}
 							/>
-							<label htmlFor="id">Docente</label>
-							<input
-								className="form-control"
-								type="number"
-								name="id"
-								id="id"
-								required 
-								onChange={this.handleChange}
-								value={form.docente ? form.docente.id : ''}
-							/>
+							<br />
+							<label htmlFor="Docente">Docente </label>
+							<select class="form-control" onChange={this.handleChanger}>
+								<option>Seleccione</option>
+								{this.state.listaDocente.map((docente) => (
+									<option
+										value={docente.id}
+										selected={
+											docente.nombre == this.state.form.docente.nombreDocente ? true : false
+										}
+									>
+										{docente.nombre + ' ' + docente.apellido}
+									</option>
+								))}
+							</select>
 						</div>
 					</ModalBody>
 

@@ -13,8 +13,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-//Estilos 
-import "react-notifications/lib/notifications.css";
+//Estilos
+import 'react-notifications/lib/notifications.css';
 
 //Iconos
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -29,7 +29,7 @@ class Materia extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
+		this.state = {		
 			lista: [],
 			modalInsertar: false,
 			modalEliminar: false,
@@ -150,6 +150,7 @@ class Materia extends Component {
 	};
 
 	render() {
+		const { form } = this.state;
 		return (
 			<div className="container">
 				<div className="row">
@@ -167,7 +168,7 @@ class Materia extends Component {
 							startIcon={<AddCircleOutlineIcon />}
 							type="submit"
 							onClick={() => {
-								this.setState({  form: {}, tipoModal: 'insertar' });
+								this.setState({ form : {}, tipoModal: 'insertar' });
 								this.modalInsertar();
 							}}
 						>
@@ -237,7 +238,7 @@ class Materia extends Component {
 					</ModalHeader>
 					<ModalBody>
 						<div className="form-group">
-							<label htmlFor="id">ID</label>
+							<label htmlFor="id">Id</label>
 							<input
 								className="form-control"
 								type="number"
@@ -245,7 +246,7 @@ class Materia extends Component {
 								id="id"
 								readOnly
 								onChange={this.handleChange}
-								value={this.state.form ? this.state.form.id : 0}
+								value={form.id ? form.id : 0}
 							/>
 							<br />
 							<label htmlFor="nombre">Nombre</label>
@@ -256,7 +257,7 @@ class Materia extends Component {
 								id="nombre"
 								required="true"
 								onChange={this.handleChange}
-								value={this.state.form ? this.state.form.nombre : ''}
+								value={form.nombre ? form.nombre : ''}
 							/>
 						</div>
 					</ModalBody>
