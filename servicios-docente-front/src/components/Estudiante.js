@@ -329,7 +329,8 @@ class Estudiante extends Component {
 							<br />
 							<label htmlFor="Docente">Docente </label>
 							<select class="form-control" onChange={this.handleChanger}>
-								<option>Seleccione</option>
+							{this.state.tipoModal == 'insertar' ? <option>Seleccione</option> : false}
+								
 								{this.state.listaDocente.map((docente) => (
 									<option
 										value={docente.id}
