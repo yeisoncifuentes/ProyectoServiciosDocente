@@ -52,7 +52,10 @@ class Docente extends Component {
                     barrio: '',
                     direccion: ''
                 }
-            }
+            },
+            idDocente: '',
+            listaMateriasNoAsignadas: [],
+            listaMateriasAsignadas: []
         }
 
         this.solicitarInsercion = this.solicitarInsercion.bind(this);
@@ -117,6 +120,69 @@ class Docente extends Component {
                 this.setState({ modalEliminar: false });
                 this.listarDocentes();
                 NotificationManager.success("Docente eliminado correctamente");
+            }).catch((error) => {
+                //error.response.data es lo que arrojo el servidor en caso de error
+                console.log(error.response.data);
+                NotificationManager.error(error.response.data.error);
+            });
+    }
+
+    asociarDocenteMateria(idMateria) {
+        let idDocente = this.state.idDocente;
+        let DocenteMateria = {
+            docente: {id: idDocente},
+            materia: {id: idMateria}
+        }
+        axios.post(`${urlBase}/api/docentes/asociarDocente`, DocenteMateria)
+            .then(response => {
+                this.listarMateriasNoAsignadas(idDocente);
+                this.listarMateriasAsignadas(idDocente);
+                NotificationManager.success(response.data);
+            }).catch((error) => {
+                //error.response.data es lo que arrojo el servidor en caso de error
+                console.log(error.response.data);
+                NotificationManager.error(error.response.data.error);
+            });
+    }
+
+    listarMateriasNoAsignadas(idDocente) {
+        axios.get(`${urlBase}/api/materias/listarNoAsociadas/${idDocente}`)
+            .then(response => {
+                this.setState({
+                    modalMaterias: true,
+                    listaMateriasNoAsignadas: response.data
+                });
+            }).catch((error) => {
+                console.log(error.response.data);
+            });
+    }
+
+    listarMateriasAsignadas(idDocente) {
+        axios.get(`${urlBase}/api/docentes/docenteMateria/${idDocente}`)
+            .then(response => {
+                let materias = [];
+                [...response.data].map((docente) => {
+                    materias.push(docente.materia);
+                });
+                this.setState({
+                    modalMaterias: true,
+                    listaMateriasAsignadas: materias
+                });
+            }).catch((error) => {
+                console.log(error.response.data);
+            });
+    }
+
+    eliminarDocenteMateria(idMateria) {
+        let idDocente = this.state.idDocente;
+        console.log(idDocente);
+        console.log(idMateria);
+        axios.delete(`${urlBase}/api/docentes/eliminarDocenteMateria/${idDocente}/${idMateria}`)
+            .then(response => {
+                this.listarMateriasNoAsignadas(idDocente);
+                this.listarMateriasAsignadas(idDocente);
+                this.listarDocentes();
+                NotificationManager.success("Materia eliminada correctamente");
             }).catch((error) => {
                 //error.response.data es lo que arrojo el servidor en caso de error
                 console.log(error.response.data);
@@ -201,6 +267,12 @@ class Docente extends Component {
 
     capturarFecha(date) {
         this.setState({ formulario: { ...this.state.formulario, fechaNacimiento: date } });
+    }
+
+    listarMaterias(idDocente) {
+        this.setState({idDocente: idDocente});
+        this.listarMateriasNoAsignadas(idDocente);
+        this.listarMateriasAsignadas(idDocente);
     }
 
     render() {
@@ -340,13 +412,80 @@ class Docente extends Component {
                         </ModalHeader>
 
                         <ModalBody>
-                            ¿Está seguro de eliminar este docente? Los estudiantes asociados también se eliminaran
+                            ¿Está seguro de eliminar este docente?
                         </ModalBody>
 
                         <ModalFooter>
                             <Button style={{ background: "red", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<RestoreFromTrashIcon />} type="submit" onClick={this.eliminarDocente}>Eliminar</Button>
                             <Button style={{ background: "gray", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark ml-2" variant="contained" startIcon={<CancelIcon />} type="submit" onClick={this.cambiarEstadoModalEliminar}>Cancelar</Button>{''}
                         </ModalFooter>
+                    </Modal>
+
+                    {/*Modal asociar materias*/}
+                    <Modal isOpen={this.state.modalMaterias}>
+                        <ModalHeader style={{ display: 'block' }}>
+                            Materias
+                            <IconButton style={{ float: 'right' }} onClick={this.cambiarEstadoModalMaterias}>
+                                <CloseIcon color="inherit"></CloseIcon>
+                            </IconButton>
+                        </ModalHeader>
+
+                        <ModalBody>
+                            <p style={{ fontWeight: 'bold' }}>Materias no asignadas</p>
+                            {/*Tabla con materias sin asociar*/}
+                            <TableContainer style={{ background: "rgb(245,245,245)", position: 'relative', overflow: 'auto', maxHeight: 250 }}>
+                                <Table aria-label="simple table" size="small">
+                                    <TableHead>
+                                        <TableRow style={{ background: "rgb(200,200,200)" }}>
+                                            <TableCell style={{ fontWeight: 'bold' }}>Materia</TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }}>Registrar</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {[...this.state.listaMateriasNoAsignadas].map((materia) => {
+                                            return (
+                                                <TableRow key={materia.id}>
+                                                    <TableCell>{materia.nombre}</TableCell>
+                                                    <TableCell>
+                                                        <IconButton onClick={this.asociarDocenteMateria.bind(this, materia.id)}>
+                                                            <AddCircleOutlineIcon color="inherit"></AddCircleOutlineIcon>
+                                                        </IconButton>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+
+                            <br/>
+                            <p style={{ fontWeight: 'bold' }}>Materias asignadas</p>
+                            {/*Tabla con materias asociadas*/}
+                            <TableContainer style={{ background: "rgb(245,245,245)", position: 'relative', overflow: 'auto', maxHeight: 250 }}>
+                                <Table aria-label="simple table" size="small">
+                                    <TableHead>
+                                        <TableRow style={{ background: "rgb(200,200,200)" }}>
+                                            <TableCell style={{ fontWeight: 'bold' }}>Materia</TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }}>Eliminar</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {[...this.state.listaMateriasAsignadas].map((materia) => {
+                                            return (
+                                                <TableRow key={materia.id}>
+                                                    <TableCell>{materia.nombre}</TableCell>
+                                                    <TableCell>
+                                                        <IconButton onClick={this.eliminarDocenteMateria.bind(this, materia.id)}>
+                                                            <DeleteIcon color="error"></DeleteIcon>
+                                                        </IconButton>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </ModalBody>
                     </Modal>
                 </div>
                 <NotificationContainer />
