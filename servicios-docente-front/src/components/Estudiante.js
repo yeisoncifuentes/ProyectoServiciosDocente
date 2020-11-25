@@ -21,6 +21,10 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import CloseIcon from '@material-ui/icons/Close';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import CancelIcon from '@material-ui/icons/Cancel';
+import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 
 const urlBase = 'http://localhost:9090/ProyectoServiciosDocente-web';
 
@@ -208,7 +212,7 @@ class Estudiante extends Component {
 					<div className="col-4">
 						<Button
 							style={{
-								background: 'rgb(235, 126, 21)',
+								background: 'rgb(58, 183, 17)',
 								fontSize: '13px',
 								fontFamily: 'sans-serif',
 								textTransform: 'none'
@@ -228,6 +232,8 @@ class Estudiante extends Component {
 					</div>
 
 					<div className="col-6" />
+
+					<div className="col-12 m-3"></div>
 
 					<div className="col-2" />
 					<div className="col-8">
@@ -249,7 +255,7 @@ class Estudiante extends Component {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{[ ...this.state.lista ].map((estudiante) => {
+									{[...this.state.lista].map((estudiante) => {
 										return (
 											<TableRow key={estudiante.id}>
 												<TableCell>{estudiante.nombre}</TableCell>
@@ -261,18 +267,19 @@ class Estudiante extends Component {
 													<IconButton
 														onClick={() => {
 															this.seleccionarEstudiante(estudiante);
-															this.setState({ modalEliminar: true });
-														}}
-													>
-														<DeleteIcon color="secondary" />
-													</IconButton>
-													<IconButton
-														onClick={() => {
-															this.seleccionarEstudiante(estudiante);
 															this.modalInsertar();
 														}}
 													>
 														<EditIcon color="primary" />
+													</IconButton>
+
+													<IconButton
+														onClick={() => {
+															this.seleccionarEstudiante(estudiante);
+															this.setState({ modalEliminar: true });
+														}}
+													>
+														<DeleteIcon color="error" />
 													</IconButton>
 												</TableCell>
 											</TableRow>
@@ -288,9 +295,10 @@ class Estudiante extends Component {
 				<Modal isOpen={this.state.modalInsertar}>
 					<ModalHeader style={{ display: 'block' }}>
 						{this.state.tipoModal == 'insertar' ? 'Registrar Estudiante' : 'Editar Estudiante'}
-						<span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>
-							x
-						</span>
+
+						<IconButton style={{ float: 'right' }} onClick={this.modalInsertar}>
+							<CloseIcon color="inherit"></CloseIcon>
+						</IconButton>
 					</ModalHeader>
 					<ModalBody>
 						<div className="form-group">
@@ -329,8 +337,8 @@ class Estudiante extends Component {
 							<br />
 							<label htmlFor="Docente">Docente </label>
 							<select class="form-control" onChange={this.handleChanger}>
-							{this.state.tipoModal == 'insertar' ? <option>Seleccione</option> : false}
-								
+								{this.state.tipoModal == 'insertar' ? <option>Seleccione</option> : false}
+
 								{this.state.listaDocente.map((docente) => (
 									<option
 										value={docente.id}
@@ -346,38 +354,28 @@ class Estudiante extends Component {
 					</ModalBody>
 
 					<ModalFooter>
-						{this.state.tipoModal == 'insertar' ? (
-							<button className="btn btn-success" onClick={this.registrar}>
-								Insertar
-							</button>
-						) : (
-							<button className="btn btn-primary" onClick={this.editar}>
-								Actualizar
-							</button>
-						)}
-						<button className="btn btn-danger" onClick={() => this.modalInsertar()}>
-							Cancelar
-						</button>
+						{this.state.tipoModal == 'insertar' ?
+							<Button style={{ background: "rgb(58, 183, 17)", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<AssignmentTurnedInIcon />} type="submit" onClick={this.registrar}>Insertar</Button> :
+							<Button style={{ background: "rgb(58, 183, 17)", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<EditIcon />} type="submit" onClick={this.editar}>Editar</Button>
+						}
+						<Button style={{ background: "gray", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark ml-2" variant="contained" startIcon={<CancelIcon />} type="submit" onClick={this.modalInsertar}>Cancelar</Button>{''}
 					</ModalFooter>
 				</Modal>
 
 				<Modal isOpen={this.state.modalEliminar}>
 					<ModalHeader style={{ display: 'block' }}>
 						Confirmación
-						<span style={{ float: 'right' }} onClick={this.cambiarEstadoModalEliminar}>
-							x
-						</span>
+						
+						<IconButton style={{ float: 'right' }} onClick={this.cambiarEstadoModalEliminar}>
+							<CloseIcon color="inherit"></CloseIcon>
+						</IconButton>
 					</ModalHeader>
 					<ModalBody>
 						¿Estás seguro de eliminar al Estudiante? {this.state.form && this.state.form.nombre}
 					</ModalBody>
 					<ModalFooter>
-						<button className="btn btn-danger" onClick={() => this.eliminar()}>
-							Sí
-						</button>
-						<button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>
-							No
-						</button>
+						<Button style={{ background: "red", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark mr-2" variant="contained" startIcon={<RestoreFromTrashIcon />} type="submit" onClick={this.eliminar}>Eliminar</Button>
+                        <Button style={{ background: "gray", fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark ml-2" variant="contained" startIcon={<CancelIcon />} type="submit" onClick={this.cambiarEstadoModalEliminar}>Cancelar</Button>{''}
 					</ModalFooter>
 				</Modal>
 				<NotificationContainer />

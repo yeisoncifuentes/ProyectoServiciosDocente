@@ -334,7 +334,7 @@ class Docente extends Component {
                                                 <TableCell>{docente.direccion.direccion}</TableCell>
                                                 <TableCell>
                                                     <IconButton onClick={this.listarMaterias.bind(this, docente.id)}>
-                                                        <MenuBookIcon color="inherit"></MenuBookIcon>
+                                                        <MenuBookIcon style={{color: 'black'}}></MenuBookIcon>
                                                     </IconButton>
                                                 </TableCell>
                                                 <TableCell>
@@ -456,7 +456,7 @@ class Docente extends Component {
                                                     <TableCell>{materia.nombre}</TableCell>
                                                     <TableCell>
                                                         <IconButton onClick={this.asociarDocenteMateria.bind(this, materia.id)}>
-                                                            <AddCircleOutlineIcon color="inherit"></AddCircleOutlineIcon>
+                                                            <AddCircleOutlineIcon style={{color: 'rgb(58, 183, 17)'}}></AddCircleOutlineIcon>
                                                         </IconButton>
                                                     </TableCell>
                                                 </TableRow>
