@@ -27,6 +27,7 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CloseIcon from '@material-ui/icons/Close';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 
 const urlBase = 'http://localhost:9090/ProyectoServiciosDocente-web';
 
@@ -40,6 +41,7 @@ class Docente extends Component {
             listaDocentes: [],
             modalFormulario: false,
             modalEliminar: false,
+            modalMaterias: false,
             tipoModal: '',
             formulario: {
                 id: '',
@@ -61,10 +63,12 @@ class Docente extends Component {
         this.solicitarInsercion = this.solicitarInsercion.bind(this);
         this.cambiarEstadoModalFormulario = this.cambiarEstadoModalFormulario.bind(this);
         this.cambiarEstadoModalEliminar = this.cambiarEstadoModalEliminar.bind(this);
+        this.cambiarEstadoModalMaterias = this.cambiarEstadoModalMaterias.bind(this);
+        this.capturarFecha = this.capturarFecha.bind(this);
+
         this.registrarDocente = this.registrarDocente.bind(this);
         this.editarDocente = this.editarDocente.bind(this);
         this.eliminarDocente = this.eliminarDocente.bind(this);
-        this.capturarFecha = this.capturarFecha.bind(this);
     }
 
     componentDidMount() {
@@ -93,7 +97,7 @@ class Docente extends Component {
                     listaDocentes: response.data
                 });
             }).catch((error) => {
-                console.log(error);
+                console.log(error.response.data);
             });
     }
 
@@ -207,6 +211,10 @@ class Docente extends Component {
         this.setState({ modalEliminar: !this.state.modalEliminar });
     }
 
+    cambiarEstadoModalMaterias() {
+        this.setState({ modalMaterias: !this.state.modalMaterias });
+    }
+
     capturarData = async e => {
         if (e.target.name === "direccion" || e.target.name === "barrio") {
             await this.setState({
@@ -309,6 +317,7 @@ class Docente extends Component {
                                         <TableCell style={{ fontWeight: 'bold' }}>Fecha Nacimiento</TableCell>
                                         <TableCell style={{ fontWeight: 'bold' }}>Barrio</TableCell>
                                         <TableCell style={{ fontWeight: 'bold' }}>Direccion</TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Materias</TableCell>
                                         <TableCell style={{ fontWeight: 'bold' }}>Acciones</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -323,6 +332,11 @@ class Docente extends Component {
                                                 <TableCell>{docente.fechaNacimientoFormato}</TableCell>
                                                 <TableCell>{docente.direccion.barrio}</TableCell>
                                                 <TableCell>{docente.direccion.direccion}</TableCell>
+                                                <TableCell>
+                                                    <IconButton onClick={this.listarMaterias.bind(this, docente.id)}>
+                                                        <MenuBookIcon color="inherit"></MenuBookIcon>
+                                                    </IconButton>
+                                                </TableCell>
                                                 <TableCell>
                                                     <IconButton onClick={this.capturarDocente.bind(this, docente)}>
                                                         <EditIcon color="primary"></EditIcon>
@@ -357,13 +371,7 @@ class Docente extends Component {
                         <ModalBody>
                             <div className="form-group">
                                 <label htmlFor="cedula">Cédula</label>
-                                <input className="form-control" 
-                                type="number" 
-                                name="cedula"
-                                 id="cedula"
-                                  required 
-                                  onChange={this.capturarData}
-                                   value={formulario.cedula ? formulario.cedula : ''}></input>
+                                <input className="form-control" type="number" name="cedula" id="cedula" required onChange={this.capturarData} value={formulario.cedula ? formulario.cedula : ''}></input>
                                 <br />
                                 <label htmlFor="nombre">Nombre</label>
                                 <input className="form-control" type="text" name="nombre" id="nombre" onChange={this.capturarData} value={formulario.nombre ? formulario.nombre : ''}></input>
