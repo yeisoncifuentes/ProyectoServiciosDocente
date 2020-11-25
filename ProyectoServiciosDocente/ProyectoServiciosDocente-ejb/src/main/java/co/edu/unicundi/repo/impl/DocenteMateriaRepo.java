@@ -28,7 +28,7 @@ public class DocenteMateriaRepo implements IDocenteMateriaRepo {
     private EntityManager entity;
 
     @Override
-    public List<DocenteMateria> listarDocenteMateria(Integer idDocente) {       
+    public List<DocenteMateria> listarDocenteMateria(Integer idDocente) {
         TypedQuery<DocenteMateria> query = this.entity.createQuery("SELECT d FROM DocenteMateria d WHERE d.docente.id = ?1", DocenteMateria.class);;
         query.setParameter(1, idDocente);
         return query.getResultList();

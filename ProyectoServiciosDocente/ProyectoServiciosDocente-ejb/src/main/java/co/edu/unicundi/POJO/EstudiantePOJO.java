@@ -22,7 +22,7 @@ public class EstudiantePOJO implements Serializable {
 
     private Docente docente;
     
-    private String cedulaDocente;
+   
 
     /**
      * Constructo vacio
@@ -90,12 +90,6 @@ public class EstudiantePOJO implements Serializable {
         this.docente = docente;
     }
 
-    public String getCedulaDocente() {
-        return cedulaDocente;
-    }
-
-    public void setCedulaDocente(String cedulaDocente) {
-        this.cedulaDocente = cedulaDocente;
-    }
+  
     
 }

@@ -1,23 +1,357 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 //Componentes
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
+//Estilos
+import 'react-notifications/lib/notifications.css';
 
 //Iconos
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import Docente from './Docente';
 
+const urlBase = 'http://localhost:9090/ProyectoServiciosDocente-web';
 
+//Constructor
 class Estudiante extends Component {
-    render() {
-        return (
-            <div className="container">
-                <div className="row">
-                    <div className="col-12">
-                        Contenido Estudiante
-                    </div>
-                </div>
-            </div>
-        );
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			lista: [],
+			modalInsertar: false,
+			modalEliminar: false,
+			tipoModal: '',
+			form: {
+				id : '',
+				nombre: '',
+				apellido: '',
+				docente: {
+					id: '',					
+					cedula: ''
+				}
+			}
+		}
+
+		this.cambiarEstadoModal = this.cambiarEstadoModal.bind(this);
+		this.cambiarEstadoModalEliminar = this.cambiarEstadoModalEliminar.bind(this);		
+		this.registrar = this.registrar.bind(this);
+		this.editar = this.editar.bind(this);
+		this.eliminar = this.eliminar.bind(this);
+	
+	}
+
+	componentDidMount() {
+		this.listar();
+	}
+
+	//Servicios
+
+	registrar() {
+		delete this.state.form.id;
+		console.log(this.state.form);
+		axios
+			.post(`${urlBase}/api/estudiantes/registrar`, this.state.form)
+			.then((response) => {
+				this.cambiarEstadoModal();
+				this.listar();
+				NotificationManager.success(response.data);
+			})
+			.catch((error) => {
+				console.log(error.response.data);
+				NotificationManager.error(error.response.data.error);
+			});
+	}
+
+	listar() {
+		axios
+			.get(`${urlBase}/api/estudiantes/listar`)
+			.then((response) => {
+				console.log(response.data);
+				this.setState({
+					lista: response.data
+				});
+			})
+			.catch((error) => {
+				NotificationManager.error(error.response.data.error);
+			});
+	}
+
+	editar() {
+		console.log(this.state.form);
+		axios
+			.put(`${urlBase}/api/estudiantes/editar`, this.state.form)
+			.then((response) => {
+				this.cambiarEstadoModal();
+				this.listar();
+				NotificationManager.success(response.data);
+			})
+			.catch((error) => {
+				//error.response.data es lo que arrojo el servidor en caso de error
+				console.log(error.response.data);
+				NotificationManager.error(error.response.data.error);
+			});
+	}
+
+	eliminar() {
+		console.log(this.state.form);
+		axios
+			.delete(`${urlBase}/api/estudiantes/eliminar/${this.state.form.id}`)
+			.then((response) => {
+				this.setState({ modalEliminar: false });
+				this.listar();
+				NotificationManager.success('Eliminado correctamente');
+			})
+			.catch((error) => {
+				//error.response.data es lo que arrojo el servidor en caso de error
+				console.log(error.response.data);
+				NotificationManager.error(error.response.data.error);
+			});
+	}
+
+	//Modal
+	modalInsertar = () => {
+		this.setState({ modalInsertar: !this.state.modalInsertar });
+	};
+
+	cambiarEstadoModal() {
+		this.setState({ modalInsertar: !this.state.modalInsertar });
+	}
+
+	cambiarEstadoModalEliminar() {
+		this.setState({ modalEliminar: !this.state.modalEliminar });
+	}
+
+	//Obtener estudiante tabla
+	seleccionarEstudiante = (estudiante) => {
+		this.setState({
+			tipoModal: 'actualizar',
+			form: {
+				id: estudiante.id,
+				nombre: estudiante.nombre,
+				apellido: estudiante.apellido,
+				docente: {
+					id: estudiante.docente.id,					
+					cedula: estudiante.docente.cedula
+				}
+			}
+		});
+	};
+
+	
+	//Capturar los datos input
+	handleChange = async e => {
+		
+        if (e.target.name === "id") {
+            await this.setState({
+                form: {
+                    ...this.state.form,
+                    docente: {
+                        ...this.state.form.docente,
+                        [e.target.name]: e.target.value
+                    }
+                }
+            });
+        } else {
+            await this.setState({
+                form: {
+                    ...this.state.form,
+                    [e.target.name]: e.target.value
+                }
+            });
+        }
     }
+
+
+	render() {
+		const { form } = this.state;
+		return (
+			<div className="container">
+				<div className="row">
+					<div className="col-2" />
+					<div className="col-4">
+						<Button
+							style={{
+								background: 'rgb(235, 126, 21)',
+								fontSize: '13px',
+								fontFamily: 'sans-serif',
+								textTransform: 'none'
+							}}
+							className="btn btn-dark"
+							variant="contained"
+							startIcon={<AddCircleOutlineIcon />}
+							type="submit"
+							onClick={() => {
+								this.setState({  form: {  docente: {} }, tipoModal: 'insertar' });
+								this.modalInsertar();
+							}}
+						>
+							Agregar Estudiante
+						</Button>
+						{''}
+					</div>
+
+					<div className="col-6" />
+
+					<div className="col-2" />
+					<div className="col-8">
+						<TableContainer
+							style={{
+								background: 'rgb(245,245,245)',
+								position: 'relative',
+								overflow: 'auto',
+								maxHeight: 350
+							}}
+						>
+							<Table aria-label="simple table" size="small">
+								<TableHead>
+									<TableRow style={{ background: 'rgb(200,200,200)' }}>
+										<TableCell style={{ fontWeight: 'bold' }}>Nombre</TableCell>
+										<TableCell style={{ fontWeight: 'bold' }}>Apellido</TableCell>
+										<TableCell style={{ fontWeight: 'bold' }}>Docente</TableCell>
+										<TableCell style={{ fontWeight: 'bold' }}>Acciones</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{[ ...this.state.lista ].map((estudiante) => {
+										return (
+											<TableRow key={estudiante.id}>
+												<TableCell>{estudiante.nombre}</TableCell>
+												<TableCell>{estudiante.apellido}</TableCell>
+												<TableCell>{estudiante.docente.cedula}</TableCell>
+												<TableCell>
+													<IconButton
+														onClick={() => {
+															this.seleccionarEstudiante(estudiante);
+															this.setState({ modalEliminar: true });
+														}}
+													>
+														<DeleteIcon color="secondary" />
+													</IconButton>
+													<IconButton
+														onClick={() => {
+															this.seleccionarEstudiante(estudiante);
+															this.modalInsertar();
+														}}
+													>
+														<EditIcon color="primary" />
+													</IconButton>
+												</TableCell>
+											</TableRow>
+										);
+									})}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</div>
+					<div className="col-2" />
+				</div>
+
+				<Modal isOpen={this.state.modalInsertar}>
+					<ModalHeader style={{ display: 'block' }}>
+						{this.state.tipoModal == 'insertar' ? 'Registrar Estudiante' : 'Editar Estudiante'}
+						<span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>
+							x
+						</span>
+					</ModalHeader>
+					<ModalBody>
+						<div className="form-group">
+							<label htmlFor="idEstudiante">ID</label>
+							<input
+								className="form-control"
+								type="number"
+								name="idEstudiante"
+								id="idEstudiante"
+								readOnly
+								onChange={this.handleChange}
+								value={form.id ? form.id : 0}
+							/>
+							<br />
+							<label htmlFor="nombre">Nombre</label>
+							<input
+								className="form-control"
+								type="text"
+								name="nombre"
+								id="nombre"
+								required 
+								onChange={this.handleChange}
+								value={form.nombre ? form.nombre : ''}
+							/>
+							<label htmlFor="apellido">Apellido</label>
+							<input
+								className="form-control"
+								type="text"
+								name="apellido"
+								id="apellido"
+								required 
+								onChange={this.handleChange}
+								value={form.apellido ? form.apellido : ''}
+							/>
+							<label htmlFor="id">Docente</label>
+							<input
+								className="form-control"
+								type="number"
+								name="id"
+								id="id"
+								required 
+								onChange={this.handleChange}
+								value={form.docente ? form.docente.id : ''}
+							/>
+						</div>
+					</ModalBody>
+
+					<ModalFooter>
+						{this.state.tipoModal == 'insertar' ? (
+							<button className="btn btn-success" onClick={this.registrar}>
+								Insertar
+							</button>
+						) : (
+							<button className="btn btn-primary" onClick={this.editar}>
+								Actualizar
+							</button>
+						)}
+						<button className="btn btn-danger" onClick={() => this.modalInsertar()}>
+							Cancelar
+						</button>
+					</ModalFooter>
+				</Modal>
+
+				<Modal isOpen={this.state.modalEliminar}>
+					<ModalHeader style={{ display: 'block' }}>
+						Confirmación
+						<span style={{ float: 'right' }} onClick={this.cambiarEstadoModalEliminar}>
+							x
+						</span>
+					</ModalHeader>
+					<ModalBody>
+						¿Estás seguro de eliminar al Estudiante? {this.state.form && this.state.form.nombre}
+					</ModalBody>
+					<ModalFooter>
+						<button className="btn btn-danger" onClick={() => this.eliminar()}>
+							Sí
+						</button>
+						<button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>
+							No
+						</button>
+					</ModalFooter>
+				</Modal>
+				<NotificationContainer />
+			</div>
+		);
+	}
 }
 
 export default Estudiante;

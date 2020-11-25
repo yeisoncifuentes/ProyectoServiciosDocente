@@ -6,6 +6,7 @@
 package co.edu.unicundi.interfaces;
 
 
+import co.edu.unicundi.POJO.DocenteMateriaPOJO;
 import co.edu.unicundi.POJO.MateriaPOJO;
 import co.edu.unicundi.entity.Materia;
 import co.edu.unicundi.exception.IdRequiredException;
@@ -38,5 +39,4 @@ public interface ILogicaMateria {
     public void editar(Materia materia) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException;
 
     public List<MateriaPOJO> listarNoAsociadas(Integer idDocente) throws ObjectNotFoundException, ListNoContentException, NoResponseBDException;
-
 }

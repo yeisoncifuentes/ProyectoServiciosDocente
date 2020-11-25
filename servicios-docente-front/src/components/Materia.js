@@ -167,7 +167,7 @@ class Materia extends Component {
 							startIcon={<AddCircleOutlineIcon />}
 							type="submit"
 							onClick={() => {
-								this.setState({ form: null, tipoModal: 'insertar' });
+								this.setState({  form: {}, tipoModal: 'insertar' });
 								this.modalInsertar();
 							}}
 						>
@@ -254,6 +254,7 @@ class Materia extends Component {
 								type="text"
 								name="nombre"
 								id="nombre"
+								required="true"
 								onChange={this.handleChange}
 								value={this.state.form ? this.state.form.nombre : ''}
 							/>

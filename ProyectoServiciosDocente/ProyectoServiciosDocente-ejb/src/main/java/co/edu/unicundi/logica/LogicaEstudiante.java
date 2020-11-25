@@ -36,8 +36,13 @@ public class LogicaEstudiante implements ILogicaEstudiante {
     private IDocenteRepo repoDocente;
 
     @Override
-    public void registrar(Estudiante estudiante) throws IdRequiredException, ObjectNotFoundException {
+    public void registrar(Estudiante estudiante) throws IdRequiredException, ObjectNotFoundException,RegisteredObjectException {
         try {
+            Estudiante validar = repo.obtenerNombreApellido(estudiante.getNombre(), estudiante.getApellido());
+
+            if (validar != null) {               
+                    throw new RegisteredObjectException("El estudiante ya se encuentra registrado");                
+            }
             if (estudiante.getDocente() == null || estudiante.getDocente().getId() == null) {
                 throw new IdRequiredException("Id requerido dentro de objeto docente");
             } else {
@@ -66,12 +71,7 @@ public class LogicaEstudiante implements ILogicaEstudiante {
                 for (Estudiante estudiante : estudiantes) {
                     ModelMapper model = new ModelMapper();
                     EstudiantePOJO est = model.map(estudiante, EstudiantePOJO.class);
-                    est.setCedulaDocente(estudiante.getDocente().getCedula());
                     estudiantesPOJO.add(est);
-                }
-
-                for (EstudiantePOJO est : estudiantesPOJO) {
-                    est.setDocente(null);
                 }
 
                 return estudiantesPOJO;
@@ -140,6 +140,14 @@ public class LogicaEstudiante implements ILogicaEstudiante {
 
             if (estudianteAux == null) {
                 throw new ObjectNotFoundException("Estudiante no existe.");
+            }
+
+            Estudiante validar = repo.obtenerNombreApellido(estudiante.getNombre(), estudiante.getApellido());
+
+            if (validar != null) {
+                if (validar.getId() != estudiante.getId()) {
+                    throw new RegisteredObjectException("El estudiante ya se encuentra registrado");
+                }
             }
 
             estudianteAux.setNombre(estudiante.getNombre());

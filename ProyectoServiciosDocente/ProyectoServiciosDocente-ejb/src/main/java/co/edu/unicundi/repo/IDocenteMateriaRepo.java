@@ -15,13 +15,13 @@ import javax.ejb.Local;
  */
 @Local
 public interface IDocenteMateriaRepo {
-    
-     public void guardar(DocenteMateria docenteMateria);
-    
+
+    public void guardar(DocenteMateria docenteMateria);
+
     public List<DocenteMateria> listarDocenteMateria(Integer idDocente);
     
     public void eliminar(DocenteMateria docenteMateria);
-    
+
     public DocenteMateria obtener(int idDocente, int idMateria);
-    
+
 }

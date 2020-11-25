@@ -20,6 +20,8 @@ public interface IEstudianteRepo {
     public void registrar(Estudiante estudiante);
 
     public List<Estudiante> listar();
+    
+    public Estudiante obtenerNombreApellido(String nombre, String apellido);   
 
     public void editar(Estudiante estudiante);
     

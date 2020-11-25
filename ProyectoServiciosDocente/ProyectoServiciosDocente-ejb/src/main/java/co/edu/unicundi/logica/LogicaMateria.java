@@ -5,7 +5,9 @@
  */
 package co.edu.unicundi.logica;
 
+import co.edu.unicundi.POJO.DocenteMateriaPOJO;
 import co.edu.unicundi.POJO.MateriaPOJO;
+import co.edu.unicundi.entity.DocenteMateria;
 import co.edu.unicundi.entity.Materia;
 import co.edu.unicundi.exception.IdRequiredException;
 import co.edu.unicundi.exception.ListNoContentException;
@@ -13,6 +15,7 @@ import co.edu.unicundi.exception.NoResponseBDException;
 import co.edu.unicundi.exception.ObjectNotFoundException;
 import co.edu.unicundi.exception.RegisteredObjectException;
 import co.edu.unicundi.interfaces.ILogicaMateria;
+import co.edu.unicundi.repo.IDocenteMateriaRepo;
 import co.edu.unicundi.repo.IMateriaRepo;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,9 @@ public class LogicaMateria implements ILogicaMateria {
 
     @EJB
     private IMateriaRepo repo;
+    
+    @EJB
+    private IDocenteMateriaRepo repoDocenteMateria;
 
     @Override
     public void registrar(Materia materia) throws RegisteredObjectException, IdRequiredException, NoResponseBDException {
@@ -116,11 +122,13 @@ public class LogicaMateria implements ILogicaMateria {
     @Override
     public void editar(Materia materia) throws RegisteredObjectException, ObjectNotFoundException, IdRequiredException, NoResponseBDException {
         try {
+            Materia materiaObtener=repo.obtenerPorNombre(materia.getNombre());
             if (materia.getId() == null) {
                 throw new IdRequiredException("Id es requerido para edición");
             }
 
-            if (repo.obtenerPorNombre(materia.getNombre()) != null) {
+            if ( materiaObtener != null ) {
+                if(materiaObtener.getId()!=materia.getId())
                 throw new RegisteredObjectException("El nombre de la materia ya se encuentra registrada");
             }
 
@@ -164,5 +172,6 @@ public class LogicaMateria implements ILogicaMateria {
             throw new ListNoContentException();
         }
     }
+    
 
 }
